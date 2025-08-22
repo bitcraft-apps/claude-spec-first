@@ -17,7 +17,11 @@ jobs:
       run: chmod +x ./framework/validate-framework.sh
     
     - name: Validate framework structure
-      run: ./framework/validate-framework.sh
+      run: |
+        # Set up framework files in current directory for validation
+        cp -r framework/* .
+        chmod +x validate-framework.sh
+        ./validate-framework.sh
     
     - name: Check YAML frontmatter in agents
       run: |
