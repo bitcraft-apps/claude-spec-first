@@ -243,8 +243,13 @@ echo "🔧 Integration Checks..."
 echo "======================="
 
 # Check for consistency between agents and commands
-COMMAND_AGENT_REFS=$(grep -h "spec-analyst\|test-designer\|arch-designer\|impl-specialist\|qa-validator" commands/*.md | wc -l | tr -d ' ')
-print_info "Found $COMMAND_AGENT_REFS agent references in commands"
+if [ -d "commands" ] && ls commands/*.md >/dev/null 2>&1; then
+    COMMAND_AGENT_REFS=$(grep -h "spec-analyst\|test-designer\|arch-designer\|impl-specialist\|qa-validator" commands/*.md | wc -l | tr -d ' ')
+    print_info "Found $COMMAND_AGENT_REFS agent references in commands"
+else
+    print_warning "commands/ directory missing or contains no .md files"
+    COMMAND_AGENT_REFS=0
+fi
 
 if [ $COMMAND_AGENT_REFS -gt 0 ]; then
     print_status "Commands integrate with agents" 0

@@ -23,8 +23,21 @@ mkdir -p "$CLAUDE_DIR/agents" "$CLAUDE_DIR/commands" "$CLAUDE_DIR/examples"
 
 echo "📦 Installing framework files..."
 
-# Install framework files
-cp -r "$FRAMEWORK_DIR"/* "$CLAUDE_DIR/"
+# Install framework files with backup
+for item in "$FRAMEWORK_DIR"/*; do
+    base_item="$(basename "$item")"
+    target_item="$CLAUDE_DIR/$base_item"
+    if [ -e "$target_item" ]; then
+        backup_name="$target_item.bak.$(date +%Y%m%d%H%M%S)"
+        echo "🔄 Backing up existing $base_item to $(basename "$backup_name")"
+        mv "$target_item" "$backup_name"
+    fi
+    if [ -d "$item" ]; then
+        cp -r "$item" "$CLAUDE_DIR/"
+    else
+        cp "$item" "$CLAUDE_DIR/"
+    fi
+done
 
 echo "✅ Installation completed successfully!"
 echo "🚀 Restart Claude Code to load the new framework"

@@ -21,9 +21,21 @@ CLAUDE_DIR="$HOME/.claude"
 
 # Check if we're in a git repository
 if [ ! -d "$SCRIPT_DIR/.git" ]; then
-    echo -e "${RED}❌ This doesn't appear to be a git repository.${NC}"
-    echo -e "${RED}   Please run this script from the cloned repository directory.${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  Not a git repository. Attempting to update via remote download...${NC}"
+    # Download latest version to temp directory
+    TEMP_DIR=$(mktemp -d)
+    echo -e "${BLUE}📥 Downloading latest framework...${NC}"
+    if command -v git >/dev/null 2>&1; then
+        git clone https://github.com/bitcraft-apps/claude-spec-first.git "$TEMP_DIR" || {
+            echo -e "${RED}❌ Failed to download updates. Please check your internet connection.${NC}"
+            exit 1
+        }
+        SCRIPT_DIR="$TEMP_DIR"
+    else
+        echo -e "${RED}❌ Git not available and not in a git repository.${NC}"
+        echo -e "${RED}   Please either install git or run from a cloned repository.${NC}"
+        exit 1
+    fi
 fi
 
 # Check if framework is currently installed
@@ -97,7 +109,7 @@ done
 
 # Update examples
 echo "Updating examples..."
-cp "$SCRIPT_DIR/framework/examples"/* "$CLAUDE_DIR/examples/"
+cp -r "$SCRIPT_DIR/framework/examples/." "$CLAUDE_DIR/examples/"
 echo "  ✅ Examples updated"
 
 # Update validation script
@@ -148,6 +160,11 @@ else
     # No CLAUDE.md exists, create it
     cp "$FRAMEWORK_CLAUDE" "$USER_CLAUDE"
     echo -e "${GREEN}✅ CLAUDE.md created${NC}"
+fi
+
+# Clean up temp directory if it was created
+if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then
+    rm -rf "$TEMP_DIR"
 fi
 
 echo ""

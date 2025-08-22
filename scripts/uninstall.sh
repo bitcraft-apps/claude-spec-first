@@ -96,8 +96,12 @@ if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
             TEMP_CLAUDE=$(mktemp)
             sed '/# Claude Spec-First Framework Integration/,/^$/d' "$CLAUDE_DIR/CLAUDE.md" > "$TEMP_CLAUDE"
             
-            # Remove trailing empty lines and the framework separator
-            sed -i '' '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" 2>/dev/null || true
+            # Remove trailing empty lines and the framework separator (portable sed)
+            if [[ "$(uname)" == "Darwin" ]]; then
+                sed -i '' '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" 2>/dev/null || true
+            else
+                sed -i '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" 2>/dev/null || true
+            fi
             
             # Only keep the file if it has content (not just the framework)
             if [ -s "$TEMP_CLAUDE" ]; then
