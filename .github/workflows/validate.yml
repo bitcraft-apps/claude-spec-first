@@ -2,67 +2,52 @@ name: Validate Framework
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 jobs:
   validate:
+    name: Validate Framework Structure and Configuration
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
     
-    - name: Make validation script executable
-      run: chmod +x ./framework/validate-framework.sh
-    
-    - name: Validate framework structure
+    - name: Run comprehensive framework validation
       run: |
+        echo "🔍 Running comprehensive framework validation..."
+        
         # Set up framework files in current directory for validation
         cp -r framework/* .
         chmod +x validate-framework.sh
+        
+        # Run the comprehensive validation script
         ./validate-framework.sh
     
-    - name: Check YAML frontmatter in agents
+    - name: Verify installation scripts
       run: |
-        echo "Validating agent files..."
-        for agent in framework/agents/*.md; do
-          echo "Checking $agent"
-          if ! head -20 "$agent" | grep -q "^name:"; then
-            echo "❌ Missing 'name:' field in $agent"
-            exit 1
-          fi
-          if ! head -20 "$agent" | grep -q "^description:"; then
-            echo "❌ Missing 'description:' field in $agent"
-            exit 1
-          fi
-          if ! head -20 "$agent" | grep -q "^tools:"; then
-            echo "❌ Missing 'tools:' field in $agent"
-            exit 1
-          fi
-          echo "✅ $agent validated"
-        done
-    
-    - name: Check YAML frontmatter in commands
-      run: |
-        echo "Validating command files..."
-        for command in framework/commands/*.md; do
-          echo "Checking $command"
-          if ! head -10 "$command" | grep -q "^description:"; then
-            echo "❌ Missing 'description:' field in $command"
-            exit 1
-          fi
-          echo "✅ $command validated"
-        done
-    
-    - name: Verify installation scripts exist
-      run: |
-        echo "Checking installation scripts..."
-        test -f scripts/install.sh && echo "✅ install.sh exists" || (echo "❌ install.sh missing" && exit 1)
-        test -f scripts/update.sh && echo "✅ update.sh exists" || (echo "❌ update.sh missing" && exit 1)
-        test -f scripts/uninstall.sh && echo "✅ uninstall.sh exists" || (echo "❌ uninstall.sh missing" && exit 1)
+        echo "📋 Verifying installation scripts..."
         
-        echo "Checking script permissions..."
-        test -x scripts/install.sh && echo "✅ install.sh is executable" || (echo "❌ install.sh not executable" && exit 1)
-        test -x scripts/update.sh && echo "✅ update.sh is executable" || (echo "❌ update.sh not executable" && exit 1)
-        test -x scripts/uninstall.sh && echo "✅ uninstall.sh is executable" || (echo "❌ uninstall.sh not executable" && exit 1)
+        # Check script existence
+        for script in install.sh update.sh uninstall.sh; do
+          if [ -f "scripts/$script" ]; then
+            echo "✅ scripts/$script exists"
+          else
+            echo "❌ scripts/$script missing"
+            exit 1
+          fi
+        done
+        
+        # Check script permissions
+        for script in install.sh update.sh uninstall.sh; do
+          if [ -x "scripts/$script" ]; then
+            echo "✅ scripts/$script is executable"
+          else
+            echo "❌ scripts/$script not executable"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All installation scripts validated"
