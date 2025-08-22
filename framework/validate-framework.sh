@@ -55,19 +55,21 @@ print_status "CLAUDE.md exists" 0
 # Check agents directory
 if [ -d "agents" ]; then
     print_status "agents/ directory exists" 0
-    AGENT_COUNT=$(find agents -name "*.md" -type f | wc -l | tr -d ' ')
+    AGENT_COUNT=$(find agents -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     print_info "Found $AGENT_COUNT agent files"
 else
     print_status "agents/ directory exists" 1
+    AGENT_COUNT=0
 fi
 
 # Check commands directory
 if [ -d "commands" ]; then
     print_status "commands/ directory exists" 0
-    COMMAND_COUNT=$(find commands -name "*.md" -type f | wc -l | tr -d ' ')
+    COMMAND_COUNT=$(find commands -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     print_info "Found $COMMAND_COUNT command files"
 else
     print_status "commands/ directory exists" 1
+    COMMAND_COUNT=0
 fi
 
 echo ""
