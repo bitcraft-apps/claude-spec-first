@@ -20,6 +20,16 @@ A comprehensive specification-first development framework for Claude Code that t
 - Test-driven development support
 - Quality assurance validation
 
+## Command Reference
+
+The framework provides these workflow commands:
+
+- `/spec-init` - Initialize specification process for new features
+- `/spec-review` - Multi-agent specification validation
+- `/impl-plan` - Implementation planning with architecture decisions
+- `/qa-check` - Quality validation and deployment readiness
+- `/spec-workflow` - Complete end-to-end workflow automation
+
 ## Documentation
 
 See [CLAUDE.md](./CLAUDE.md) for detailed setup and usage instructions.
