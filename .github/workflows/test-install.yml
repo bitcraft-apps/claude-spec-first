@@ -60,3 +60,8 @@ jobs:
         fi
         
         echo "🎉 Installation test completed successfully!"
+        
+        # Explicitly clean up the temporary home directory
+        echo "🧹 Cleaning up test environment..."
+        rm -rf "$TEST_HOME"
+        echo "✅ Cleanup completed"

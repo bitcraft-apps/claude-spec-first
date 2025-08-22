@@ -294,6 +294,9 @@ if [ $FAILED -eq 0 ]; then
     fi
     
     echo ""
+    echo "=========================="
+    echo -e "${YELLOW}Note: This script assumes CLAUDE.md is in the current directory. If you use a custom CLAUDE_DIR, paths may differ.${NC}"
+    echo ""
     echo "🚀 Next Steps:"
     echo "- Try: /spec-init sample feature"
     echo "- Test: /spec-workflow complete example"

@@ -96,12 +96,16 @@ if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
             TEMP_CLAUDE=$(mktemp)
             sed '/# Claude Spec-First Framework Integration/,/^$/d' "$CLAUDE_DIR/CLAUDE.md" > "$TEMP_CLAUDE"
             
-            # Remove trailing empty lines and the framework separator (portable sed)
-            if [[ "$(uname)" == "Darwin" ]]; then
-                sed -i '' '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" 2>/dev/null || true
-            else
-                sed -i '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" 2>/dev/null || true
+            # Use portable sed: output to a new temp file, then move it back
+            TEMP_CLAUDE2=$(mktemp)
+            sed '/^# ========================================$/,/^# ========================================$/d' "$TEMP_CLAUDE" > "$TEMP_CLAUDE2"
+            if [ $? -ne 0 ] || [ ! -s "$TEMP_CLAUDE2" ]; then
+                echo -e "${RED}❌ Error: Failed to remove framework separator from CLAUDE.md.${NC}"
+                rm -f "$TEMP_CLAUDE2"
+                rm -f "$TEMP_CLAUDE"
+                exit 1
             fi
+            mv "$TEMP_CLAUDE2" "$TEMP_CLAUDE"
             
             # Only keep the file if it has content (not just the framework)
             if [ -s "$TEMP_CLAUDE" ]; then

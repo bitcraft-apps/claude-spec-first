@@ -25,8 +25,10 @@ if [ ! -d "$SCRIPT_DIR/.git" ]; then
     # Download latest version to temp directory
     TEMP_DIR=$(mktemp -d)
     echo -e "${BLUE}📥 Downloading latest framework...${NC}"
+    # Determine repository URL (env var, arg, or default)
+    REPO_URL="${CLAUDE_REPO_URL:-${1:-https://github.com/bitcraft-apps/claude-spec-first.git}}"
     if command -v git >/dev/null 2>&1; then
-        git clone https://github.com/bitcraft-apps/claude-spec-first.git "$TEMP_DIR" || {
+        git clone "$REPO_URL" "$TEMP_DIR" || {
             echo -e "${RED}❌ Failed to download updates. Please check your internet connection.${NC}"
             exit 1
         }
@@ -47,8 +49,8 @@ fi
 
 echo -e "${BLUE}📡 Fetching latest updates...${NC}"
 
-# Save current branch
-CURRENT_BRANCH=$(git branch --show-current)
+# Save current branch (compatible with older git versions)
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 # Fetch and pull latest changes
 git fetch origin

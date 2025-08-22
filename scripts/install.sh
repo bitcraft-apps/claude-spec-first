@@ -12,6 +12,38 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
 FRAMEWORK_DIR="$SCRIPT_DIR/framework"
 CLAUDE_DIR="$HOME/.claude"
 
+# Arrays to track backups and installations for rollback
+BACKUPS=()
+INSTALLED=()
+
+# Rollback function
+rollback() {
+    echo "❌ Installation failed. Rolling back changes..."
+    
+    # Remove installed files
+    for item in "${INSTALLED[@]}"; do
+        if [ -e "$item" ]; then
+            echo "🔄 Removing $item"
+            rm -rf "$item"
+        fi
+    done
+    
+    # Restore backups
+    for backup in "${BACKUPS[@]}"; do
+        if [ -e "$backup" ]; then
+            original="${backup%.bak.*}"
+            echo "🔄 Restoring $original from backup"
+            mv "$backup" "$original"
+        fi
+    done
+    
+    echo "❌ Installation rolled back successfully"
+    exit 1
+}
+
+# Set trap for cleanup on error
+trap rollback ERR
+
 # Validate framework directory exists
 if [ ! -d "$FRAMEWORK_DIR" ]; then
     echo "❌ Framework directory not found: $FRAMEWORK_DIR"
@@ -31,13 +63,30 @@ for item in "$FRAMEWORK_DIR"/*; do
         backup_name="$target_item.bak.$(date +%Y%m%d%H%M%S)"
         echo "🔄 Backing up existing $base_item to $(basename "$backup_name")"
         mv "$target_item" "$backup_name"
+        if [ $? -ne 0 ]; then
+            echo "❌ Failed to backup $base_item"
+            exit 1
+        fi
+        BACKUPS+=("$backup_name")
     fi
     if [ -d "$item" ]; then
         cp -r "$item" "$CLAUDE_DIR/"
+        if [ $? -ne 0 ]; then
+            echo "❌ Failed to copy directory $base_item"
+            exit 1
+        fi
+        INSTALLED+=("$target_item")
     else
         cp "$item" "$CLAUDE_DIR/"
+        if [ $? -ne 0 ]; then
+            echo "❌ Failed to copy file $base_item"
+            exit 1
+        fi
+        INSTALLED+=("$target_item")
     fi
 done
+
+trap - ERR  # Disable rollback trap after successful install
 
 echo "✅ Installation completed successfully!"
 echo "🚀 Restart Claude Code to load the new framework"
