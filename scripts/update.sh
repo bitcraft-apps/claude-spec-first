@@ -95,19 +95,33 @@ echo -e "${BLUE}🔄 Updating framework files...${NC}"
 
 # Update agents (preserve any custom agents by checking names)
 echo "Updating agents..."
-for agent_file in "$SCRIPT_DIR/framework/agents"/*.md; do
-    agent_name=$(basename "$agent_file")
-    cp "$agent_file" "$CLAUDE_DIR/agents/"
-    echo "  ✅ Updated: $agent_name"
-done
+shopt -s nullglob
+agent_files=("$SCRIPT_DIR/framework/agents"/*.md)
+if [ ${#agent_files[@]} -eq 0 ]; then
+    echo "  ⚠️  No agent files found to update."
+else
+    for agent_file in "${agent_files[@]}"; do
+        agent_name=$(basename "$agent_file")
+        cp "$agent_file" "$CLAUDE_DIR/agents/"
+        echo "  ✅ Updated: $agent_name"
+    done
+fi
+shopt -u nullglob
 
 # Update commands (preserve any custom commands by checking names)  
 echo "Updating commands..."
-for command_file in "$SCRIPT_DIR/framework/commands"/*.md; do
-    command_name=$(basename "$command_file")
-    cp "$command_file" "$CLAUDE_DIR/commands/"
-    echo "  ✅ Updated: $command_name"
-done
+shopt -s nullglob
+command_files=("$SCRIPT_DIR/framework/commands"/*.md)
+if [ ${#command_files[@]} -eq 0 ]; then
+    echo "  ⚠️  No command files found to update."
+else
+    for command_file in "${command_files[@]}"; do
+        command_name=$(basename "$command_file")
+        cp "$command_file" "$CLAUDE_DIR/commands/"
+        echo "  ✅ Updated: $command_name"
+    done
+fi
+shopt -u nullglob
 
 # Update examples
 echo "Updating examples..."

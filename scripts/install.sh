@@ -62,23 +62,20 @@ for item in "$FRAMEWORK_DIR"/*; do
     if [ -e "$target_item" ]; then
         backup_name="$target_item.bak.$(date +%Y%m%d%H%M%S)"
         echo "🔄 Backing up existing $base_item to $(basename "$backup_name")"
-        mv "$target_item" "$backup_name"
-        if [ $? -ne 0 ]; then
+        if ! mv "$target_item" "$backup_name"; then
             echo "❌ Failed to backup $base_item"
             exit 1
         fi
         BACKUPS+=("$backup_name")
     fi
     if [ -d "$item" ]; then
-        cp -r "$item" "$CLAUDE_DIR/"
-        if [ $? -ne 0 ]; then
+        if ! cp -r "$item" "$CLAUDE_DIR/"; then
             echo "❌ Failed to copy directory $base_item"
             exit 1
         fi
         INSTALLED+=("$target_item")
     else
-        cp "$item" "$CLAUDE_DIR/"
-        if [ $? -ne 0 ]; then
+        if ! cp "$item" "$CLAUDE_DIR/"; then
             echo "❌ Failed to copy file $base_item"
             exit 1
         fi
