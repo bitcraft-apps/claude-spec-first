@@ -1,0 +1,62 @@
+name: Test Installation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-install:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test installation script
+      run: |
+        echo "Testing installation process..."
+        chmod +x scripts/install.sh
+        
+        # Create a temporary home directory for testing
+        export TEST_HOME=$(mktemp -d)
+        export HOME=$TEST_HOME
+        
+        # Run installation
+        ./scripts/install.sh
+        
+        # Verify installation
+        echo "Verifying installation..."
+        test -d "$HOME/.claude" && echo "✅ .claude directory created" || (echo "❌ .claude directory missing" && exit 1)
+        test -d "$HOME/.claude/agents" && echo "✅ agents directory created" || (echo "❌ agents directory missing" && exit 1)
+        test -d "$HOME/.claude/commands" && echo "✅ commands directory created" || (echo "❌ commands directory missing" && exit 1)
+        test -d "$HOME/.claude/examples" && echo "✅ examples directory created" || (echo "❌ examples directory missing" && exit 1)
+        
+        # Check if files were installed
+        agent_count=$(find "$HOME/.claude/agents" -name "*.md" | wc -l)
+        command_count=$(find "$HOME/.claude/commands" -name "*.md" | wc -l)
+        
+        if [ "$agent_count" -eq 5 ]; then
+          echo "✅ All 5 agents installed"
+        else
+          echo "❌ Expected 5 agents, found $agent_count"
+          exit 1
+        fi
+        
+        if [ "$command_count" -eq 5 ]; then
+          echo "✅ All 5 commands installed"  
+        else
+          echo "❌ Expected 5 commands, found $command_count"
+          exit 1
+        fi
+        
+        # Test validation script
+        if [ -x "$HOME/.claude/validate-framework.sh" ]; then
+          echo "✅ Validation script installed and executable"
+          cd "$HOME/.claude" && ./validate-framework.sh
+        else
+          echo "❌ Validation script not installed or not executable"
+          exit 1
+        fi
+        
+        echo "🎉 Installation test completed successfully!"

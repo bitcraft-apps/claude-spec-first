@@ -1,0 +1,64 @@
+name: Validate Framework
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Make validation script executable
+      run: chmod +x ./framework/validate-framework.sh
+    
+    - name: Validate framework structure
+      run: ./framework/validate-framework.sh
+    
+    - name: Check YAML frontmatter in agents
+      run: |
+        echo "Validating agent files..."
+        for agent in framework/agents/*.md; do
+          echo "Checking $agent"
+          if ! head -20 "$agent" | grep -q "^name:"; then
+            echo "❌ Missing 'name:' field in $agent"
+            exit 1
+          fi
+          if ! head -20 "$agent" | grep -q "^description:"; then
+            echo "❌ Missing 'description:' field in $agent"
+            exit 1
+          fi
+          if ! head -20 "$agent" | grep -q "^tools:"; then
+            echo "❌ Missing 'tools:' field in $agent"
+            exit 1
+          fi
+          echo "✅ $agent validated"
+        done
+    
+    - name: Check YAML frontmatter in commands
+      run: |
+        echo "Validating command files..."
+        for command in framework/commands/*.md; do
+          echo "Checking $command"
+          if ! head -10 "$command" | grep -q "^description:"; then
+            echo "❌ Missing 'description:' field in $command"
+            exit 1
+          fi
+          echo "✅ $command validated"
+        done
+    
+    - name: Verify installation scripts exist
+      run: |
+        echo "Checking installation scripts..."
+        test -f scripts/install.sh && echo "✅ install.sh exists" || (echo "❌ install.sh missing" && exit 1)
+        test -f scripts/update.sh && echo "✅ update.sh exists" || (echo "❌ update.sh missing" && exit 1)
+        test -f scripts/uninstall.sh && echo "✅ uninstall.sh exists" || (echo "❌ uninstall.sh missing" && exit 1)
+        
+        echo "Checking script permissions..."
+        test -x scripts/install.sh && echo "✅ install.sh is executable" || (echo "❌ install.sh not executable" && exit 1)
+        test -x scripts/update.sh && echo "✅ update.sh is executable" || (echo "❌ update.sh not executable" && exit 1)
+        test -x scripts/uninstall.sh && echo "✅ uninstall.sh is executable" || (echo "❌ uninstall.sh not executable" && exit 1)
