@@ -21,6 +21,7 @@ jobs:
         
         # Set up framework files in current directory for validation
         cp -r framework/* .
+        cp README.md .  # Copy README.md for documentation validation
         chmod +x validate-framework.sh
         
         # Run the comprehensive validation script
