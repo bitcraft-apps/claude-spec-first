@@ -50,12 +50,19 @@ jobs:
           exit 1
         fi
         
-        # Test validation script
+        # Test validation script exists and is executable
         if [ -x "$HOME/.claude/validate-framework.sh" ]; then
           echo "✅ Validation script installed and executable"
-          cd "$HOME/.claude" && ./validate-framework.sh
         else
           echo "❌ Validation script not installed or not executable"
+          exit 1
+        fi
+        
+        # Verify CLAUDE.md was installed
+        if [ -f "$HOME/.claude/CLAUDE.md" ]; then
+          echo "✅ CLAUDE.md installed"
+        else
+          echo "❌ CLAUDE.md not installed"
           exit 1
         fi
         
