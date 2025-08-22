@@ -1,0 +1,57 @@
+name: Validate Framework
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Framework Structure and Configuration
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Run comprehensive framework validation
+      run: |
+        echo "🔍 Running comprehensive framework validation..."
+        
+        # Create temporary directory for validation
+        TEMP_DIR=$(mktemp -d)
+        
+        # Set up framework files in temp directory for validation
+        cp -r framework/* "$TEMP_DIR/"
+        cp README.md "$TEMP_DIR/"
+        chmod +x "$TEMP_DIR/validate-framework.sh"
+        
+        # Run the comprehensive validation script
+        cd "$TEMP_DIR" && ./validate-framework.sh
+    
+    - name: Verify installation scripts
+      run: |
+        echo "📋 Verifying installation scripts..."
+        
+        # Check script existence
+        for script in install.sh update.sh uninstall.sh; do
+          if [ -f "scripts/$script" ]; then
+            echo "✅ scripts/$script exists"
+          else
+            echo "❌ scripts/$script missing"
+            exit 1
+          fi
+        done
+        
+        # Check script permissions
+        for script in install.sh update.sh uninstall.sh; do
+          if [ -x "scripts/$script" ]; then
+            echo "✅ scripts/$script is executable"
+          else
+            echo "❌ scripts/$script not executable"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All installation scripts validated"

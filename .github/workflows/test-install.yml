@@ -1,0 +1,87 @@
+name: Test Installation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-install:
+    name: Test Installation Process
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Test framework installation
+      run: |
+        echo "🚀 Testing installation process..."
+        
+        # Make installation script executable
+        chmod +x scripts/install.sh
+        
+        # Create isolated test environment
+        export TEST_HOME=$(mktemp -d)
+        export HOME=$TEST_HOME
+        echo "📁 Created test environment: $TEST_HOME"
+        
+        # Run installation
+        echo "📦 Running installation..."
+        ./scripts/install.sh
+        
+        echo "✅ Installation completed successfully"
+    
+    - name: Verify installation results
+      run: |
+        echo "🔍 Verifying installation results..."
+        
+        # Use the same test environment
+        export TEST_HOME=$(mktemp -d)
+        export HOME=$TEST_HOME
+        ./scripts/install.sh > /dev/null 2>&1  # Silent install for verification
+        
+        # Verify directory structure
+        directories=(".claude" ".claude/agents" ".claude/commands" ".claude/examples")
+        for dir in "${directories[@]}"; do
+          if [ -d "$HOME/$dir" ]; then
+            echo "✅ $dir directory created"
+          else
+            echo "❌ $dir directory missing"
+            exit 1
+          fi
+        done
+        
+        # Verify file counts
+        agent_count=$(find "$HOME/.claude/agents" -name "*.md" | wc -l)
+        command_count=$(find "$HOME/.claude/commands" -name "*.md" | wc -l)
+        
+        [ "$agent_count" -eq 5 ] && echo "✅ All 5 agents installed" || { echo "❌ Expected 5 agents, found $agent_count"; exit 1; }
+        [ "$command_count" -eq 5 ] && echo "✅ All 5 commands installed" || { echo "❌ Expected 5 commands, found $command_count"; exit 1; }
+        
+        # Verify core files
+        core_files=("validate-framework.sh" "CLAUDE.md")
+        for file in "${core_files[@]}"; do
+          if [ -f "$HOME/.claude/$file" ]; then
+            echo "✅ $file installed"
+          else
+            echo "❌ $file not installed"
+            exit 1
+          fi
+        done
+        
+        # Verify script permissions
+        if [ -x "$HOME/.claude/validate-framework.sh" ]; then
+          echo "✅ Validation script is executable"
+        else
+          echo "❌ Validation script not executable"
+          exit 1
+        fi
+        
+        echo "🎉 All installation verification checks passed!"
+        
+        # Cleanup
+        echo "🧹 Cleaning up test environment..."
+        rm -rf "$TEST_HOME"
+        echo "✅ Cleanup completed"

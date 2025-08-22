@@ -1,0 +1,36 @@
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor/IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+
+# Framework-Generated Files
+.claude/
+*.backup.*
+*.bak
+*.tmp
+*.log
+
+# Development Files
+node_modules/
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# OS Generated Files
+.fseventsd
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
