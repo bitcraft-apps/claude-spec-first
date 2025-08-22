@@ -24,16 +24,16 @@ WARNINGS=0
 print_status() {
     if [ $2 -eq 0 ]; then
         echo -e "${GREEN}✅ $1${NC}"
-        ((PASSED++))
+        PASSED=$((PASSED + 1))
     else
         echo -e "${RED}❌ $1${NC}"
-        ((FAILED++))
+        FAILED=$((FAILED + 1))
     fi
 }
 
 print_warning() {
     echo -e "${YELLOW}⚠️  $1${NC}"
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 }
 
 print_info() {
