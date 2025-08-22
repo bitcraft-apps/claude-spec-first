@@ -135,6 +135,8 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
 done
 
 echo ""
+echo "=========================="
+echo -e "${YELLOW}Note: This script assumes CLAUDE.md is in the current directory. If you use a custom CLAUDE_DIR, paths may differ.${NC}"
 echo "📋 Validating Commands..."
 echo "========================"
 
