@@ -34,3 +34,10 @@ node_modules/
 .fseventsd
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+# Test Coverage
+coverage/
+*.lcov
+.nyc_output/
+coverage.json
+coverage-final.json
