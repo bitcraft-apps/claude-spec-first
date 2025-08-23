@@ -76,9 +76,28 @@ echo ""
 echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
-# Required agents
-REQUIRED_AGENTS=("spec-analyst" "test-designer" "arch-designer" "impl-specialist" "qa-validator")
+# Framework Configuration - centralized list of required components
+REQUIRED_AGENTS=("spec-analyst" "test-designer" "arch-designer" "impl-specialist" "qa-validator" "doc-synthesizer")
+REQUIRED_COMMANDS=("spec-init" "spec-review" "impl-plan" "qa-check" "spec-workflow" "doc-generate")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
+
+# Function to build agent pattern dynamically from REQUIRED_AGENTS array
+build_agent_pattern() {
+    local pattern=""
+    local first=true
+    for agent in "${REQUIRED_AGENTS[@]}"; do
+        if [ "$first" = true ]; then
+            pattern="$agent"
+            first=false
+        else
+            pattern="$pattern\|$agent"
+        fi
+    done
+    echo "$pattern"
+}
+
+# Build agent pattern for grep searches (used in multiple places)
+AGENT_PATTERN=$(build_agent_pattern)
 
 for agent in "${REQUIRED_AGENTS[@]}"; do
     AGENT_FILE="agents/${agent}.md"
@@ -140,8 +159,7 @@ echo -e "${YELLOW}Note: This script assumes CLAUDE.md is in the current director
 echo "📋 Validating Commands..."
 echo "========================"
 
-# Required commands
-REQUIRED_COMMANDS=("spec-init" "spec-review" "impl-plan" "qa-check" "spec-workflow")
+# Using centralized REQUIRED_COMMANDS from framework configuration above
 
 for command in "${REQUIRED_COMMANDS[@]}"; do
     COMMAND_FILE="commands/${command}.md"
@@ -171,7 +189,7 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
         fi
         
         # Check for agent delegation
-        AGENT_MENTIONS=$(grep -c "spec-analyst\|test-designer\|arch-designer\|impl-specialist\|qa-validator" "$COMMAND_FILE" || true)
+        AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$COMMAND_FILE" || true)
         if [ $AGENT_MENTIONS -gt 0 ]; then
             print_status "$command delegates to agents ($AGENT_MENTIONS mentions)" 0
         else
@@ -243,12 +261,52 @@ else
 fi
 
 echo ""
+echo "📄 Validating Documentation Templates..."
+echo "========================================"
+
+# Check templates directory
+if [ -d "templates" ]; then
+    print_status "templates/ directory exists" 0
+    
+    # Check technical templates
+    if [ -d "templates/technical" ]; then
+        print_status "templates/technical/ directory exists" 0
+        TECH_TEMPLATE_COUNT=$(find templates/technical -name "*.md" -type f | wc -l | tr -d ' ')
+        print_info "Found $TECH_TEMPLATE_COUNT technical template files"
+    else
+        print_warning "templates/technical/ directory missing (recommended)"
+    fi
+    
+    # Check user templates
+    if [ -d "templates/user" ]; then
+        print_status "templates/user/ directory exists" 0
+        USER_TEMPLATE_COUNT=$(find templates/user -name "*.md" -type f | wc -l | tr -d ' ')
+        print_info "Found $USER_TEMPLATE_COUNT user template files"
+    else
+        print_warning "templates/user/ directory missing (recommended)"
+    fi
+    
+    # Check for core template files
+    CORE_TEMPLATES=("documentation-structure.md" "metadata-system.md" "archival-process.md")
+    for template in "${CORE_TEMPLATES[@]}"; do
+        if [ -f "templates/$template" ]; then
+            print_status "$template template exists" 0
+        else
+            print_warning "$template template missing (recommended)"
+        fi
+    done
+    
+else
+    print_warning "templates/ directory missing (recommended for doc-generate functionality)"
+fi
+
+echo ""
 echo "🔧 Integration Checks..."
 echo "======================="
 
 # Check for consistency between agents and commands
 if [ -d "commands" ] && ls commands/*.md >/dev/null 2>&1; then
-    COMMAND_AGENT_REFS=$(grep -h "spec-analyst\|test-designer\|arch-designer\|impl-specialist\|qa-validator" commands/*.md | wc -l | tr -d ' ')
+    COMMAND_AGENT_REFS=$(grep -h "$AGENT_PATTERN" commands/*.md | wc -l | tr -d ' ')
     print_info "Found $COMMAND_AGENT_REFS agent references in commands"
 else
     print_warning "commands/ directory missing or contains no .md files"
@@ -261,11 +319,10 @@ else
     print_status "Commands integrate with agents" 1
 fi
 
-# Check workflow completeness
-WORKFLOW_COMMANDS=("spec-init" "spec-review" "impl-plan" "qa-check")
+# Check workflow completeness (using centralized command list)
 WORKFLOW_COMPLETE=true
 
-for cmd in "${WORKFLOW_COMMANDS[@]}"; do
+for cmd in "${REQUIRED_COMMANDS[@]}"; do
     if [ ! -f "commands/${cmd}.md" ]; then
         WORKFLOW_COMPLETE=false
         break
@@ -301,7 +358,8 @@ if [ $FAILED -eq 0 ]; then
     echo ""
     echo "🚀 Next Steps:"
     echo "- Try: /spec-init sample feature"
-    echo "- Test: /spec-workflow complete example"
+    echo "- Test: /spec-workflow complete example (now includes documentation generation)"
+    echo "- Generate docs: /doc-generate project-name"
     echo "- Review: README.md for detailed usage guide"
     
     exit 0
