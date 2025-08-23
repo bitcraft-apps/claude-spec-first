@@ -1,0 +1,56 @@
+milestones:
+  - title: "v1.1.0 - Enhanced Issue Management"
+    description: |
+      Comprehensive GitHub Issues integration with templates, labels, and automation.
+      
+      Key Features:
+      - Issue templates for all common scenarios
+      - Automated labeling and triage
+      - Community engagement workflows
+      - Integration with framework validation
+    due_date: "2024-03-15"
+    state: "open"
+  
+  - title: "v1.2.0 - Advanced Workflows"
+    description: |
+      Multi-agent orchestration improvements and workflow enhancements.
+      
+      Key Features:
+      - Enhanced agent coordination
+      - Improved workflow commands
+      - Better error handling and recovery
+      - Performance optimizations
+    due_date: "2024-06-15"
+    state: "open"
+  
+  - title: "v1.3.0 - Developer Experience"
+    description: |
+      IDE integrations, tooling improvements, and developer productivity features.
+      
+      Key Features:
+      - VSCode extension
+      - CLI improvements
+      - Better debugging tools
+      - Enhanced documentation
+    due_date: "2024-09-15"
+    state: "open"
+  
+  - title: "v2.0.0 - Framework Evolution"
+    description: |
+      Major architectural improvements and breaking changes for enhanced capabilities.
+      
+      Key Features:
+      - Plugin architecture
+      - Custom agent development
+      - Advanced configuration options
+      - Performance and scalability improvements
+    due_date: "2024-12-15"
+    state: "open"
+  
+  - title: "Future Ideas"
+    description: |
+      Long-term vision and community-requested features for future consideration.
+      
+      This milestone captures ideas and suggestions that don't fit into current release plans
+      but may be valuable for future development cycles.
+    state: "open"
