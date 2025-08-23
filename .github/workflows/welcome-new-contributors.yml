@@ -44,12 +44,12 @@ jobs:
                   )?.name.replace('type:', '') || 'issue';
                   
                   message = [
-                    \`👋 Welcome to the Claude Spec-First Framework, @\${contributor}!\`,
+                    `👋 Welcome to the Claude Spec-First Framework, @${contributor}!`,
                     '',
-                    \`Thank you for opening your first \${issueType}. We appreciate your contribution to the project!\`,
+                    `Thank you for opening your first ${issueType}. We appreciate your contribution to the project!`,
                     '',
                     '### Next Steps',
-                    \`- Our team will review your \${issueType} and respond within 24-48 hours\`,
+                    `- Our team will review your ${issueType} and respond within 24-48 hours`,
                     '- Feel free to provide additional details if needed',
                     '- Join our [discussions](../../discussions) for community support',
                     '',
@@ -68,12 +68,12 @@ jobs:
                     body: message
                   });
                   
-                  console.log(\`Posted welcome message for new contributor @\${contributor} on issue #\${context.payload.issue.number}\`);
+                  console.log(`Posted welcome message for new contributor @${contributor} on issue #${context.payload.issue.number}`);
                   
                 } else if (context.payload.pull_request) {
                   // Welcome message for new PR
                   message = [
-                    \`🎉 Thank you for your first contribution, @\${contributor}!\`,
+                    `🎉 Thank you for your first contribution, @${contributor}!`,
                     '',
                     'We\'re excited to review your pull request. Here\'s what happens next:',
                     '',
@@ -99,10 +99,10 @@ jobs:
                     event: 'COMMENT'
                   });
                   
-                  console.log(\`Posted welcome message for new contributor @\${contributor} on PR #\${context.payload.pull_request.number}\`);
+                  console.log(`Posted welcome message for new contributor @${contributor} on PR #${context.payload.pull_request.number}`);
                 }
               } else {
-                console.log(\`Contributor @\${contributor} has previous interactions, skipping welcome message\`);
+                console.log(`Contributor @${contributor} has previous interactions, skipping welcome message`);
               }
               
             } catch (error) {
