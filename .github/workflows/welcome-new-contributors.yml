@@ -58,8 +58,8 @@ jobs:
                     '- [Code of Conduct](../CODE_OF_CONDUCT.md)',
                     '- [Framework Documentation](../README.md)',
                     '',
-                    'We\'re excited to have you as part of our community! 🎉'
-                  ].join('\\n');
+                    "We're excited to have you as part of our community! 🎉"
+                  ].join('\n');
 
                   await github.rest.issues.createComment({
                     owner,
@@ -75,7 +75,7 @@ jobs:
                   message = [
                     `🎉 Thank you for your first contribution, @${contributor}!`,
                     '',
-                    'We\'re excited to review your pull request. Here\'s what happens next:',
+                    "We're excited to review your pull request. Here's what happens next:",
                     '',
                     '### Review Process',
                     '- Automated checks will run (please ensure they pass)',
@@ -89,7 +89,7 @@ jobs:
                     '- [Code Style Guide](../docs/style-guide.md)',
                     '',
                     'Thank you for helping improve the Claude Spec-First Framework! 🚀'
-                  ].join('\\n');
+                  ].join('\n');
 
                   await github.rest.pulls.createReview({
                     owner,
