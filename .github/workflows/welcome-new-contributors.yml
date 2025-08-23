@@ -1,4 +1,5 @@
-name: Welcome New Contributors
+# Welcome workflow - fixed template literal syntax issues
+name: Welcome New Contributors v2
 
 on:
   issues:
