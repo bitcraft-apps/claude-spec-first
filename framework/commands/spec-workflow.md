@@ -46,6 +46,14 @@ This command orchestrates the full specification-first workflow using all specia
 - Security, performance, and accessibility validation
 - Generate deployment readiness assessment
 
+### Phase 6: Final Documentation Generation
+**Command**: Execute `/doc-generate $ARGUMENTS` process
+- Synthesize all development artifacts into comprehensive documentation
+- Generate technical documentation for developers and maintainers
+- Create user-facing documentation for end users and stakeholders
+- Archive original specifications with full traceability
+- Deploy documentation to chosen platforms
+
 ## Success Criteria
 
 ### Specification Phase Complete:
@@ -65,6 +73,13 @@ This command orchestrates the full specification-first workflow using all specia
 - [ ] No critical or blocking issues identified
 - [ ] Deployment readiness confirmed
 - [ ] Monitoring and rollback plans established
+
+### Documentation Generation Complete:
+- [ ] All development artifacts successfully synthesized
+- [ ] Technical documentation covers architecture, APIs, and operations
+- [ ] User documentation provides complete feature coverage and tutorials
+- [ ] Original specifications archived with full traceability
+- [ ] Documentation deployed and accessible to stakeholders
 
 ## Workflow Execution Instructions
 
@@ -97,7 +112,13 @@ Follow the implementation plan using test-driven development:
 ```
 /qa-check $ARGUMENTS
 ```
-Ensure deployment readiness before release.
+Ensure deployment readiness before proceeding to documentation.
+
+### Step 6: Generate Final Documentation
+```
+/doc-generate $ARGUMENTS
+```
+Create comprehensive documentation and archive development artifacts.
 
 ## Quality Assurance Throughout
 
@@ -126,8 +147,8 @@ Ensure deployment readiness before release.
 - Issue escalation procedures documented
 
 ## Instructions
-This workflow ensures systematic, high-quality development from initial concept to deployment-ready implementation. Each phase builds on the previous one, with multiple validation points to ensure quality and correctness.
+This workflow ensures systematic, high-quality development from initial concept to deployment-ready implementation with comprehensive documentation. Each of the 6 phases builds on the previous one, with multiple validation points to ensure quality and correctness.
 
 **To start the complete workflow, begin with: `/spec-init $ARGUMENTS`**
 
-The workflow will guide you through each phase with clear checkpoints and quality gates to ensure successful delivery.
+The workflow will guide you through all phases with clear checkpoints and quality gates to ensure successful delivery and complete documentation.
