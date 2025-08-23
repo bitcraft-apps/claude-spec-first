@@ -1,0 +1,69 @@
+{
+  "name": "claude-spec-first-github-issues",
+  "version": "1.0.0",
+  "description": "GitHub Issues Setup for Claude Spec-First Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:foundation": "jest tests/foundation",
+    "test:templates": "jest tests/template-validation.test.js",
+    "test:labels": "jest tests/auto-labeling.test.js",
+    "test:automation": "jest tests/automation",
+    "test:integration": "jest tests/integration",
+    "test:performance": "jest tests/performance",
+    "test:security": "jest tests/security",
+    "validate-templates": "node scripts/validate-templates.js",
+    "sync-labels": "node scripts/sync-labels.js",
+    "create-milestones": "node scripts/create-milestones.js",
+    "deploy": "node scripts/deploy.js",
+    "start:monitoring": "node scripts/production-service.js",
+    "health-check": "node -e \"require('./monitoring').testMonitoring(process.env.GITHUB_TOKEN)\"",
+    "dashboard": "node -e \"require('./monitoring/dashboard').generateTextSummary(process.env.GITHUB_TOKEN).then(console.log)\"",
+    "metrics": "node -e \"console.log(JSON.stringify(require('./monitoring/metrics').getSystemSummary(), null, 2))\"",
+    "export-data": "node -e \"console.log(JSON.stringify(require('./monitoring').exportMonitoringData(), null, 2))\""
+  },
+  "keywords": [
+    "github",
+    "issues",
+    "templates",
+    "automation",
+    "claude",
+    "spec-first"
+  ],
+  "author": "Claude Spec-First Framework",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.8"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "utils/**/*.js",
+      "api/**/*.js",
+      "automation/**/*.js",
+      "!**/*.test.js",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 85,
+        "lines": 85,
+        "statements": 85
+      }
+    },
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

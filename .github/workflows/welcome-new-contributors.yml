@@ -1,0 +1,111 @@
+name: Welcome New Contributors
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Welcome new contributors
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const { owner, repo } = context.repo;
+              const contributor = context.payload.sender.login;
+              
+              // Check if this is the contributor's first interaction with this repository
+              const { data: issues } = await github.rest.search.issuesAndPullRequests({
+                q: 'repo:' + owner + '/' + repo + ' author:' + contributor,
+                sort: 'created',
+                order: 'asc',
+                per_page: 2
+              });
+              
+              const isFirstTime = issues.total_count === 1;
+              
+              if (isFirstTime) {
+                let message = '';
+                
+                if (context.payload.issue) {
+                  // Welcome message for new issue
+                  const issueLabels = context.payload.issue.labels || [];
+                  const issueType = issueLabels.find(label => 
+                    label.name.startsWith('type:')
+                  )?.name.replace('type:', '') || 'issue';
+                  
+                  message = [
+                    '👋 Welcome to the Claude Spec-First Framework, @' + contributor + '!',
+                    '',
+                    'Thank you for opening your first ' + issueType + '. We appreciate your contribution to the project!',
+                    '',
+                    '### Next Steps',
+                    '- Our team will review your ' + issueType + ' and respond within 24-48 hours',
+                    '- Feel free to provide additional details if needed',
+                    '- Join our [discussions](../../discussions) for community support',
+                    '',
+                    '### Contributing Resources',
+                    '- [Contributing Guidelines](../CONTRIBUTING.md)',
+                    '- [Code of Conduct](../CODE_OF_CONDUCT.md)',
+                    '- [Framework Documentation](../README.md)',
+                    '',
+                    "We're excited to have you as part of our community! 🎉"
+                  ].join('\n');
+
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: context.payload.issue.number,
+                    body: message
+                  });
+                  
+                  console.log('Posted welcome message for new contributor @' + contributor + ' on issue #' + context.payload.issue.number);
+                  
+                } else if (context.payload.pull_request) {
+                  // Welcome message for new PR
+                  message = [
+                    '🎉 Thank you for your first contribution, @' + contributor + '!',
+                    '',
+                    "We're excited to review your pull request. Here's what happens next:",
+                    '',
+                    '### Review Process',
+                    '- Automated checks will run (please ensure they pass)',
+                    '- A maintainer will review your changes',
+                    '- We may request changes or ask questions',
+                    '- Once approved, your PR will be merged',
+                    '',
+                    '### Contributing Resources',
+                    '- [Contributing Guidelines](../CONTRIBUTING.md)',
+                    '- [Development Setup](../docs/development.md)',
+                    '- [Code Style Guide](../docs/style-guide.md)',
+                    '',
+                    'Thank you for helping improve the Claude Spec-First Framework! 🚀'
+                  ].join('\n');
+
+                  await github.rest.pulls.createReview({
+                    owner,
+                    repo,
+                    pull_number: context.payload.pull_request.number,
+                    body: message,
+                    event: 'COMMENT'
+                  });
+                  
+                  console.log('Posted welcome message for new contributor @' + contributor + ' on PR #' + context.payload.pull_request.number);
+                }
+              } else {
+                console.log('Contributor @' + contributor + ' has previous interactions, skipping welcome message');
+              }
+              
+            } catch (error) {
+              console.error('Welcome message failed:', error);
+              // Don't throw - allow issue/PR creation to succeed even if welcome fails
+            }
