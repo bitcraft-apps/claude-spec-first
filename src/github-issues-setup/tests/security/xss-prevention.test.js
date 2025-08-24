@@ -270,7 +270,7 @@ describe('XSS Prevention', () => {
       // <script> and </script> tags using character codes for obfuscation testing
       const SCRIPT_OPEN_TAG = String.fromCharCode(60, 115, 99, 114, 105, 112, 116, 62); // "<script>"
       const SCRIPT_CLOSE_TAG = String.fromCharCode(60, 47, 115, 99, 114, 105, 112, 116, 62); // "</script>"
-      
+
       const unicodePayloads = [
         '\\u003Cscript\\u003Ealert("unicode")\\u003C/script\\u003E',  // Unicode encoded script tags
         '\\x3Cscript\\x3Ealert("hex")\\x3C/script\\x3E',              // Hex encoded script tags
