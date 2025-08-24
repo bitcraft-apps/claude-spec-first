@@ -34,8 +34,8 @@ if ls "$HOME"/.claude-backup-* 1> /dev/null 2>&1; then
 fi
 
 echo -e "${YELLOW}⚠️  This will remove all framework components:${NC}"
-echo "• 5 specialized agents (spec-analyst, test-designer, etc.)"
-echo "• 5 workflow commands (spec-init, spec-review, etc.)" 
+echo "• 6 specialized agents (spec-analyst, test-designer, doc-synthesizer, etc.)"
+echo "• 6 workflow commands (spec-init, spec-review, doc-generate, etc.)" 
 echo "• Framework examples and validation tools"
 echo "• Framework section from CLAUDE.md"
 echo ""
@@ -51,7 +51,7 @@ fi
 echo -e "${BLUE}🗑️  Removing framework files...${NC}"
 
 # Remove framework agents
-FRAMEWORK_AGENTS=("spec-analyst.md" "test-designer.md" "arch-designer.md" "impl-specialist.md" "qa-validator.md")
+FRAMEWORK_AGENTS=("spec-analyst.md" "test-designer.md" "arch-designer.md" "impl-specialist.md" "qa-validator.md" "doc-synthesizer.md")
 for agent in "${FRAMEWORK_AGENTS[@]}"; do
     if [ -f "$CLAUDE_DIR/agents/$agent" ]; then
         rm "$CLAUDE_DIR/agents/$agent"
@@ -60,7 +60,7 @@ for agent in "${FRAMEWORK_AGENTS[@]}"; do
 done
 
 # Remove framework commands
-FRAMEWORK_COMMANDS=("spec-init.md" "spec-review.md" "impl-plan.md" "qa-check.md" "spec-workflow.md")
+FRAMEWORK_COMMANDS=("spec-init.md" "spec-review.md" "impl-plan.md" "qa-check.md" "spec-workflow.md" "doc-generate.md")
 for command in "${FRAMEWORK_COMMANDS[@]}"; do
     if [ -f "$CLAUDE_DIR/commands/$command" ]; then
         rm "$CLAUDE_DIR/commands/$command"

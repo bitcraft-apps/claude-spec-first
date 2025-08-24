@@ -12,6 +12,7 @@
 2. **Test Phase**: Convert specs to failing tests that define expected behavior  
 3. **Implementation Phase**: Write minimal code to pass tests, then refactor
 4. **Validation Phase**: Verify implementation matches specifications exactly
+5. **Documentation Phase**: Generate comprehensive documentation and archive artifacts
 
 ## Quality Standards
 - All requirements must have corresponding test cases
