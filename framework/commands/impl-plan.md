@@ -9,9 +9,9 @@ You are creating a detailed implementation plan for: **$ARGUMENTS**
 ## Multi-Agent Planning Process
 
 ### Phase 1: Architecture Implementation Strategy
-**IMMEDIATE ACTION**: Use the arch-designer sub-agent to create implementation strategy from architectural specifications.
+**IMMEDIATE ACTION**: Use the csf-arch-designer sub-agent to create implementation strategy from architectural specifications.
 
-The arch-designer should:
+The csf-arch-designer should:
 - Review architectural decisions and component designs
 - Create detailed implementation phases and milestones
 - Identify critical path dependencies and bottlenecks
@@ -19,9 +19,9 @@ The arch-designer should:
 - Provide technology-specific implementation guidance
 
 ### Phase 2: Test-Driven Implementation Plan
-**IMMEDIATE ACTION**: Use the test-designer sub-agent to create TDD implementation sequence.
+**IMMEDIATE ACTION**: Use the csf-test-designer sub-agent to create TDD implementation sequence.
 
-The test-designer should:
+The csf-test-designer should:
 - Organize test cases into logical implementation order
 - Create test-driven development phases (Red → Green → Refactor)
 - Identify test dependencies and setup requirements
@@ -29,9 +29,9 @@ The test-designer should:
 - Define test execution and validation checkpoints
 
 ### Phase 3: Implementation Sequencing
-**IMMEDIATE ACTION**: Use the impl-specialist sub-agent to create detailed coding plan.
+**IMMEDIATE ACTION**: Use the csf-impl-specialist sub-agent to create detailed coding plan.
 
-The impl-specialist should:
+The csf-impl-specialist should:
 - Break down implementation into specific coding tasks
 - Identify code dependencies and implementation order
 - Plan refactoring and code quality improvements
@@ -84,4 +84,4 @@ At each phase completion:
 - Include risk mitigation and contingency planning
 - Provide clear deliverables and success criteria for each phase
 
-**Start by delegating to the arch-designer for implementation strategy creation for: $ARGUMENTS**
+**Start by delegating to the csf-arch-designer for implementation strategy creation for: $ARGUMENTS**

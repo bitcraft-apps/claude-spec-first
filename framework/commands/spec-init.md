@@ -36,10 +36,10 @@ Create the following deliverables:
 3. `implementation-plan.md` - Development roadmap
 
 ## Instructions
-- Use the spec-analyst sub-agent to handle the requirements analysis phase
+- Use the csf-spec-analyst sub-agent to handle the requirements analysis phase
 - Follow our specification-first workflow principles
 - Delegate to appropriate specialists for each phase
 - Ensure all requirements have corresponding test cases
 - Create failing tests that encode the requirements
 
-**IMMEDIATE ACTION**: Delegate the requirements analysis for "$ARGUMENTS" to the spec-analyst sub-agent. The spec-analyst will ask clarifying questions and create detailed specifications following their specialized process.
+**IMMEDIATE ACTION**: Delegate the requirements analysis for "$ARGUMENTS" to the csf-spec-analyst sub-agent. The csf-spec-analyst will ask clarifying questions and create detailed specifications following their specialized process.

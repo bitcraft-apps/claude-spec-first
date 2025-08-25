@@ -4,21 +4,25 @@ This directory contains the core components of the Claude Specification-First De
 
 ## Components
 
-### Agents (`agents/`)
-- **spec-analyst**: Requirements analysis and specification creation
-- **test-designer**: Test-first development with comprehensive test suites  
-- **arch-designer**: System architecture and technical design decisions
-- **impl-specialist**: Code implementation following specifications and tests
-- **qa-validator**: Quality assurance and deployment readiness validation
-- **doc-synthesizer**: Documentation synthesis from development artifacts
+### Agents (`agents/csf/`)
+- **csf-spec-analyst**: Requirements analysis and specification creation
+- **csf-test-designer**: Test-first development with comprehensive test suites  
+- **csf-arch-designer**: System architecture and technical design decisions
+- **csf-impl-specialist**: Code implementation following specifications and tests
+- **csf-qa-validator**: Quality assurance and deployment readiness validation
+- **csf-doc-synthesizer**: Documentation synthesis from development artifacts
 
-### Commands (`commands/`)
+*Note: All agents are namespaced with `csf-` prefix to avoid conflicts with other Claude Code tools.*
+
+### Commands (`commands/csf/`)
 - **spec-init**: Initialize specification process for new features
 - **spec-review**: Multi-agent specification validation
 - **impl-plan**: Implementation planning with architecture decisions
 - **qa-check**: Quality validation and deployment readiness
 - **spec-workflow**: Complete end-to-end workflow automation
 - **doc-generate**: Generate comprehensive documentation from artifacts
+
+*Note: Commands are installed in the `csf/` subdirectory and reference the namespaced agents.*
 
 ### Templates (`templates/`)
 - **technical/**: Technical documentation templates
@@ -106,13 +110,15 @@ The framework includes a comprehensive semantic versioning system to manage fram
 - **`/doc-generate [project]`** - Generate comprehensive documentation from artifacts
 - **`/spec-workflow [project]`** - Complete end-to-end workflow automation (all phases)
 
-### Specialized Agents
-- **`spec-analyst`** - Requirements analysis and specification creation
-- **`test-designer`** - Test-first development with comprehensive test suites
-- **`arch-designer`** - System architecture and technical design decisions
-- **`impl-specialist`** - Code implementation following specifications and tests
-- **`qa-validator`** - Quality assurance and deployment readiness validation
-- **`doc-synthesizer`** - Documentation synthesis from development artifacts
+### Specialized Agents (Namespaced)
+- **`csf-spec-analyst`** - Requirements analysis and specification creation
+- **`csf-test-designer`** - Test-first development with comprehensive test suites
+- **`csf-arch-designer`** - System architecture and technical design decisions
+- **`csf-impl-specialist`** - Code implementation following specifications and tests
+- **`csf-qa-validator`** - Quality assurance and deployment readiness validation
+- **`csf-doc-synthesizer`** - Documentation synthesis from development artifacts
+
+*All agents use the `csf-` prefix to prevent conflicts with other tools' agents.*
 
 ## Validation
 

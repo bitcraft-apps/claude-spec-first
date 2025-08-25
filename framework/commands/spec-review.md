@@ -9,9 +9,9 @@ You are conducting a comprehensive specification review for: **$ARGUMENTS**
 ## Multi-Agent Review Process
 
 ### Phase 1: Specification Analysis
-**IMMEDIATE ACTION**: Use the spec-analyst sub-agent to review the existing specification for completeness, consistency, and clarity.
+**IMMEDIATE ACTION**: Use the csf-spec-analyst sub-agent to review the existing specification for completeness, consistency, and clarity.
 
-The spec-analyst should:
+The csf-spec-analyst should:
 - Analyze the current specification documents
 - Identify gaps, ambiguities, and inconsistencies  
 - Check requirements traceability
@@ -19,9 +19,9 @@ The spec-analyst should:
 - Recommend improvements and clarifications
 
 ### Phase 2: Test Alignment Validation
-**IMMEDIATE ACTION**: Use the test-designer sub-agent to validate that test cases align with specifications.
+**IMMEDIATE ACTION**: Use the csf-test-designer sub-agent to validate that test cases align with specifications.
 
-The test-designer should:
+The csf-test-designer should:
 - Review existing test cases against specifications
 - Identify missing test scenarios
 - Check for test-specification alignment gaps
@@ -29,9 +29,9 @@ The test-designer should:
 - Recommend additional test cases if needed
 
 ### Phase 3: Architecture Consistency Check
-**IMMEDIATE ACTION**: Use the arch-designer sub-agent to validate architectural alignment with specifications.
+**IMMEDIATE ACTION**: Use the csf-arch-designer sub-agent to validate architectural alignment with specifications.
 
-The arch-designer should:
+The csf-arch-designer should:
 - Review architecture against functional requirements
 - Check for architectural decision consistency
 - Validate non-functional requirement support
@@ -63,4 +63,4 @@ Before approving specifications:
 - Provide actionable recommendations with clear priorities
 - Ensure specifications are ready for high-quality implementation
 
-**Start by delegating to the spec-analyst for initial specification analysis of: $ARGUMENTS**
+**Start by delegating to the csf-spec-analyst for initial specification analysis of: $ARGUMENTS**

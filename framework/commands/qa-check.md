@@ -9,9 +9,9 @@ You are conducting comprehensive QA validation for: **$ARGUMENTS**
 ## Multi-Agent Quality Validation Process
 
 ### Phase 1: Implementation Validation
-**IMMEDIATE ACTION**: Use the qa-validator sub-agent to conduct comprehensive quality assessment.
+**IMMEDIATE ACTION**: Use the csf-qa-validator sub-agent to conduct comprehensive quality assessment.
 
-The qa-validator should:
+The csf-qa-validator should:
 - Verify implementation against original specifications
 - Execute and analyze all test suites and coverage
 - Validate code quality, security, and performance standards
@@ -19,9 +19,9 @@ The qa-validator should:
 - Assess deployment readiness with go/no-go recommendation
 
 ### Phase 2: Specification Compliance Verification
-**IMMEDIATE ACTION**: Use the spec-analyst sub-agent to verify specification compliance.
+**IMMEDIATE ACTION**: Use the csf-spec-analyst sub-agent to verify specification compliance.
 
-The spec-analyst should:
+The csf-spec-analyst should:
 - Compare final implementation against original requirements
 - Validate that all acceptance criteria are met
 - Check for requirement creep or missing functionality
@@ -29,9 +29,9 @@ The spec-analyst should:
 - Confirm user experience matches specified behavior
 
 ### Phase 3: Architecture Compliance Review
-**IMMEDIATE ACTION**: Use the arch-designer sub-agent to validate architectural compliance.
+**IMMEDIATE ACTION**: Use the csf-arch-designer sub-agent to validate architectural compliance.
 
-The arch-designer should:
+The csf-arch-designer should:
 - Verify implementation follows architectural decisions
 - Check that non-functional requirements are met
 - Validate performance, security, and scalability implementations
@@ -39,9 +39,9 @@ The arch-designer should:
 - Assess technical debt and maintenance considerations
 
 ### Phase 4: Test Coverage Validation
-**IMMEDIATE ACTION**: Use the test-designer sub-agent to validate test completeness.
+**IMMEDIATE ACTION**: Use the csf-test-designer sub-agent to validate test completeness.
 
-The test-designer should:
+The csf-test-designer should:
 - Verify all test cases execute successfully
 - Check test coverage against requirements
 - Validate that tests actually test intended behavior
@@ -49,9 +49,9 @@ The test-designer should:
 - Confirm testing strategy supports long-term maintenance
 
 ### Phase 5: Documentation Readiness Assessment
-**IMMEDIATE ACTION**: Use the doc-synthesizer sub-agent to assess documentation readiness.
+**IMMEDIATE ACTION**: Use the csf-doc-synthesizer sub-agent to assess documentation readiness.
 
-The doc-synthesizer should:
+The csf-doc-synthesizer should:
 - Verify all development artifacts are complete and accessible
 - Check that specifications, architecture decisions, and QA reports are available
 - Validate implementation artifacts can be analyzed for documentation
@@ -107,4 +107,4 @@ Validate all quality gates pass:
 - Include specific actions required before deployment
 - Consider operational and maintenance requirements
 
-**Start by delegating to the qa-validator for comprehensive quality assessment of: $ARGUMENTS**
+**Start by delegating to the csf-qa-validator for comprehensive quality assessment of: $ARGUMENTS**

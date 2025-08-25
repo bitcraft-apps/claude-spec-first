@@ -1,5 +1,5 @@
 ---
-name: spec-analyst
+name: csf-spec-analyst
 description: Requirements analysis and specification creation specialist. Use this agent when you need to convert business requirements into detailed technical specifications with test cases.
 tools: Read, Write, Edit, Grep, Glob
 ---

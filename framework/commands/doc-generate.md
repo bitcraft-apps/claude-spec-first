@@ -12,9 +12,9 @@ This command synthesizes all development artifacts (specifications, tests, archi
 ## Process Steps
 
 ### Phase 1: Artifact Collection and Validation
-**IMMEDIATE ACTION**: Use the doc-synthesizer sub-agent to collect and catalog all development artifacts.
+**IMMEDIATE ACTION**: Use the csf-doc-synthesizer sub-agent to collect and catalog all development artifacts.
 
-The doc-synthesizer should:
+The csf-doc-synthesizer should:
 - Scan `docs/specifications/` for all requirement documents and test cases
 - Collect architecture decisions from `docs/architecture/`
 - Gather QA reports and validation results
@@ -23,7 +23,7 @@ The doc-synthesizer should:
 - Validate artifact consistency and completeness
 
 ### Phase 2: Technical Documentation Generation
-**IMMEDIATE ACTION**: Use the doc-synthesizer sub-agent to create comprehensive technical documentation.
+**IMMEDIATE ACTION**: Use the csf-doc-synthesizer sub-agent to create comprehensive technical documentation.
 
 Generate the following technical documentation structure:
 ```
@@ -47,7 +47,7 @@ docs/technical/
 ```
 
 ### Phase 3: User Documentation Generation
-**IMMEDIATE ACTION**: Use the doc-synthesizer sub-agent to create user-facing documentation.
+**IMMEDIATE ACTION**: Use the csf-doc-synthesizer sub-agent to create user-facing documentation.
 
 Generate the following user documentation structure:
 ```
@@ -69,9 +69,9 @@ docs/user/
 ```
 
 ### Phase 4: Documentation Quality Validation
-**IMMEDIATE ACTION**: Use the qa-validator sub-agent to validate documentation quality.
+**IMMEDIATE ACTION**: Use the csf-qa-validator sub-agent to validate documentation quality.
 
-The qa-validator should:
+The csf-qa-validator should:
 - Verify all documentation against actual implementation
 - Check that all major features are documented
 - Validate code examples and ensure they work
@@ -80,7 +80,7 @@ The qa-validator should:
 - Ensure consistent terminology and formatting
 
 ### Phase 5: Specification Archival
-**IMMEDIATE ACTION**: Use the doc-synthesizer sub-agent to archive original specifications.
+**IMMEDIATE ACTION**: Use the csf-doc-synthesizer sub-agent to archive original specifications.
 
 Archive process:
 - Create `docs/archive/specs/[timestamp]/` directory
@@ -173,4 +173,4 @@ traceability_id: unique change tracking ID
 - Maintain traceability while making documentation self-contained
 - Test all user workflows and code examples before publication
 
-**IMMEDIATE ACTION**: Start the documentation generation process by delegating to the doc-synthesizer sub-agent to collect and analyze all development artifacts for: "$ARGUMENTS"
+**IMMEDIATE ACTION**: Start the documentation generation process by delegating to the csf-doc-synthesizer sub-agent to collect and analyze all development artifacts for: "$ARGUMENTS"

@@ -1,5 +1,5 @@
 ---
-name: test-designer
+name: csf-test-designer
 description: Test-first development specialist who creates comprehensive test suites from specifications. Use this agent when you need to convert requirements into failing tests that define expected behavior.
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---

@@ -1,5 +1,5 @@
 ---
-name: arch-designer
+name: csf-arch-designer
 description: System architecture and design specialist who creates technical architecture from specifications. Use this agent when you need to design system architecture, make technology decisions, and create implementation blueprints.
 tools: Read, Write, Edit, Glob, Grep
 ---

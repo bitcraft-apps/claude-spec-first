@@ -40,7 +40,7 @@ This command orchestrates the specification-first workflow using specialized sub
 
 ### Phase 1: Requirements & Specification
 **Command**: Execute `/spec-init $ARGUMENTS` process
-- Use spec-analyst to gather requirements and create detailed specifications
+- Use csf-spec-analyst to gather requirements and create detailed specifications
 - Generate comprehensive test cases and acceptance criteria
 - Create clear scope boundaries and success metrics
 - Document assumptions and constraints
@@ -64,12 +64,12 @@ This command orchestrates the specification-first workflow using specialized sub
 **If EXECUTED (Enterprise mode):**
 **Command**: Execute `/impl-plan $ARGUMENTS` process
 - Create detailed implementation roadmap with phases
-- Plan test-driven development approach using arch-designer
+- Plan test-driven development approach using csf-arch-designer
 - Identify dependencies, risks, and resource requirements  
 - Establish quality gates and validation checkpoints
 
 ### Phase 4: Implementation Execution
-**Execute implementation using impl-specialist**
+**Execute implementation using csf-impl-specialist**
 - Write code following TDD approach (Red → Green → Refactor)
 - Implement according to architectural guidelines
 - Ensure all tests pass and requirements are met
@@ -80,7 +80,7 @@ This command orchestrates the specification-first workflow using specialized sub
 
 **If SKIPPED (Standard mode):**
 - QA validation integrated into Phase 4 implementation
-- impl-specialist performs basic testing and validation
+- csf-impl-specialist performs basic testing and validation
 - Run existing test suite to ensure no regressions
 - Skip to Phase 6 or completion
 
@@ -149,11 +149,11 @@ This command orchestrates the specification-first workflow using specialized sub
 ```
 /spec-init $ARGUMENTS
 ```
-- Use spec-analyst in standard mode (focused, not comprehensive)
+- Use csf-spec-analyst in standard mode (focused, not comprehensive)
 - Wait for essential specifications before proceeding
 
 #### Step 2: Essential Test Design  
-- Use test-designer in standard mode (essential tests, skip comprehensive coverage)
+- Use csf-test-designer in standard mode (essential tests, skip comprehensive coverage)
 - Focus on happy path and critical edge cases
 
 #### Step 3: Skip Architecture Planning
@@ -162,7 +162,7 @@ This command orchestrates the specification-first workflow using specialized sub
 - Proceed directly to implementation
 
 #### Step 4: Streamlined Implementation
-- Use impl-specialist in standard mode
+- Use csf-impl-specialist in standard mode
 - Integrate basic QA validation into implementation
 - Include essential inline documentation
 - **SKIP** separate QA and documentation phases
@@ -175,7 +175,7 @@ This command orchestrates the specification-first workflow using specialized sub
 ```
 /spec-init $ARGUMENTS
 ```
-- Use spec-analyst in enterprise mode (comprehensive analysis)
+- Use csf-spec-analyst in enterprise mode (comprehensive analysis)
 - Wait for complete specifications before proceeding
 
 #### Step 2: Complete Specification Review
@@ -189,12 +189,12 @@ This command orchestrates the specification-first workflow using specialized sub
 ```
 /impl-plan $ARGUMENTS
 ```
-- Use arch-designer for comprehensive architecture
+- Use csf-arch-designer for comprehensive architecture
 - Create detailed implementation roadmap
 - Plan risk mitigation and quality gates
 
 #### Step 4: Enterprise Implementation
-- Use impl-specialist in enterprise mode
+- Use csf-impl-specialist in enterprise mode
 - Follow comprehensive architectural guidelines
 - Maintain extensive documentation standards
 

@@ -1,5 +1,5 @@
 ---
-name: impl-specialist
+name: csf-impl-specialist
 description: Code implementation specialist who writes clean, tested code following specifications and architecture. Use this agent when you need to implement features that pass predefined tests and match technical specifications exactly.
 tools: Read, Write, Edit, MultiEdit, Bash, Grep, Glob
 ---
