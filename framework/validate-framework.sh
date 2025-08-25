@@ -47,38 +47,21 @@ print_info() {
 validate_path_security() {
     local path="$1"
     
-    # Debug output for CI troubleshooting
-    if [[ -n "${CI:-}" ]]; then
-        echo "DEBUG: Validating path: '$path'" >&2
-    fi
-    
     # Check for directory traversal attempts (../ or /./)
     if [[ "$path" == *"../"* ]] || [[ "$path" == *"/./"* ]] || [[ "$path" == *"//"* ]]; then
-        if [[ -n "${CI:-}" ]]; then
-            echo "DEBUG: Blocked traversal pattern in: '$path'" >&2
-        fi
         return 1
     fi
     
     # Check for paths starting with ../
     if [[ "$path" == "../"* ]]; then
-        if [[ -n "${CI:-}" ]]; then
-            echo "DEBUG: Blocked ../ prefix in: '$path'" >&2
-        fi
         return 1
     fi
     
     # Check for null bytes or other dangerous characters
-    if [[ "$path" =~ $'\0' ]] || [[ "$path" =~ [\;\|\`\$] ]]; then
-        if [[ -n "${CI:-}" ]]; then
-            echo "DEBUG: Blocked dangerous characters in: '$path'" >&2
-        fi
+    if [[ "$path" =~ $'\0' ]] || [[ "$path" =~ [';|`$'] ]]; then
         return 1
     fi
     
-    if [[ -n "${CI:-}" ]]; then
-        echo "DEBUG: Path validated successfully: '$path'" >&2
-    fi
     return 0
 }
 
