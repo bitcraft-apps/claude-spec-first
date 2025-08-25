@@ -57,8 +57,13 @@ validate_path_security() {
         return 1
     fi
     
-    # Check for null bytes or other dangerous characters
-    if [[ "$path" =~ $'\0' ]] || [[ "$path" =~ [';|`$'] ]]; then
+    # Check for dangerous characters using string pattern matching (more portable)
+    case "$path" in
+        *\;* | *\|* | *\`* | *\$*) return 1 ;;
+    esac
+    
+    # Check for null bytes
+    if [[ "$path" =~ $'\0' ]]; then
         return 1
     fi
     
