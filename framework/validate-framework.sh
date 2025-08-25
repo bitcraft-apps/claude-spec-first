@@ -189,7 +189,12 @@ else
 fi
 
 # Check commands directory
-COMMANDS_DIR=$(build_safe_path "commands/csf")
+# Set commands directory based on execution mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    COMMANDS_DIR=$(build_safe_path "commands")
+else
+    COMMANDS_DIR=$(build_safe_path "commands/csf")
+fi
 if [ -d "$COMMANDS_DIR" ]; then
     print_status "commands/ directory exists" 0
     COMMAND_COUNT=$(find "$COMMANDS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -229,7 +234,13 @@ AGENT_PATTERN=$(build_agent_pattern)
 for agent in "${REQUIRED_AGENTS[@]}"; do
     # Remove csf- prefix from agent name for filename
     AGENT_FILENAME=${agent#csf-}
-    AGENT_FILE=$(build_safe_path "agents/csf/${AGENT_FILENAME}.md")
+    
+    # Set agent directory based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        AGENT_FILE=$(build_safe_path "agents/${AGENT_FILENAME}.md")
+    else
+        AGENT_FILE=$(build_safe_path "agents/csf/${AGENT_FILENAME}.md")
+    fi
     
     if [ -f "$AGENT_FILE" ]; then
         print_status "$agent.md exists" 0
@@ -293,7 +304,12 @@ echo "========================"
 # Using centralized REQUIRED_COMMANDS from framework configuration above
 
 for command in "${REQUIRED_COMMANDS[@]}"; do
-    COMMAND_FILE=$(build_safe_path "commands/csf/${command}.md")
+    # Set command file path based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        COMMAND_FILE=$(build_safe_path "commands/${command}.md")
+    else
+        COMMAND_FILE=$(build_safe_path "commands/csf/${command}.md")
+    fi
     
     if [ -f "$COMMAND_FILE" ]; then
         print_status "$command.md exists" 0
@@ -469,7 +485,12 @@ fi
 WORKFLOW_COMPLETE=true
 
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
-    CMD_PATH=$(build_safe_path "commands/csf/${cmd}.md")
+    # Set command path based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        CMD_PATH=$(build_safe_path "commands/${cmd}.md")
+    else
+        CMD_PATH=$(build_safe_path "commands/csf/${cmd}.md")
+    fi
     if [ ! -f "$CMD_PATH" ]; then
         WORKFLOW_COMPLETE=false
         break
