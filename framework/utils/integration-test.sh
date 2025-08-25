@@ -85,7 +85,8 @@ export HOME="$TEST_DIR/home"
 
 # Simulate installation
 cd "$PROJECT_ROOT"
-CLAUDE_DIR="$TEST_DIR/home/.claude" scripts/install.sh >/dev/null 2>&1
+export CLAUDE_DIR="$TEST_DIR/home/.claude"
+scripts/install.sh >/dev/null 2>&1
 
 cd "$TEST_DIR/home/.claude"
 
