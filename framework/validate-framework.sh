@@ -47,8 +47,13 @@ print_info() {
 validate_path_security() {
     local path="$1"
     
-    # Check for directory traversal attempts
-    if [[ "$path" == *".."* ]] || [[ "$path" == *"//./"* ]] || [[ "$path" == *"//"* ]]; then
+    # Check for directory traversal attempts (../ or /./)
+    if [[ "$path" == *"../"* ]] || [[ "$path" == *"/./"* ]] || [[ "$path" == *"//"* ]]; then
+        return 1
+    fi
+    
+    # Check for paths starting with ../
+    if [[ "$path" == "../"* ]]; then
         return 1
     fi
     
