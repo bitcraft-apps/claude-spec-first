@@ -9,6 +9,21 @@ set -e  # Exit on any error
 echo "🔍 Validating Specification-First Development Framework..."
 echo "=================================================="
 
+# Try to load and display framework version
+if [ -f "./utils/version-utils.sh" ]; then
+    . "./utils/version-utils.sh"
+    FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
+    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
+elif [ -f "./framework/utils/version-utils.sh" ]; then
+    . "./framework/utils/version-utils.sh"
+    FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
+    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
+else
+    FRAMEWORK_VERSION="unknown"
+    echo -e "${YELLOW}Framework Version: $FRAMEWORK_VERSION (version utilities not found)${NC}"
+fi
+echo ""
+
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -127,6 +142,35 @@ if [ ! -f "$CLAUDE_MD_PATH" ]; then
 fi
 
 print_status "CLAUDE.md exists ($EXECUTION_MODE mode)" 0
+
+# Check VERSION file
+VERSION_PATH=$(build_safe_path "VERSION")
+if [ -f "$VERSION_PATH" ]; then
+    print_status "VERSION file exists" 0
+    VERSION_CONTENT=$(cat "$VERSION_PATH" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if echo "$VERSION_CONTENT" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null; then
+        print_status "VERSION file has valid format" 0
+        print_info "Framework version: $VERSION_CONTENT"
+    else
+        print_status "VERSION file has valid format" 1
+        print_info "VERSION content: '$VERSION_CONTENT'"
+    fi
+else
+    print_status "VERSION file exists" 1
+fi
+
+# Check version utilities
+VERSION_UTILS_PATH=$(build_safe_path "utils/version-utils.sh")
+if [ -f "$VERSION_UTILS_PATH" ]; then
+    print_status "version utilities exist" 0
+    if [ -x "$VERSION_UTILS_PATH" ]; then
+        print_status "version utilities are executable" 0
+    else
+        print_status "version utilities are executable" 1
+    fi
+else
+    print_status "version utilities exist" 1
+fi
 
 # Check agents directory
 AGENTS_DIR=$(build_safe_path "agents")

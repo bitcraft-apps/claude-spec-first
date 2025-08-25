@@ -51,7 +51,7 @@ if [ ! -d "$FRAMEWORK_DIR" ]; then
 fi
 
 # Create Claude directory if it doesn't exist
-mkdir -p "$CLAUDE_DIR/agents" "$CLAUDE_DIR/commands" "$CLAUDE_DIR/examples"
+mkdir -p "$CLAUDE_DIR/agents" "$CLAUDE_DIR/commands" "$CLAUDE_DIR/examples" "$CLAUDE_DIR/utils"
 
 echo "📦 Installing framework files..."
 
@@ -86,4 +86,11 @@ done
 trap - ERR  # Disable rollback trap after successful install
 
 echo "✅ Installation completed successfully!"
+
+# Display version information if available
+if [ -f "$CLAUDE_DIR/utils/version-utils.sh" ] && [ -f "$CLAUDE_DIR/VERSION" ]; then
+    FRAMEWORK_VERSION=$(cat "$CLAUDE_DIR/VERSION" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+    echo "📋 Framework version: $FRAMEWORK_VERSION"
+fi
+
 echo "🚀 Restart Claude Code to load the new framework"
