@@ -19,34 +19,34 @@ This command provides a rapid, token-efficient development workflow for simple f
 ## Workflow Execution
 
 ### Step 1: Quick Requirements Analysis (2-3 minutes)
-Use **spec-analyst in MVP mode** to:
+Use **csf-spec-analyst in MVP mode** to:
 - Ask 2-3 essential clarifying questions (only blockers)
 - Define core functionality in 3-5 bullet points
 - Identify 1-2 critical success criteria
 - Set clear scope boundaries (what's NOT included)
 - **Estimate LOC** - confirm this should be <500 LOC for MVP workflow
 
-**Output Expected:** Essential requirements in MVP format (see spec-analyst MVP mode)
+**Output Expected:** Essential requirements in MVP format (see csf-spec-analyst MVP mode)
 
 ### Step 2: Essential Test Design (2-3 minutes)
-Use **test-designer in MVP mode** to:
+Use **csf-test-designer in MVP mode** to:
 - Create 3-6 essential tests covering main happy path
 - Add 1-2 critical edge case tests
 - Generate minimal test data/fixtures
 - **Write failing tests** that encode the requirements
 - Skip comprehensive test strategy documentation
 
-**Output Expected:** Working test files that fail initially (see test-designer MVP mode)
+**Output Expected:** Working test files that fail initially (see csf-test-designer MVP mode)
 
 ### Step 3: Streamlined Implementation (Main effort)
-Use **impl-specialist in MVP mode** to:
+Use **csf-impl-specialist in MVP mode** to:
 - Implement minimal code to pass all tests
 - Add essential error handling only
 - Include basic inline comments for complex logic
 - Use sensible defaults for technology choices
 - **Skip architecture phase** - follow existing patterns
 
-**Output Expected:** Working code with minimal documentation (see impl-specialist MVP mode)
+**Output Expected:** Working code with minimal documentation (see csf-impl-specialist MVP mode)
 
 ### Step 4: Quick Validation & Cleanup (1-2 minutes)
 - Run tests to ensure they pass
@@ -106,7 +106,7 @@ Use **impl-specialist in MVP mode** to:
 
 ## Instructions for Execution
 
-**Start immediately with:** Use spec-analyst in MVP mode to gather essential requirements for "$ARGUMENTS"
+**Start immediately with:** Use csf-spec-analyst in MVP mode to gather essential requirements for "$ARGUMENTS"
 
 **Then proceed sequentially:**
 1. Clarify requirements (MVP mode)

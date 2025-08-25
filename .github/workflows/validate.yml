@@ -19,16 +19,9 @@ jobs:
       run: |
         echo "🔍 Running comprehensive framework validation..."
         
-        # Create temporary directory for validation
-        TEMP_DIR=$(mktemp -d)
-        
-        # Set up framework files in temp directory for validation
-        cp -r framework/* "$TEMP_DIR/"
-        cp README.md "$TEMP_DIR/"
-        chmod +x "$TEMP_DIR/validate-framework.sh"
-        
-        # Run the comprehensive validation script
-        cd "$TEMP_DIR" && ./validate-framework.sh
+        # Run validation directly from repository (preserves repository mode)
+        chmod +x framework/validate-framework.sh
+        ./framework/validate-framework.sh
     
     - name: Verify installation scripts
       run: |

@@ -1,5 +1,5 @@
 ---
-name: doc-synthesizer
+name: csf-doc-synthesizer
 description: Documentation synthesis specialist who transforms development artifacts into comprehensive technical and user-facing documentation. Use this agent to create final documentation after QA validation is complete.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob
 ---

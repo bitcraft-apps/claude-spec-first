@@ -1,5 +1,5 @@
 ---
-name: qa-validator
+name: csf-qa-validator
 description: Quality assurance and validation specialist who verifies implementations against specifications, runs comprehensive tests, and ensures code quality standards. Use this agent when you need to validate that implementations meet all requirements and quality gates.
 tools: Read, Bash, Grep, Glob
 ---

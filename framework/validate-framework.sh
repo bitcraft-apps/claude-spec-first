@@ -189,7 +189,12 @@ else
 fi
 
 # Check commands directory
-COMMANDS_DIR=$(build_safe_path "commands")
+# Set commands directory based on execution mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    COMMANDS_DIR=$(build_safe_path "commands")
+else
+    COMMANDS_DIR=$(build_safe_path "commands/csf")
+fi
 if [ -d "$COMMANDS_DIR" ]; then
     print_status "commands/ directory exists" 0
     COMMAND_COUNT=$(find "$COMMANDS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -204,7 +209,7 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("spec-analyst" "test-designer" "arch-designer" "impl-specialist" "qa-validator" "doc-synthesizer")
+REQUIRED_AGENTS=("csf-spec-analyst" "csf-test-designer" "csf-arch-designer" "csf-impl-specialist" "csf-qa-validator" "csf-doc-synthesizer")
 REQUIRED_COMMANDS=("spec-init" "spec-review" "impl-plan" "qa-check" "spec-workflow" "doc-generate")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 
@@ -227,7 +232,15 @@ build_agent_pattern() {
 AGENT_PATTERN=$(build_agent_pattern)
 
 for agent in "${REQUIRED_AGENTS[@]}"; do
-    AGENT_FILE=$(build_safe_path "agents/${agent}.md")
+    # Remove csf- prefix from agent name for filename
+    AGENT_FILENAME=${agent#csf-}
+    
+    # Set agent directory based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        AGENT_FILE=$(build_safe_path "agents/${AGENT_FILENAME}.md")
+    else
+        AGENT_FILE=$(build_safe_path "agents/csf/${AGENT_FILENAME}.md")
+    fi
     
     if [ -f "$AGENT_FILE" ]; then
         print_status "$agent.md exists" 0
@@ -282,14 +295,21 @@ done
 
 echo ""
 echo "=========================="
-echo -e "${YELLOW}Note: This script assumes CLAUDE.md is in the current directory. If you use a custom CLAUDE_DIR, paths may differ.${NC}"
+if [ "$EXECUTION_MODE" = "csf" ]; then
+    echo -e "${BLUE}CSF Mode: Validating command prefix system${NC}"
+fi
 echo "📋 Validating Commands..."
 echo "========================"
 
 # Using centralized REQUIRED_COMMANDS from framework configuration above
 
 for command in "${REQUIRED_COMMANDS[@]}"; do
-    COMMAND_FILE=$(build_safe_path "commands/${command}.md")
+    # Set command file path based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        COMMAND_FILE=$(build_safe_path "commands/${command}.md")
+    else
+        COMMAND_FILE=$(build_safe_path "commands/csf/${command}.md")
+    fi
     
     if [ -f "$COMMAND_FILE" ]; then
         print_status "$command.md exists" 0
@@ -306,6 +326,15 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
             print_status "$command has description field" 0
         else
             print_status "$command has description field" 1
+        fi
+        
+        # Check for CSF prefix in CSF mode
+        if [ "$EXECUTION_MODE" = "csf" ]; then
+            if grep -q "command_prefix: csf" "$COMMAND_FILE"; then
+                print_status "$command has CSF prefix" 0
+            else
+                print_status "$command has CSF prefix" 1
+            fi
         fi
         
         # Check for $ARGUMENTS usage
@@ -456,7 +485,12 @@ fi
 WORKFLOW_COMPLETE=true
 
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
-    CMD_PATH=$(build_safe_path "commands/${cmd}.md")
+    # Set command path based on execution mode
+    if [ "$EXECUTION_MODE" = "repository" ]; then
+        CMD_PATH=$(build_safe_path "commands/${cmd}.md")
+    else
+        CMD_PATH=$(build_safe_path "commands/csf/${cmd}.md")
+    fi
     if [ ! -f "$CMD_PATH" ]; then
         WORKFLOW_COMPLETE=false
         break
@@ -491,9 +525,16 @@ if [ $FAILED -eq 0 ]; then
     echo -e "${YELLOW}Note: Running in $EXECUTION_MODE mode with prefix: '$FRAMEWORK_PREFIX'${NC}"
     echo ""
     echo "🚀 Next Steps:"
-    echo "- Try: /spec-init sample feature"
-    echo "- Test: /spec-workflow complete example (now includes documentation generation)"
-    echo "- Generate docs: /doc-generate project-name"
+    if [ "$EXECUTION_MODE" = "csf" ]; then
+        echo "- Try: /csf:spec-init sample feature"
+        echo "- Test: /csf:spec-workflow complete example"
+        echo "- Generate docs: /csf:doc-generate project-name"
+        echo "- Quick implementation: /csf:implement-now simple task"
+    else
+        echo "- Try: /spec-init sample feature"
+        echo "- Test: /spec-workflow complete example (now includes documentation generation)"
+        echo "- Generate docs: /doc-generate project-name"
+    fi
     echo "- Review: README.md for detailed usage guide"
     
     exit 0
