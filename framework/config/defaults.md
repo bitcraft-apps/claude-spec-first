@@ -3,9 +3,9 @@
 ## Code Limits & Thresholds
 
 ### Lines of Code Limits
-- `MAX_LOC_DEFAULT: 500` - Default maximum lines of code for a single feature/PR (excluding tests and docs)
-- `MAX_LOC_SIMPLE: 200` - Threshold below which projects are considered "simple"
-- `MAX_LOC_COMPLEX: 1000` - Threshold above which projects require full enterprise workflow
+- `MAX_LOC_DEFAULT_THRESHOLD: 500` - Default maximum lines of code for a single feature/PR (excluding tests and docs)
+- `MAX_LOC_SIMPLE_THRESHOLD: 200` - Threshold below which projects are considered "simple"
+- `MAX_LOC_COMPLEX_THRESHOLD: 1000` - Threshold above which projects require full enterprise workflow
 
 ### Token Efficiency Settings
 - `TOKEN_EFFICIENCY: high` - Default token usage optimization level

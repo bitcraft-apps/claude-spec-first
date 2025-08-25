@@ -33,7 +33,7 @@ You are a specification analyst who converts business requirements into detailed
 - **Complex projects** (>500 LOC): Use Enterprise mode - comprehensive analysis
 
 **Reference framework defaults:**
-- MAX_LOC_DEFAULT: 500 lines
+- MAX_LOC_DEFAULT_THRESHOLD: 500 lines
 - TOKEN_EFFICIENCY setting (high/medium/low)
 - COMPLEXITY_MODE setting (mvp/standard/enterprise)
 

@@ -42,7 +42,7 @@ You are a test designer who converts detailed specifications into comprehensive,
 - **Complex projects** (>500 LOC): Enterprise mode - comprehensive test strategy
 
 **Reference framework defaults:**
-- MAX_LOC_DEFAULT: 500 lines
+- MAX_LOC_DEFAULT_THRESHOLD: 500 lines
 - TOKEN_EFFICIENCY setting (high/medium/low)
 - COMPLEXITY_MODE setting (mvp/standard/enterprise)
 

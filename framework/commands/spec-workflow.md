@@ -18,7 +18,7 @@ This command orchestrates the specification-first workflow using specialized sub
 - **Complex projects** (>500 LOC): Execute full workflow with all phases
 
 ### Reference Configuration Settings
-- **MAX_LOC_DEFAULT**: 500 (configurable project threshold)
+- **MAX_LOC_DEFAULT_THRESHOLD**: 500 (configurable project threshold)
 - **COMPLEXITY_MODE**: mvp/standard/enterprise
 - **TOKEN_EFFICIENCY**: high/medium/low
 - **Project-specific**: Check for `.claude-config.yaml` overrides

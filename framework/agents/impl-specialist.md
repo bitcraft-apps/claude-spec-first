@@ -53,7 +53,7 @@ You are an implementation specialist who writes production-ready code that passe
 - **Complex projects** (>500 LOC): Enterprise mode - comprehensive implementation
 
 **Reference framework defaults:**
-- MAX_LOC_DEFAULT: 500 lines
+- MAX_LOC_DEFAULT_THRESHOLD: 500 lines
 - TOKEN_EFFICIENCY setting (high/medium/low)
 - COMPLEXITY_MODE setting (mvp/standard/enterprise)
 

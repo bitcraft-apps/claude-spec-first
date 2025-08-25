@@ -12,7 +12,7 @@
 ## Configuration System
 
 ### Default Settings (Configurable)
-- **MAX_LOC_DEFAULT**: 500 lines of code per feature/PR (excludes tests and docs)
+- **MAX_LOC_DEFAULT_THRESHOLD**: 500 lines of code per feature/PR (excludes tests and docs)
 - **COMPLEXITY_MODE**: mvp (options: mvp/standard/enterprise)
 - **TOKEN_EFFICIENCY**: high (options: high/medium/low)
 - **Default approach**: Start with simplest workflow, escalate if needed
