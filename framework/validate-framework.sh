@@ -2,6 +2,7 @@
 
 # Specification-First Development Framework Validation Script
 # Validates all components for Claude Code compliance and functionality
+# Supports dual-mode operation: repository mode (./framework/) and installed mode (~/.claude/)
 
 set -e  # Exit on any error
 
@@ -40,22 +41,98 @@ print_info() {
     echo -e "${BLUE}ℹ️  $1${NC}"
 }
 
+# Security and Path Management Functions
+
+# Validate path security - prevent directory traversal attacks
+validate_path_security() {
+    local path="$1"
+    
+    # Check for directory traversal attempts (../ or /./)
+    if [[ "$path" == *"../"* ]] || [[ "$path" == *"/./"* ]] || [[ "$path" == *"//"* ]]; then
+        return 1
+    fi
+    
+    # Check for paths starting with ../
+    if [[ "$path" == "../"* ]]; then
+        return 1
+    fi
+    
+    # Check for dangerous characters using string pattern matching (more portable)
+    case "$path" in
+        *\;* | *\|* | *\`* | *\$*) return 1 ;;
+    esac
+    
+    # Note: Null byte checking removed due to CI environment compatibility issues
+    # Null bytes in legitimate file paths are extremely rare in practice
+    
+    return 0
+}
+
+# Build safe path with framework prefix and security validation
+build_safe_path() {
+    local relative_path="$1"
+    local full_path="${FRAMEWORK_PREFIX}${relative_path}"
+    
+    # Validate path security
+    if ! validate_path_security "$full_path"; then
+        echo -e "${RED}Security Error: Invalid path detected: $full_path${NC}" >&2
+        exit 1
+    fi
+    
+    echo "$full_path"
+}
+
+# Detect execution mode based on directory structure
+detect_execution_mode() {
+    # Check if we're in repository mode (has ./framework/ directory)
+    if [ -d "./framework" ] && [ -f "./framework/CLAUDE.md" ]; then
+        EXECUTION_MODE="repository"
+        FRAMEWORK_PREFIX="./framework/"
+        print_info "Detected repository mode - using ./framework/ prefix"
+        return 0
+    fi
+    
+    # Check if we're in installed mode (has CLAUDE.md in current directory)
+    if [ -f "./CLAUDE.md" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX=""
+        print_info "Detected installed mode - using current directory"
+        return 0
+    fi
+    
+    # Neither mode detected
+    echo -e "${RED}❌ Invalid execution context${NC}" >&2
+    echo -e "${RED}This script must be run from either:${NC}" >&2
+    echo -e "${RED}  - Repository root (with ./framework/ directory)${NC}" >&2
+    echo -e "${RED}  - Installed location (~/.claude/ with CLAUDE.md)${NC}" >&2
+    exit 1
+}
+
+# Execution mode detection and path management
+EXECUTION_MODE=""
+FRAMEWORK_PREFIX=""
+
 echo ""
 echo "📁 Checking Directory Structure..."
 echo "=================================="
 
-# Check if we're in the right directory
-if [ ! -f "CLAUDE.md" ]; then
-    echo -e "${RED}❌ Not in Claude Code configuration directory (CLAUDE.md not found)${NC}"
+# Initialize execution mode detection
+detect_execution_mode
+
+# Check framework structure using detected mode
+CLAUDE_MD_PATH=$(build_safe_path "CLAUDE.md")
+if [ ! -f "$CLAUDE_MD_PATH" ]; then
+    echo -e "${RED}❌ Framework CLAUDE.md not found at: $CLAUDE_MD_PATH${NC}"
     exit 1
 fi
 
-print_status "CLAUDE.md exists" 0
+print_status "CLAUDE.md exists ($EXECUTION_MODE mode)" 0
 
 # Check agents directory
-if [ -d "agents" ]; then
+AGENTS_DIR=$(build_safe_path "agents")
+if [ -d "$AGENTS_DIR" ]; then
     print_status "agents/ directory exists" 0
-    AGENT_COUNT=$(find agents -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+    AGENT_COUNT=$(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     print_info "Found $AGENT_COUNT agent files"
 else
     print_status "agents/ directory exists" 1
@@ -63,9 +140,10 @@ else
 fi
 
 # Check commands directory
-if [ -d "commands" ]; then
+COMMANDS_DIR=$(build_safe_path "commands")
+if [ -d "$COMMANDS_DIR" ]; then
     print_status "commands/ directory exists" 0
-    COMMAND_COUNT=$(find commands -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+    COMMAND_COUNT=$(find "$COMMANDS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
     print_info "Found $COMMAND_COUNT command files"
 else
     print_status "commands/ directory exists" 1
@@ -100,7 +178,7 @@ build_agent_pattern() {
 AGENT_PATTERN=$(build_agent_pattern)
 
 for agent in "${REQUIRED_AGENTS[@]}"; do
-    AGENT_FILE="agents/${agent}.md"
+    AGENT_FILE=$(build_safe_path "agents/${agent}.md")
     
     if [ -f "$AGENT_FILE" ]; then
         print_status "$agent.md exists" 0
@@ -162,7 +240,7 @@ echo "========================"
 # Using centralized REQUIRED_COMMANDS from framework configuration above
 
 for command in "${REQUIRED_COMMANDS[@]}"; do
-    COMMAND_FILE="commands/${command}.md"
+    COMMAND_FILE=$(build_safe_path "commands/${command}.md")
     
     if [ -f "$COMMAND_FILE" ]; then
         print_status "$command.md exists" 0
@@ -205,26 +283,26 @@ echo ""
 echo "📖 Validating CLAUDE.md..."
 echo "=========================="
 
-# Check CLAUDE.md content
-if grep -q "Specification-First Development" "CLAUDE.md"; then
+# Check CLAUDE.md content using safe path
+if grep -q "Specification-First Development" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md contains specification-first principles" 0
 else
     print_status "CLAUDE.md contains specification-first principles" 1
 fi
 
-if grep -q "## Core Principles" "CLAUDE.md"; then
+if grep -q "## Core Principles" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has core principles section" 0
 else
     print_status "CLAUDE.md has core principles section" 1
 fi
 
-if grep -q "## Workflow" "CLAUDE.md"; then
+if grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has workflow section" 0
 else
     print_status "CLAUDE.md has workflow section" 1
 fi
 
-if grep -q "## Instructions for Claude" "CLAUDE.md"; then
+if grep -q "## Instructions for Claude" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has Claude instructions" 0
 else
     print_status "CLAUDE.md has Claude instructions" 1
@@ -234,16 +312,17 @@ echo ""
 echo "📚 Checking Documentation..."
 echo "============================"
 
-if [ -f "README.md" ]; then
+README_PATH=$(build_safe_path "README.md")
+if [ -f "$README_PATH" ]; then
     print_status "README.md exists" 0
     
-    if grep -q "Quick Start" "README.md"; then
+    if grep -q "Quick Start" "$README_PATH"; then
         print_status "README.md has quick start guide" 0
     else
         print_status "README.md has quick start guide" 1
     fi
     
-    if grep -q "Command Reference" "README.md"; then
+    if grep -q "Command Reference" "$README_PATH"; then
         print_status "README.md has command reference" 0
     else
         print_status "README.md has command reference" 1
@@ -252,9 +331,10 @@ else
     print_status "README.md exists" 1
 fi
 
-if [ -d "examples" ]; then
+EXAMPLES_DIR=$(build_safe_path "examples")
+if [ -d "$EXAMPLES_DIR" ]; then
     print_status "examples/ directory exists" 0
-    EXAMPLE_COUNT=$(find examples -name "*.md" -type f | wc -l | tr -d ' ')
+    EXAMPLE_COUNT=$(find "$EXAMPLES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
     print_info "Found $EXAMPLE_COUNT example files"
 else
     print_warning "examples/ directory missing (recommended)"
@@ -265,22 +345,25 @@ echo "📄 Validating Documentation Templates..."
 echo "========================================"
 
 # Check templates directory
-if [ -d "templates" ]; then
+TEMPLATES_DIR=$(build_safe_path "templates")
+if [ -d "$TEMPLATES_DIR" ]; then
     print_status "templates/ directory exists" 0
     
     # Check technical templates
-    if [ -d "templates/technical" ]; then
+    TECH_TEMPLATES_DIR=$(build_safe_path "templates/technical")
+    if [ -d "$TECH_TEMPLATES_DIR" ]; then
         print_status "templates/technical/ directory exists" 0
-        TECH_TEMPLATE_COUNT=$(find templates/technical -name "*.md" -type f | wc -l | tr -d ' ')
+        TECH_TEMPLATE_COUNT=$(find "$TECH_TEMPLATES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
         print_info "Found $TECH_TEMPLATE_COUNT technical template files"
     else
         print_warning "templates/technical/ directory missing (recommended)"
     fi
     
     # Check user templates
-    if [ -d "templates/user" ]; then
+    USER_TEMPLATES_DIR=$(build_safe_path "templates/user")
+    if [ -d "$USER_TEMPLATES_DIR" ]; then
         print_status "templates/user/ directory exists" 0
-        USER_TEMPLATE_COUNT=$(find templates/user -name "*.md" -type f | wc -l | tr -d ' ')
+        USER_TEMPLATE_COUNT=$(find "$USER_TEMPLATES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
         print_info "Found $USER_TEMPLATE_COUNT user template files"
     else
         print_warning "templates/user/ directory missing (recommended)"
@@ -289,7 +372,8 @@ if [ -d "templates" ]; then
     # Check for core template files
     CORE_TEMPLATES=("documentation-structure.md" "metadata-system.md" "archival-process.md")
     for template in "${CORE_TEMPLATES[@]}"; do
-        if [ -f "templates/$template" ]; then
+        TEMPLATE_PATH=$(build_safe_path "templates/$template")
+        if [ -f "$TEMPLATE_PATH" ]; then
             print_status "$template template exists" 0
         else
             print_warning "$template template missing (recommended)"
@@ -305,8 +389,8 @@ echo "🔧 Integration Checks..."
 echo "======================="
 
 # Check for consistency between agents and commands
-if [ -d "commands" ] && ls commands/*.md >/dev/null 2>&1; then
-    COMMAND_AGENT_REFS=$(grep -h "$AGENT_PATTERN" commands/*.md | wc -l | tr -d ' ')
+if [ -d "$COMMANDS_DIR" ] && ls "$COMMANDS_DIR"/*.md >/dev/null 2>&1; then
+    COMMAND_AGENT_REFS=$(grep -h "$AGENT_PATTERN" "$COMMANDS_DIR"/*.md | wc -l | tr -d ' ')
     print_info "Found $COMMAND_AGENT_REFS agent references in commands"
 else
     print_warning "commands/ directory missing or contains no .md files"
@@ -323,7 +407,8 @@ fi
 WORKFLOW_COMPLETE=true
 
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
-    if [ ! -f "commands/${cmd}.md" ]; then
+    CMD_PATH=$(build_safe_path "commands/${cmd}.md")
+    if [ ! -f "$CMD_PATH" ]; then
         WORKFLOW_COMPLETE=false
         break
     fi
@@ -354,7 +439,7 @@ if [ $FAILED -eq 0 ]; then
     
     echo ""
     echo "=========================="
-    echo -e "${YELLOW}Note: This script assumes CLAUDE.md is in the current directory. If you use a custom CLAUDE_DIR, paths may differ.${NC}"
+    echo -e "${YELLOW}Note: Running in $EXECUTION_MODE mode with prefix: '$FRAMEWORK_PREFIX'${NC}"
     echo ""
     echo "🚀 Next Steps:"
     echo "- Try: /spec-init sample feature"
