@@ -23,18 +23,12 @@ This example demonstrates the **ultra-streamlined `/implement-now` workflow** fo
 - `styles/contact-form.css` - Updated button container alignment
 
 ### Code Changes:
-```css
-/* Before */
-.contact-form .button-container {
-  text-align: left;
-  margin-top: 1rem;
-}
-
-/* After */
-.contact-form .button-container {
-  text-align: right;  /* Changed from left to right */
-  margin-top: 1rem;
-}
+```diff
+ .contact-form .button-container {
+-  text-align: left;
++  text-align: right;
+   margin-top: 1rem;
+ }
 ```
 
 ### Testing:
