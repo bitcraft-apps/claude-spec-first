@@ -107,6 +107,11 @@ assert_failure() {
     fi
 }
 
+# Helper function to safely get version with fallback
+get_version_safe() {
+    "$VERSION_UTILS" get 2>/dev/null || echo "failed"
+}
+
 # Test: Version validation
 test_version_validation() {
     echo -e "${BLUE}Testing version validation...${NC}"
@@ -256,19 +261,19 @@ test_cli_interface() {
     
     # Test get command
     local result
-    result=$("$VERSION_UTILS" get 2>/dev/null || echo "failed")
+    result=$(get_version_safe)
     assert_equals "1.0.0" "$result" "CLI get command works"
     
     # Test set command
     assert_success "'$VERSION_UTILS' set '2.0.0' >/dev/null" "CLI set command works"
     
-    result=$("$VERSION_UTILS" get 2>/dev/null || echo "failed")
+    result=$(get_version_safe)
     assert_equals "2.0.0" "$result" "CLI set command updates version"
     
     # Test increment command
     assert_success "'$VERSION_UTILS' increment patch >/dev/null" "CLI increment command works"
     
-    result=$("$VERSION_UTILS" get 2>/dev/null || echo "failed")
+    result=$(get_version_safe)
     assert_equals "2.0.1" "$result" "CLI increment command updates version"
     
     # Test compare command

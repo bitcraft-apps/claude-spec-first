@@ -293,8 +293,10 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
                 echo "Usage: $0 compare <version1> <version2>" >&2
                 exit 1
             fi
-            compare_versions "$2" "$3" || result=$?
-            result=${result:-0}
+            set +e  # Temporarily disable strict error handling
+            compare_versions "$2" "$3"
+            result=$?
+            set -e  # Re-enable strict error handling
             case $result in
                 0) echo "$2 == $3" ;;
                 1) echo "$2 > $3" ;;

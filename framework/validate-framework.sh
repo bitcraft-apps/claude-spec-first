@@ -147,7 +147,12 @@ print_status "CLAUDE.md exists ($EXECUTION_MODE mode)" 0
 VERSION_PATH=$(build_safe_path "VERSION")
 if [ -f "$VERSION_PATH" ]; then
     print_status "VERSION file exists" 0
-    VERSION_CONTENT=$(cat "$VERSION_PATH" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    # Use version utilities if available, otherwise fall back to manual parsing
+    if command -v get_framework_version >/dev/null 2>&1; then
+        VERSION_CONTENT=$(get_framework_version 2>/dev/null || echo "")
+    else
+        VERSION_CONTENT=$(cat "$VERSION_PATH" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    fi
     if echo "$VERSION_CONTENT" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null; then
         print_status "VERSION file has valid format" 0
         print_info "Framework version: $VERSION_CONTENT"
