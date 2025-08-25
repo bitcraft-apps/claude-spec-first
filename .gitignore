@@ -19,8 +19,12 @@ Thumbs.db
 .claude/
 *.backup.*
 *.bak
+*.bak.*
+VERSION.bak.*
 *.tmp
 *.log
+test_results.txt
+*_results.txt
 
 # Development Files
 node_modules/
