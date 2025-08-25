@@ -129,7 +129,7 @@ This ensures every file system access is:
 
 ### Validation Coverage Architecture
 
-The system implements 79 distinct validation checks across multiple categories:
+The system implements 97 distinct validation checks across multiple categories:
 
 #### Directory Structure (6 checks)
 - Framework root validation
@@ -144,7 +144,7 @@ The system implements 79 distinct validation checks across multiple categories:
 - Tool name validation against approved list
 - Content structure verification
 
-#### Command Validation (36 checks, 6 commands × 6 checks each)
+#### Command Validation (54 checks, 9 commands × 6 checks each)
 - File existence verification
 - YAML frontmatter syntax validation
 - Description field presence
