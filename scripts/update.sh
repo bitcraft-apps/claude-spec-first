@@ -40,7 +40,7 @@ if [ ! -d "$SCRIPT_DIR/.git" ]; then
     fi
 fi
 
-# Check if framework is currently installed (check for CSF structure)
+# Check if framework is currently installed (check for either CSF or legacy structure)
 if [ ! -f "$CLAUDE_DIR/agents/csf/spec.md" ] && [ ! -f "$CLAUDE_DIR/agents/spec-analyst.md" ]; then
     echo -e "${YELLOW}⚠️  Framework doesn't appear to be installed.${NC}"
     echo -e "${BLUE}🚀 Running initial installation instead...${NC}"
