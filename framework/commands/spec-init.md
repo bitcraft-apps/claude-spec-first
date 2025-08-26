@@ -1,45 +1,56 @@
 ---
-description: Initialize specification process for a new feature - creates detailed requirements, test cases, and implementation plan
+description: Smart specification initialization - automatically routes to optimal workflow based on complexity
 ---
 
-# Specification Initialization
+# Smart Specification Initialization
 
 You are starting the specification-first development process for: **$ARGUMENTS**
 
-## Process Steps:
+## Automatic Workflow Routing
 
-### 1. Requirements Analysis
-Ask clarifying questions about:
-- What exactly should this feature do?
-- What are the success criteria?
-- What are the constraints and limitations?
-- Who are the users and what are their needs?
-- What are the performance/security requirements?
+This command intelligently routes to the most appropriate workflow based on task complexity:
 
-### 2. Specification Creation
-Once requirements are clear, create:
-- **Requirements Summary**: Clear scope and boundaries
-- **Functional Specifications**: Detailed component breakdown  
-- **Acceptance Criteria**: Measurable success conditions
-- **Test Cases**: Both happy path and edge cases
+### Step 1: Quick Complexity Assessment (30 seconds)
+Evaluate the task:
+- **Estimated LOC**: How many lines of code will this require?
+- **Clarity**: Are requirements obvious and well-understood?
+- **Integration**: Does this affect multiple systems or components?
 
-### 3. Implementation Planning
-Generate:
-- **Architecture Overview**: High-level design approach
-- **Implementation Tasks**: Step-by-step development plan
-- **Quality Gates**: Checkpoints for validation
+### Step 2: Automatic Routing
+Based on assessment, automatically execute:
 
-## Output Structure
-Create the following deliverables:
-1. `requirements.md` - Detailed requirements document
-2. `test-cases.md` - Comprehensive test scenarios
-3. `implementation-plan.md` - Development roadmap
+**For Simple Tasks (<100 LOC, obvious solution):**
+```
+→ /csf:implement-now $ARGUMENTS
+```
+Skip specification ceremony and implement directly.
+
+**For Medium Tasks (100-500 LOC, clear requirements):**
+```
+→ /csf:spec-mvp $ARGUMENTS  
+```
+Streamlined specification with essential testing and rapid implementation.
+
+**For Complex Tasks (>500 LOC, unclear requirements, high risk):**
+```
+→ /csf:spec-workflow $ARGUMENTS
+```
+Complete specification-first workflow with all phases.
+
+## Decision Matrix
+```
+Is solution obvious and <100 LOC?
+├─ Yes → /csf:implement-now
+└─ No → Is it well-understood and <500 LOC?
+    ├─ Yes → /csf:spec-mvp
+    └─ No → /csf:spec-workflow
+```
 
 ## Instructions
-- Use the csf-spec-analyst sub-agent to handle the requirements analysis phase
-- Follow our specification-first workflow principles
-- Delegate to appropriate specialists for each phase
-- Ensure all requirements have corresponding test cases
-- Create failing tests that encode the requirements
+**Immediately assess "$ARGUMENTS" and route to the appropriate workflow:**
 
-**IMMEDIATE ACTION**: Delegate the requirements analysis for "$ARGUMENTS" to the csf-spec-analyst sub-agent. The csf-spec-analyst will ask clarifying questions and create detailed specifications following their specialized process.
+1. **Quick assessment**: Estimate complexity and clarity
+2. **Route automatically**: Execute the recommended command
+3. **No additional ceremony**: Let the routed workflow handle the details
+
+**IMMEDIATE ACTION**: Assess the complexity of "$ARGUMENTS" and automatically execute the most appropriate workflow command (`/csf:implement-now`, `/csf:spec-mvp`, or `/csf:spec-workflow`).

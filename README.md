@@ -15,7 +15,7 @@ A comprehensive specification-first development framework for Claude Code that t
 ## Features
 
 - 6 specialized sub-agents for different development phases (namespaced as `csf-*`)
-- 6 workflow commands for structured development
+- Streamlined workflow commands with intelligent routing
 - Smart installation with backup and merge capabilities
 - Test-driven development support
 - Quality assurance validation
@@ -24,14 +24,20 @@ A comprehensive specification-first development framework for Claude Code that t
 
 ## Command Reference
 
-The framework provides these workflow commands:
+The framework provides these streamlined workflow commands:
 
-- `/spec-init` - Initialize specification process for new features
-- `/spec-review` - Multi-agent specification validation
-- `/impl-plan` - Implementation planning with architecture decisions
-- `/qa-check` - Quality validation and deployment readiness
-- `/doc-generate` - Generate comprehensive documentation from artifacts
-- `/spec-workflow` - Complete end-to-end workflow automation
+**Primary Workflow Commands:**
+- `/csf:spec-init` - Smart router that selects optimal workflow automatically
+- `/csf:implement-now` - Direct implementation for simple, obvious tasks
+- `/csf:spec-mvp` - Rapid development for simple-to-medium features  
+- `/csf:spec-workflow` - Complete workflow for complex systems
+
+**Utility Commands:**
+- `/csf:complexity-eval` - Analyze task complexity and recommend workflow
+- `/csf:spec-review` - Multi-agent specification validation
+- `/csf:impl-plan` - Implementation planning with architecture decisions
+- `/csf:qa-check` - Quality validation and deployment readiness
+- `/csf:doc-generate` - Generate comprehensive documentation from artifacts
 
 ## Agent Namespacing
 
