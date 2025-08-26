@@ -38,11 +38,6 @@ The framework uses a streamlined 3-phase approach:
 - **`/csf:document`** - Generate documentation from spec and implementation
 - **`/csf:workflow`** - Execute complete spec → implement → document cycle
 
-### Utility Commands
-- **`/csf:spec-init`** - Smart router for starting appropriate workflow
-- **`/csf:implement-now`** - Direct implementation for obvious tasks
-- **`/csf:doc-generate`** - Generate documentation only
-
 ## Specialized Agents
 
 The framework uses 3 specialized agents:
@@ -83,10 +78,10 @@ Each agent has specific tools and focuses on their phase of the workflow.
 
 ### Decision Guidelines
 ```
-Simple, obvious task → /csf:implement-now
 Clear requirements → /csf:spec then /csf:implement  
 Complex feature → /csf:workflow (full cycle)
 Documentation only → /csf:document
+Simple update → /csf:implement (with existing context)
 ```
 
 Focus on delivering working, well-documented solutions through clear specifications and quality implementation.
