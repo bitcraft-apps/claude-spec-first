@@ -53,12 +53,12 @@ jobs:
           fi
         done
         
-        # Verify file counts
+        # Verify file counts (updated for simplified framework)
         agent_count=$(find "$HOME/.claude/agents" -name "*.md" | wc -l)
         command_count=$(find "$HOME/.claude/commands" -name "*.md" | wc -l)
         
-        [ "$agent_count" -eq 6 ] && echo "✅ All 6 agents installed" || { echo "❌ Expected 6 agents, found $agent_count"; exit 1; }
-        [ "$command_count" -eq 9 ] && echo "✅ All 9 commands installed" || { echo "❌ Expected 9 commands, found $command_count"; exit 1; }
+        [ "$agent_count" -eq 3 ] && echo "✅ All 3 agents installed" || { echo "❌ Expected 3 agents, found $agent_count"; exit 1; }
+        [ "$command_count" -eq 7 ] && echo "✅ All 7 commands installed" || { echo "❌ Expected 7 commands, found $command_count"; exit 1; }
         
         # Verify core files
         core_files=("validate-framework.sh" "CLAUDE.md")
