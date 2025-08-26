@@ -1,6 +1,6 @@
 # Claude Spec-First Framework
 
-A comprehensive specification-first development framework for Claude Code that transforms it into a professional development environment following structured workflows: Requirements → Specifications → Tests → Architecture → Implementation → Quality Assurance → Documentation.
+A streamlined specification-first development framework for Claude Code that transforms it into a professional development environment following a clean 3-phase workflow: Specification → Implementation → Documentation.
 
 ## Quick Start
 
@@ -14,41 +14,30 @@ A comprehensive specification-first development framework for Claude Code that t
 
 ## Features
 
-- 6 specialized sub-agents for different development phases (namespaced as `csf-*`)
-- Streamlined workflow commands with intelligent routing
+- 3 specialized agents for focused development phases (namespaced as `csf-*`)
+- 4 streamlined commands for clean workflow execution
+- Context clearing between phases for focused work
 - Smart installation with backup and merge capabilities
-- Test-driven development support
-- Quality assurance validation
 - Comprehensive documentation generation from artifacts
 - Conflict-free operation with other Claude Code tools
 
 ## Command Reference
 
-The framework provides these streamlined workflow commands:
+The framework provides 4 streamlined workflow commands:
 
-**Primary Workflow Commands:**
-- `/csf:spec-init` - Smart router that selects optimal workflow automatically
-- `/csf:implement-now` - Direct implementation for simple, obvious tasks
-- `/csf:spec-mvp` - Rapid development for simple-to-medium features  
-- `/csf:spec-workflow` - Complete workflow for complex systems
-
-**Utility Commands:**
-- `/csf:complexity-eval` - Analyze task complexity and recommend workflow
-- `/csf:spec-review` - Multi-agent specification validation
-- `/csf:impl-plan` - Implementation planning with architecture decisions
-- `/csf:qa-check` - Quality validation and deployment readiness
-- `/csf:doc-generate` - Generate comprehensive documentation from artifacts
+**Workflow Commands:**
+- `/csf:spec` - Create specifications from business requirements
+- `/csf:implement` - Implement code from specifications
+- `/csf:document` - Generate documentation from spec and implementation
+- `/csf:workflow` - Execute complete spec → implement → document cycle
 
 ## Agent Namespacing
 
 All framework agents use the `csf-` prefix to avoid conflicts with other Claude Code tools:
 
-- `csf-spec-analyst` - Requirements analysis and specification creation
-- `csf-test-designer` - Test-driven development specialist
-- `csf-arch-designer` - System architecture and design specialist  
-- `csf-impl-specialist` - Code implementation specialist
-- `csf-qa-validator` - Quality assurance specialist
-- `csf-doc-synthesizer` - Documentation synthesis specialist
+- `csf-spec` - Requirements analysis and specification creation
+- `csf-implement` - Code implementation specialist
+- `csf-document` - Documentation synthesis specialist
 
 This ensures the framework can coexist with other agent-based tools without naming conflicts.
 

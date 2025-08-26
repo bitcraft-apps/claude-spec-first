@@ -43,7 +43,7 @@ jobs:
         ./scripts/install.sh > /dev/null 2>&1  # Silent install for verification
         
         # Verify directory structure
-        directories=(".claude" ".claude/agents" ".claude/commands" ".claude/examples")
+        directories=(".claude" ".claude/agents" ".claude/commands" ".claude/.csf")
         for dir in "${directories[@]}"; do
           if [ -d "$HOME/$dir" ]; then
             echo "✅ $dir directory created"
@@ -53,31 +53,23 @@ jobs:
           fi
         done
         
-        # Verify file counts
-        agent_count=$(find "$HOME/.claude/agents" -name "*.md" | wc -l)
-        command_count=$(find "$HOME/.claude/commands" -name "*.md" | wc -l)
+        # Verify file counts (updated for simplified framework with CSF prefix)
+        agent_count=$(find "$HOME/.claude/agents/csf" -name "*.md" 2>/dev/null | wc -l)
+        command_count=$(find "$HOME/.claude/commands/csf" -name "*.md" 2>/dev/null | wc -l)
         
-        [ "$agent_count" -eq 6 ] && echo "✅ All 6 agents installed" || { echo "❌ Expected 6 agents, found $agent_count"; exit 1; }
-        [ "$command_count" -eq 9 ] && echo "✅ All 9 commands installed" || { echo "❌ Expected 9 commands, found $command_count"; exit 1; }
+        [ "$agent_count" -eq 3 ] && echo "✅ All 3 agents installed" || { echo "❌ Expected 3 agents, found $agent_count"; exit 1; }
+        [ "$command_count" -eq 4 ] && echo "✅ All 4 commands installed" || { echo "❌ Expected 4 commands, found $command_count"; exit 1; }
         
-        # Verify core files
-        core_files=("validate-framework.sh" "CLAUDE.md")
-        for file in "${core_files[@]}"; do
-          if [ -f "$HOME/.claude/$file" ]; then
-            echo "✅ $file installed"
+        # Verify framework metadata files
+        metadata_files=(".installed" "VERSION")
+        for file in "${metadata_files[@]}"; do
+          if [ -f "$HOME/.claude/.csf/$file" ]; then
+            echo "✅ $file installed in .csf directory"
           else
-            echo "❌ $file not installed"
+            echo "❌ $file not installed in .csf directory"
             exit 1
           fi
         done
-        
-        # Verify script permissions
-        if [ -x "$HOME/.claude/validate-framework.sh" ]; then
-          echo "✅ Validation script is executable"
-        else
-          echo "❌ Validation script not executable"
-          exit 1
-        fi
         
         echo "🎉 All installation verification checks passed!"
         
