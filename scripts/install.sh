@@ -96,6 +96,12 @@ trap - ERR  # Disable rollback trap after successful install
 # Create installation marker
 echo "$(date +"%Y-%m-%d %H:%M:%S")" > "$CLAUDE_DIR/.csf/.installed"
 
+# Copy VERSION file if it exists
+if [ -f "$FRAMEWORK_DIR/VERSION" ]; then
+    cp "$FRAMEWORK_DIR/VERSION" "$CLAUDE_DIR/.csf/"
+    echo "📋 VERSION file installed"
+fi
+
 echo "✅ Claude Spec-First Framework installation completed successfully!"
 echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
