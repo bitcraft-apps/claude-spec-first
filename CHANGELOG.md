@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [0.5.0] - 2025-08-26
+
+### Added
+- **Context Clearing**: Implemented context clearing between workflow phases for focused work
+- **Streamlined Command Structure**: New clean command naming with 4 primary commands
+- **Simplified Agent System**: Consolidated functionality into 3 specialized agents
+
+### Changed
+- **BREAKING**: Revolutionary framework simplification from 6 agents down to 3 agents
+- **BREAKING**: Command structure changed from 9 commands to 4 primary commands
+- **BREAKING**: Agent names updated to `csf-spec`, `csf-implement`, `csf-document`
+- **BREAKING**: Command names updated to `spec`, `implement`, `document`, `workflow`
+- Updated workflow to use baby steps evolution approach with clear phase separation
+- Enhanced documentation and examples for simplified structure
+
+### Removed
+- **BREAKING**: Removed `csf-test-designer` agent (testing integrated into implementation phase)
+- **BREAKING**: Removed `csf-arch-designer` agent (architecture integrated into implementation phase)
+- **BREAKING**: Removed `csf-qa-validator` agent (QA integrated into implementation phase)
+- **BREAKING**: Removed `spec-review`, `impl-plan`, `qa-check`, `complexity-eval`, `spec-mvp` commands
+- Eliminated complexity that had accumulated over multiple iterations
+
 ## [0.4.0] - 2025-08-26
 
 ### Added
@@ -77,7 +99,8 @@ The following releases occurred before the versioning system was implemented:
 - **Validation Suite**: Comprehensive framework validation with 83+ automated checks
 - **GitHub Integration**: CI/CD workflows for validation and installation testing
 
-[Unreleased]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/bitcraft-apps/claude-spec-first/releases/tag/v0.4.0
 [0.3.0]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.1.0...v0.2.0
