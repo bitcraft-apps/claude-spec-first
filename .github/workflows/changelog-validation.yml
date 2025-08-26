@@ -25,8 +25,7 @@ jobs:
         echo "🔍 Checking for version changes..."
         
         # Get the base branch version
-        git checkout origin/main -- framework/VERSION 2>/dev/null || echo "No existing VERSION file"
-        BASE_VERSION=$(cat framework/VERSION 2>/dev/null || echo "0.0.0")
+        BASE_VERSION=$(git show origin/main:framework/VERSION 2>/dev/null || echo "0.0.0")
         
         # Get the PR version  
         git checkout HEAD -- framework/VERSION
@@ -71,36 +70,39 @@ jobs:
         # Validate changelog format structure
         echo "🔍 Validating changelog format..."
         
-        format_errors=""
+        format_errors=()
         
         # Check for title
         if ! grep -q "# Changelog" CHANGELOG.md; then
-          format_errors="$format_errors missing-title"
+          format_errors+=("missing-title")
         fi
         
         # Check for version headers with links
         if ! grep -q "## \[" CHANGELOG.md; then
-          format_errors="$format_errors missing-version-links"
+          format_errors+=("missing-version-links")
         fi
         
         # Check for Unreleased section
         if ! grep -q "\[Unreleased\]" CHANGELOG.md; then
-          format_errors="$format_errors missing-unreleased-section"
+          format_errors+=("missing-unreleased-section")
         fi
         
         # Check for comparison links at bottom
         if ! grep -q "\[Unreleased\]:" CHANGELOG.md; then
-          format_errors="$format_errors missing-comparison-links"
+          format_errors+=("missing-comparison-links")
         fi
         
         # Check for the new version in changelog
         if ! grep -q "## \[${PR_VERSION}\]" CHANGELOG.md; then
-          format_errors="$format_errors missing-new-version"
+          format_errors+=("missing-new-version")
         fi
         
-        if [ -n "$format_errors" ]; then
+        if [ ${#format_errors[@]} -ne 0 ]; then
           echo "❌ ERROR: Changelog format validation failed"
-          echo "Format issues detected:$format_errors"
+          echo "Format issues detected:"
+          for err in "${format_errors[@]}"; do
+            echo "- $err"
+          done
           echo ""
           echo "Expected changelog format (Keep a Changelog):"
           echo "- Must have '# Changelog' title"
@@ -144,7 +146,10 @@ jobs:
         fi
         
         if [ -n "$content_warnings" ]; then
-          echo "⚠️  WARNING: Changelog content quality issues detected:$content_warnings"
+          echo "⚠️  WARNING: Changelog content quality issues detected:"
+          for warning in $content_warnings; do
+            echo "- $warning"
+          done
           echo ""
           echo "Recommendations:"
           echo "- Document actual changes for version $PR_VERSION"
