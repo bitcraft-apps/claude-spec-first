@@ -33,14 +33,15 @@ token_efficiency: medium
 
 ## Workflow Commands
 
-### Quick Commands (High Efficiency)
-- **`/implement-now`** - Direct implementation for obvious tasks (<100 LOC, <30 min)
-- **`/spec-mvp`** - MVP specification workflow (200-500 LOC, minimal ceremony)
-- **`/complexity-eval`** - Analyze task and recommend optimal workflow
+### Primary Commands (Streamlined Decision Tree)
+- **`/csf:spec-init`** - Smart router that automatically selects optimal workflow
+- **`/csf:implement-now`** - Direct implementation for obvious tasks (<100 LOC, <30 min)  
+- **`/csf:spec-mvp`** - MVP specification workflow (100-500 LOC, minimal ceremony)
+- **`/csf:spec-workflow`** - Complete specification-first workflow (>500 LOC, comprehensive)
 
-### Full Workflow Commands
-- **`/spec-workflow`** - Complete specification-first workflow (>500 LOC, comprehensive)
-- **`/spec-init`**, **`/spec-review`**, **`/impl-plan`**, **`/qa-check`**, **`/doc-generate`** - Individual phases
+### Utility Commands
+- **`/csf:complexity-eval`** - Analyze task and recommend optimal workflow
+- **`/csf:spec-review`**, **`/csf:impl-plan`**, **`/csf:qa-check`**, **`/csf:doc-generate`** - Individual phases
 
 ## Adaptive Workflow
 1. **Specification Phase**: Requirements → Detailed Specs → Acceptance Criteria
@@ -83,8 +84,10 @@ token_efficiency: medium
 
 ### Decision Matrix
 ```
-Unknown complexity → /complexity-eval
-Obvious solution → /implement-now  
-Simple feature → /spec-mvp
-Complex system → /spec-workflow
+Start here → /csf:spec-init (smart router)
+  ├─ Obvious solution (<100 LOC) → /csf:implement-now  
+  ├─ Simple feature (100-500 LOC) → /csf:spec-mvp
+  └─ Complex system (>500 LOC) → /csf:spec-workflow
+
+Alternative: /csf:complexity-eval for detailed analysis
 ```
