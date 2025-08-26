@@ -1,44 +1,32 @@
-# Claude Spec-First Framework Components
+# Claude Spec-First Framework - Simplified
 
-This directory contains the core components of the Claude Specification-First Development Framework.
+This directory contains the core components of the Claude Specification-First Development Framework - simplified to 3 agents and 4 commands for focused, efficient development.
 
 ## Components
 
-### Agents (`agents/csf/`)
-- **csf-spec-analyst**: Requirements analysis and specification creation
-- **csf-test-designer**: Test-first development with comprehensive test suites  
-- **csf-arch-designer**: System architecture and technical design decisions
-- **csf-impl-specialist**: Code implementation following specifications and tests
-- **csf-qa-validator**: Quality assurance and deployment readiness validation
-- **csf-doc-synthesizer**: Documentation synthesis from development artifacts
+### Agents (`agents/`)
+- **csf-spec**: Requirements analysis and specification creation
+- **csf-implement**: Code implementation following specifications
+- **csf-document**: Documentation generation from specifications and code
 
-*Note: All agents are namespaced with `csf-` prefix to avoid conflicts with other Claude Code tools.*
-
-### Commands (`commands/csf/`)
-- **spec-init**: Initialize specification process for new features
-- **spec-review**: Multi-agent specification validation
-- **impl-plan**: Implementation planning with architecture decisions
-- **qa-check**: Quality validation and deployment readiness
-- **spec-workflow**: Complete end-to-end workflow automation
-- **doc-generate**: Generate comprehensive documentation from artifacts
-
-*Note: Commands are installed in the `csf/` subdirectory and reference the namespaced agents.*
+### Commands (`commands/`)
+- **spec**: Create specifications from business requirements
+- **implement**: Implement code from specifications  
+- **document**: Generate documentation from spec and implementation
+- **workflow**: Execute complete spec → implement → document cycle
 
 ### Templates (`templates/`)
 - **technical/**: Technical documentation templates
 - **user/**: User-facing documentation templates
 - **documentation-structure.md**: Documentation organization guide
-- **metadata-system.md**: Metadata and traceability system
-- **archival-process.md**: Specification archival procedures
 
 ### Examples (`examples/`)
-- **todo-api-example.md**: Complete workflow example
-- **doc-generation-test.md**: Documentation generation validation
+- **simple-workflow-example.md**: Complete 3-phase workflow example
 
 ### Utilities (`utils/`)
-- **version-utils.sh**: Semantic versioning system for framework management
-- **test-version-utils.sh**: Comprehensive test suite for version utilities
-- **integration-test.sh**: Integration tests for complete versioning system
+- **version-utils.sh**: Framework version management
+- **test-version-utils.sh**: Version utility tests
+- **integration-test.sh**: Integration testing
 
 ## Quick Start
 
@@ -52,73 +40,59 @@ This directory contains the core components of the Claude Specification-First De
    ~/.claude/validate-framework.sh
    ```
 
-3. **Start Development**: Begin with specification initialization:
-   ```
-   /spec-init my-new-feature
-   ```
+3. **Start Development**: Use the simplified workflow:
 
-## Versioning System
-
-The framework includes a comprehensive semantic versioning system to manage framework versions and ensure compatibility.
-
-### Version Management Commands
-
-```bash
-# Get current framework version
-./utils/version-utils.sh get
-
-# Display version information
-./utils/version-utils.sh info
-
-# Set a specific version
-./utils/version-utils.sh set 1.2.3
-
-# Increment version (patch, minor, or major)
-./utils/version-utils.sh increment patch
-
-# Compare two versions
-./utils/version-utils.sh compare 1.0.0 1.2.0
-
-# Validate version format
-./utils/version-utils.sh validate 1.2.3
+### Individual Commands
+```
+/csf:spec Add user authentication
+/csf:implement docs/specifications/user-auth-spec.md  
+/csf:document docs/specifications/user-auth-spec.md src/auth/
 ```
 
-### Version Integration
+### Complete Workflow (Recommended)
+```
+/csf:workflow Add user authentication with email/password login
+```
 
-- Framework validation displays current version
-- Installation script shows installed version
-- Version utilities work in both repository and installed modes
-- Backward compatibility with frameworks without VERSION file
+## Workflow
 
-4. **Complete Workflow**: Run the full 6-phase development process:
-   ```
-   /spec-workflow my-project
-   ```
+The simplified framework follows a 3-phase approach:
 
-5. **Generate Documentation**: Create comprehensive documentation:
-   ```
-   /doc-generate my-project
-   ```
+### Phase 1: Specification
+- Convert business requirements into clear, actionable specifications
+- Define concrete acceptance criteria and constraints  
+- **Context cleared before implementation**
+
+### Phase 2: Implementation
+- Build working code that matches specifications exactly
+- Follow existing code patterns and conventions
+- **Context cleared before documentation**
+
+### Phase 3: Documentation  
+- Generate comprehensive docs from specification and implementation
+- Create both technical and user-facing documentation
+- Ensure accuracy against actual implementation
 
 ## Command Reference
 
-### Core Workflow Commands
-- **`/spec-init [feature]`** - Initialize specification process for new features
-- **`/spec-review [feature]`** - Multi-agent specification validation  
-- **`/impl-plan [feature]`** - Implementation planning with architecture decisions
-- **`/qa-check [project]`** - Quality validation and deployment readiness
-- **`/doc-generate [project]`** - Generate comprehensive documentation from artifacts
-- **`/spec-workflow [project]`** - Complete end-to-end workflow automation (all phases)
+### Primary Commands
+- **`/csf:spec [requirements]`** - Create specification from business requirements
+- **`/csf:implement [spec_or_requirements]`** - Implement code from specifications  
+- **`/csf:document [spec_and_code_paths]`** - Generate documentation
+- **`/csf:workflow [requirements]`** - Execute complete development cycle
 
-### Specialized Agents (Namespaced)
-- **`csf-spec-analyst`** - Requirements analysis and specification creation
-- **`csf-test-designer`** - Test-first development with comprehensive test suites
-- **`csf-arch-designer`** - System architecture and technical design decisions
-- **`csf-impl-specialist`** - Code implementation following specifications and tests
-- **`csf-qa-validator`** - Quality assurance and deployment readiness validation
-- **`csf-doc-synthesizer`** - Documentation synthesis from development artifacts
+### Utility Commands (if still available)
+- **`/csf:spec-init`** - Smart router for starting workflows
+- **`/csf:implement-now`** - Direct implementation for simple tasks
+- **`/csf:doc-generate`** - Documentation generation only
 
-*All agents use the `csf-` prefix to prevent conflicts with other tools' agents.*
+## Key Benefits
+
+- **Simple**: Only 3 agents and 4 commands to understand
+- **Clear**: Each phase has a specific, focused purpose
+- **Context Clearing**: Prevents information overload between phases
+- **Complete**: Delivers specification, working code, and documentation
+- **Flexible**: Use individual commands or complete workflow
 
 ## Validation
 
@@ -130,4 +104,4 @@ Run the validation script to ensure all components are properly configured:
 
 ---
 
-*This framework transforms Claude Code into a professional specification-first development environment.*
+*This simplified framework focuses on the essential workflow: spec → implement → document.*

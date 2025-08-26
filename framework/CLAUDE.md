@@ -1,93 +1,92 @@
 # Specification-First Development Workflow
 
 ## Core Principles
-- **Right-sized approach** - Match development rigor to project complexity and constraints
-- **MVP by default** - Start with minimal viable approach, scale up only when needed
-- **Token efficiency** - Optimize for rapid development while maintaining quality
-- **Specifications before implementation** - Create appropriate specifications for the complexity level
-- **Test-driven approach** - Write essential tests that encode requirements
-- **Quality gates** - Validate at each phase, but skip phases when appropriate
+- **Specification first** - Always create clear requirements before implementation
+- **Context clearing** - Clear context between phases for focused work
+- **Baby steps** - Start simple, add complexity only when needed
+- **Quality gates** - Validate at each phase before proceeding
 - **Ask clarifying questions** - Never assume requirements, always seek clarity
 
-## Configuration System
+## Simplified Workflow
 
-### Default Settings (Configurable)
-- **MAX_LOC_DEFAULT_THRESHOLD**: 500 lines of code per feature/PR (excludes tests and docs)
-- **COMPLEXITY_MODE**: mvp (options: mvp/standard/enterprise)
-- **TOKEN_EFFICIENCY**: high (options: high/medium/low)
-- **Default approach**: Start with simplest workflow, escalate if needed
+The framework uses a streamlined 3-phase approach:
 
-### Complexity Detection
-**Automatically choose appropriate workflow based on:**
-- **Simple projects** (<200 LOC): Use MVP mode, skip architecture phase
-- **Medium projects** (200-500 LOC): Use standard mode, focused approach
-- **Complex projects** (>500 LOC): Use enterprise mode, comprehensive workflow
+### Phase 1: Specification
+- Convert business requirements into clear, actionable specifications
+- Define concrete acceptance criteria and constraints
+- Identify key components and edge cases
+- **Clear context before implementation**
 
-### Configuration Override
-Projects can override defaults with `.claude-config.yaml`:
-```yaml
-max_loc: 750
-complexity_mode: standard
-token_efficiency: medium
-```
+### Phase 2: Implementation  
+- Build working code that matches specifications exactly
+- Follow existing code patterns and conventions
+- Handle specified error cases appropriately
+- Test implementation for correctness
+- **Clear context before documentation**
+
+### Phase 3: Documentation
+- Generate comprehensive docs from specification and implementation
+- Create both technical and user-facing documentation
+- Ensure accuracy against actual implementation
+- Organize information logically and clearly
 
 ## Workflow Commands
 
-### Primary Commands (Streamlined Decision Tree)
-- **`/csf:spec-init`** - Smart router that automatically selects optimal workflow
-- **`/csf:implement-now`** - Direct implementation for obvious tasks (<100 LOC, <30 min)  
-- **`/csf:spec-mvp`** - MVP specification workflow (100-500 LOC, minimal ceremony)
-- **`/csf:spec-workflow`** - Complete specification-first workflow (>500 LOC, comprehensive)
+### Primary Commands
+- **`/csf:spec`** - Create specification from business requirements
+- **`/csf:implement`** - Implement code from specifications
+- **`/csf:document`** - Generate documentation from spec and implementation
+- **`/csf:workflow`** - Execute complete spec → implement → document cycle
 
 ### Utility Commands
-- **`/csf:complexity-eval`** - Analyze task and recommend optimal workflow
-- **`/csf:spec-review`**, **`/csf:impl-plan`**, **`/csf:qa-check`**, **`/csf:doc-generate`** - Individual phases
+- **`/csf:spec-init`** - Smart router for starting appropriate workflow
+- **`/csf:implement-now`** - Direct implementation for obvious tasks
+- **`/csf:doc-generate`** - Generate documentation only
 
-## Adaptive Workflow
-1. **Specification Phase**: Requirements → Detailed Specs → Acceptance Criteria
-2. **Test Phase**: Convert specs to failing tests that define expected behavior  
-3. **Implementation Phase**: Write minimal code to pass tests, then refactor
-4. **Validation Phase**: Verify implementation matches specifications exactly
-5. **Documentation Phase**: Generate comprehensive documentation and archive artifacts
+## Specialized Agents
+
+The framework uses 3 specialized agents:
+
+1. **csf-spec** - Requirements analysis and specification creation
+2. **csf-implement** - Code implementation following specifications  
+3. **csf-document** - Documentation generation and synthesis
+
+Each agent has specific tools and focuses on their phase of the workflow.
 
 ## Quality Standards
-- All requirements must have corresponding test cases
-- Tests must fail initially (proving they test the right thing)
-- Implementation must pass all tests before review
-- Code must be documented and maintainable
+- All requirements must have clear acceptance criteria
+- Implementation must match specifications exactly
+- Code must be clean, readable, and maintainable
+- Documentation must be accurate and comprehensive
+- Each phase must complete successfully before proceeding
 
 ## File Organization
 - Specifications: `docs/specifications/`
-- Architecture decisions: `docs/architecture/`
-- Context and examples: `docs/context/`
+- Implementation: Source code following project structure
+- Documentation: `docs/` with technical and user subdirectories
 
 ## Instructions for Claude
 
 ### Efficiency-First Approach
-- **Start simple**: Use `/complexity-eval` when unsure of scope, default to simpler workflows
-- **Escalate when needed**: Upgrade from `/implement-now` → `/spec-mvp` → `/spec-workflow` as complexity emerges
-- **Respect LOC limits**: Keep features under configured limits (default 500 LOC)
-- **Skip unnecessary phases**: Architecture, QA, and documentation phases are optional based on complexity
+- **Ask clarifying questions** about vague requirements
+- **Use appropriate workflow** - simple tasks may not need full workflow
+- **Clear context** between phases for focused work
+- **Validate thoroughly** at each phase before proceeding
+- **Maintain quality** throughout all phases
 
-### Quality Maintenance
-- Always ask clarifying questions about vague requirements
-- Break complex features into smaller, testable components (but implement MVP first)
-- Create appropriate specifications for the complexity level (not always comprehensive)
-- Write essential tests that encode requirements (focus on critical paths)
-- Maintain traceability between requirements, tests, and code
+### Workflow Execution
+- Execute phases in order: spec → implement → document
+- Complete each phase fully before moving to next
+- Clear context between phases for clean separation
+- Validate results at each step
+- Maintain traceability between requirements, code, and docs
 
-### Configuration Awareness  
-- Check project configuration settings before starting work
-- Reference framework defaults for LOC limits and complexity modes
-- Adapt agent outputs based on token efficiency settings
-- Skip phases that don't add value for the current complexity level
-
-### Decision Matrix
+### Decision Guidelines
 ```
-Start here → /csf:spec-init (smart router)
-  ├─ Obvious solution (<100 LOC) → /csf:implement-now  
-  ├─ Simple feature (100-500 LOC) → /csf:spec-mvp
-  └─ Complex system (>500 LOC) → /csf:spec-workflow
-
-Alternative: /csf:complexity-eval for detailed analysis
+Simple, obvious task → /csf:implement-now
+Clear requirements → /csf:spec then /csf:implement  
+Complex feature → /csf:workflow (full cycle)
+Documentation only → /csf:document
 ```
+
+Focus on delivering working, well-documented solutions through clear specifications and quality implementation.

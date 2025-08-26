@@ -209,8 +209,8 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("csf-spec-analyst" "csf-test-designer" "csf-arch-designer" "csf-impl-specialist" "csf-qa-validator" "csf-doc-synthesizer")
-REQUIRED_COMMANDS=("spec-init" "spec-review" "impl-plan" "qa-check" "spec-workflow" "doc-generate")
+REQUIRED_AGENTS=("csf-spec" "csf-implement" "csf-document")
+REQUIRED_COMMANDS=("spec" "implement" "document" "workflow")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 
 # Function to build agent pattern dynamically from REQUIRED_AGENTS array
@@ -374,7 +374,7 @@ else
     print_status "CLAUDE.md has core principles section" 1
 fi
 
-if grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
+if grep -q "## Simplified Workflow" "$CLAUDE_MD_PATH" || grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has workflow section" 0
 else
     print_status "CLAUDE.md has workflow section" 1
@@ -526,14 +526,14 @@ if [ $FAILED -eq 0 ]; then
     echo ""
     echo "🚀 Next Steps:"
     if [ "$EXECUTION_MODE" = "csf" ]; then
-        echo "- Try: /csf:spec-init sample feature"
-        echo "- Test: /csf:spec-workflow complete example"
-        echo "- Generate docs: /csf:doc-generate project-name"
+        echo "- Create spec: /csf:spec sample feature"
+        echo "- Full workflow: /csf:workflow complete example"
+        echo "- Generate docs: /csf:document project-name"
         echo "- Quick implementation: /csf:implement-now simple task"
     else
-        echo "- Try: /spec-init sample feature"
-        echo "- Test: /spec-workflow complete example (now includes documentation generation)"
-        echo "- Generate docs: /doc-generate project-name"
+        echo "- Create spec: /spec sample feature"
+        echo "- Full workflow: /workflow complete example"
+        echo "- Generate docs: /document project-name"
     fi
     echo "- Review: README.md for detailed usage guide"
     
