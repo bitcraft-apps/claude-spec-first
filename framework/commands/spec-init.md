@@ -21,36 +21,36 @@ Based on assessment, automatically execute:
 
 **For Simple Tasks (<100 LOC, obvious solution):**
 ```
-→ /csf:implement-now $ARGUMENTS
+/csf:implement-now $ARGUMENTS
 ```
 Skip specification ceremony and implement directly.
 
 **For Medium Tasks (100-500 LOC, clear requirements):**
 ```
-→ /csf:spec-mvp $ARGUMENTS  
+/csf:spec-mvp $ARGUMENTS  
 ```
 Streamlined specification with essential testing and rapid implementation.
 
 **For Complex Tasks (>500 LOC, unclear requirements, high risk):**
 ```
-→ /csf:spec-workflow $ARGUMENTS
+/csf:spec-workflow $ARGUMENTS
 ```
 Complete specification-first workflow with all phases.
 
 ## Decision Matrix
 ```
 Is solution obvious and <100 LOC?
-├─ Yes → /csf:implement-now
-└─ No → Is it well-understood and <500 LOC?
-    ├─ Yes → /csf:spec-mvp
-    └─ No → /csf:spec-workflow
+├─ Yes: /csf:implement-now
+└─ No: Is it well-understood and <500 LOC?
+    ├─ Yes: /csf:spec-mvp
+    └─ No: /csf:spec-workflow
 ```
 
 ## Instructions
 **Immediately assess "$ARGUMENTS" and route to the appropriate workflow:**
 
 1. **Quick assessment**: Estimate complexity and clarity
-2. **Route automatically**: Execute the recommended command
+2. **Route accordingly**: Execute the recommended command based on your assessment
 3. **No additional ceremony**: Let the routed workflow handle the details
 
-**IMMEDIATE ACTION**: Assess the complexity of "$ARGUMENTS" and automatically execute the most appropriate workflow command (`/csf:implement-now`, `/csf:spec-mvp`, or `/csf:spec-workflow`).
+**IMMEDIATE ACTION**: Assess the complexity of "$ARGUMENTS" and execute the most appropriate workflow command (`/csf:implement-now`, `/csf:spec-mvp`, or `/csf:spec-workflow`) based on your assessment.
