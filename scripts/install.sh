@@ -8,7 +8,7 @@ set -e  # Exit on any error
 echo "🚀 Installing Claude Spec-First Framework (commands and agents only)..."
 echo "======================================================================="
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/..\" &> /dev/null && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
 FRAMEWORK_DIR="$SCRIPT_DIR/framework"
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"  # Allow override via environment variable
 
