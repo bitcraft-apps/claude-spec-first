@@ -374,7 +374,7 @@ else
     print_status "CLAUDE.md has core principles section" 1
 fi
 
-if grep -q "## Workflow" "$CLAUDE_MD_PATH" || grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
+if grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has workflow section" 0
 else
     print_status "CLAUDE.md has workflow section" 1
