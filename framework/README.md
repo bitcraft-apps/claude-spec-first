@@ -1,6 +1,6 @@
-# Claude Spec-First Framework - Simplified
+# Claude Spec-First Framework
 
-This directory contains the core components of the Claude Specification-First Development Framework - simplified to 3 agents and 4 commands for focused, efficient development.
+This directory contains the core components of the Claude Specification-First Development Framework
 
 ## Components
 
@@ -11,7 +11,7 @@ This directory contains the core components of the Claude Specification-First De
 
 ### Commands (`commands/`)
 - **spec**: Create specifications from business requirements
-- **implement**: Implement code from specifications  
+- **implement**: Implement code from specifications
 - **document**: Generate documentation from spec and implementation
 - **workflow**: Execute complete spec → implement → document cycle
 
@@ -45,7 +45,7 @@ This directory contains the core components of the Claude Specification-First De
 ### Individual Commands
 ```
 /csf:spec Add user authentication
-/csf:implement docs/specifications/user-auth-spec.md  
+/csf:implement docs/specifications/user-auth-spec.md
 /csf:document docs/specifications/user-auth-spec.md src/auth/
 ```
 
@@ -60,7 +60,7 @@ The simplified framework follows a 3-phase approach:
 
 ### Phase 1: Specification
 - Convert business requirements into clear, actionable specifications
-- Define concrete acceptance criteria and constraints  
+- Define concrete acceptance criteria and constraints
 - **Context cleared before implementation**
 
 ### Phase 2: Implementation
@@ -68,7 +68,7 @@ The simplified framework follows a 3-phase approach:
 - Follow existing code patterns and conventions
 - **Context cleared before documentation**
 
-### Phase 3: Documentation  
+### Phase 3: Documentation
 - Generate comprehensive docs from specification and implementation
 - Create both technical and user-facing documentation
 - Ensure accuracy against actual implementation
@@ -77,7 +77,7 @@ The simplified framework follows a 3-phase approach:
 
 ### Primary Commands
 - **`/csf:spec [requirements]`** - Create specification from business requirements
-- **`/csf:implement [spec_or_requirements]`** - Implement code from specifications  
+- **`/csf:implement [spec_or_requirements]`** - Implement code from specifications
 - **`/csf:document [spec_and_code_paths]`** - Generate documentation
 - **`/csf:workflow [requirements]`** - Execute complete development cycle
 

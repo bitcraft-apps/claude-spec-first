@@ -61,25 +61,25 @@ print_info() {
 # Validate path security - prevent directory traversal attacks
 validate_path_security() {
     local path="$1"
-    
+
     # Check for directory traversal attempts (../ or /./)
     if [[ "$path" == *"../"* ]] || [[ "$path" == *"/./"* ]] || [[ "$path" == *"//"* ]]; then
         return 1
     fi
-    
+
     # Check for paths starting with ../
     if [[ "$path" == "../"* ]]; then
         return 1
     fi
-    
+
     # Check for dangerous characters using string pattern matching (more portable)
     case "$path" in
         *\;* | *\|* | *\`* | *\$*) return 1 ;;
     esac
-    
+
     # Note: Null byte checking removed due to CI environment compatibility issues
     # Null bytes in legitimate file paths are extremely rare in practice
-    
+
     return 0
 }
 
@@ -87,13 +87,13 @@ validate_path_security() {
 build_safe_path() {
     local relative_path="$1"
     local full_path="${FRAMEWORK_PREFIX}${relative_path}"
-    
+
     # Validate path security
     if ! validate_path_security "$full_path"; then
         echo -e "${RED}Security Error: Invalid path detected: $full_path${NC}" >&2
         exit 1
     fi
-    
+
     echo "$full_path"
 }
 
@@ -106,7 +106,7 @@ detect_execution_mode() {
         print_info "Detected repository mode - using ./framework/ prefix"
         return 0
     fi
-    
+
     # Check if we're in installed mode (has CLAUDE.md in current directory)
     if [ -f "./CLAUDE.md" ]; then
         EXECUTION_MODE="installed"
@@ -114,7 +114,7 @@ detect_execution_mode() {
         print_info "Detected installed mode - using current directory"
         return 0
     fi
-    
+
     # Neither mode detected
     echo -e "${RED}❌ Invalid execution context${NC}" >&2
     echo -e "${RED}This script must be run from either:${NC}" >&2
@@ -234,42 +234,42 @@ AGENT_PATTERN=$(build_agent_pattern)
 for agent in "${REQUIRED_AGENTS[@]}"; do
     # Remove csf- prefix from agent name for filename
     AGENT_FILENAME=${agent#csf-}
-    
+
     # Set agent directory based on execution mode
     if [ "$EXECUTION_MODE" = "repository" ]; then
         AGENT_FILE=$(build_safe_path "agents/${AGENT_FILENAME}.md")
     else
         AGENT_FILE=$(build_safe_path "agents/csf/${AGENT_FILENAME}.md")
     fi
-    
+
     if [ -f "$AGENT_FILE" ]; then
         print_status "$agent.md exists" 0
-        
+
         # Check YAML frontmatter
         if head -1 "$AGENT_FILE" | grep -q "^---$"; then
             print_status "$agent has YAML frontmatter" 0
         else
             print_status "$agent has YAML frontmatter" 1
         fi
-        
+
         # Check required fields
         if grep -q "^name: $agent$" "$AGENT_FILE"; then
             print_status "$agent has correct name field" 0
         else
             print_status "$agent has correct name field" 1
         fi
-        
+
         if grep -q "^description:" "$AGENT_FILE"; then
             print_status "$agent has description field" 0
         else
             print_status "$agent has description field" 1
         fi
-        
+
         # Check tools field format
         if grep -q "^tools:" "$AGENT_FILE"; then
             TOOLS_LINE=$(grep "^tools:" "$AGENT_FILE")
             print_info "$agent tools: $TOOLS_LINE"
-            
+
             # Validate tool names
             INVALID_TOOLS=false
             for tool in "${VALID_TOOLS[@]}"; do
@@ -280,14 +280,14 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
         else
             print_warning "$agent missing tools field (optional but recommended)"
         fi
-        
+
         # Check content structure
         if grep -q "^# " "$AGENT_FILE"; then
             print_status "$agent has proper content structure" 0
         else
             print_status "$agent has proper content structure" 1
         fi
-        
+
     else
         print_status "$agent.md exists" 1
     fi
@@ -310,24 +310,24 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
     else
         COMMAND_FILE=$(build_safe_path "commands/csf/${command}.md")
     fi
-    
+
     if [ -f "$COMMAND_FILE" ]; then
         print_status "$command.md exists" 0
-        
+
         # Check YAML frontmatter
         if head -1 "$COMMAND_FILE" | grep -q "^---$"; then
             print_status "$command has YAML frontmatter" 0
         else
             print_status "$command has YAML frontmatter" 1
         fi
-        
+
         # Check description field
         if grep -q "^description:" "$COMMAND_FILE"; then
             print_status "$command has description field" 0
         else
             print_status "$command has description field" 1
         fi
-        
+
         # Check for CSF prefix in CSF mode
         if [ "$EXECUTION_MODE" = "csf" ]; then
             if grep -q "command_prefix: csf" "$COMMAND_FILE"; then
@@ -336,14 +336,14 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
                 print_status "$command has CSF prefix" 1
             fi
         fi
-        
+
         # Check for $ARGUMENTS usage
         if grep -q '\$ARGUMENTS' "$COMMAND_FILE"; then
             print_status "$command uses \$ARGUMENTS placeholder" 0
         else
             print_warning "$command doesn't use \$ARGUMENTS (may be intentional)"
         fi
-        
+
         # Check for agent delegation
         AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$COMMAND_FILE" || true)
         if [ $AGENT_MENTIONS -gt 0 ]; then
@@ -351,7 +351,7 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
         else
             print_warning "$command doesn't delegate to agents"
         fi
-        
+
     else
         print_status "$command.md exists" 1
     fi
@@ -374,7 +374,7 @@ else
     print_status "CLAUDE.md has core principles section" 1
 fi
 
-if grep -q "## Simplified Workflow" "$CLAUDE_MD_PATH" || grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
+if grep -q "## Workflow" "$CLAUDE_MD_PATH" || grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
     print_status "CLAUDE.md has workflow section" 0
 else
     print_status "CLAUDE.md has workflow section" 1
@@ -393,13 +393,13 @@ echo "============================"
 README_PATH=$(build_safe_path "README.md")
 if [ -f "$README_PATH" ]; then
     print_status "README.md exists" 0
-    
+
     if grep -q "Quick Start" "$README_PATH"; then
         print_status "README.md has quick start guide" 0
     else
         print_status "README.md has quick start guide" 1
     fi
-    
+
     if grep -q "Command Reference" "$README_PATH"; then
         print_status "README.md has command reference" 0
     else
@@ -426,7 +426,7 @@ echo "========================================"
 TEMPLATES_DIR=$(build_safe_path "templates")
 if [ -d "$TEMPLATES_DIR" ]; then
     print_status "templates/ directory exists" 0
-    
+
     # Check technical templates
     TECH_TEMPLATES_DIR=$(build_safe_path "templates/technical")
     if [ -d "$TECH_TEMPLATES_DIR" ]; then
@@ -436,7 +436,7 @@ if [ -d "$TEMPLATES_DIR" ]; then
     else
         print_warning "templates/technical/ directory missing (recommended)"
     fi
-    
+
     # Check user templates
     USER_TEMPLATES_DIR=$(build_safe_path "templates/user")
     if [ -d "$USER_TEMPLATES_DIR" ]; then
@@ -446,7 +446,7 @@ if [ -d "$TEMPLATES_DIR" ]; then
     else
         print_warning "templates/user/ directory missing (recommended)"
     fi
-    
+
     # Check for core template files
     CORE_TEMPLATES=("documentation-structure.md" "metadata-system.md" "archival-process.md")
     for template in "${CORE_TEMPLATES[@]}"; do
@@ -457,7 +457,7 @@ if [ -d "$TEMPLATES_DIR" ]; then
             print_warning "$template template missing (recommended)"
         fi
     done
-    
+
 else
     print_warning "templates/ directory missing (recommended for doc-generate functionality)"
 fi
@@ -515,11 +515,11 @@ echo ""
 if [ $FAILED -eq 0 ]; then
     echo -e "${GREEN}🎉 Framework validation PASSED!${NC}"
     echo -e "${GREEN}The specification-first development framework is properly configured and ready for use.${NC}"
-    
+
     if [ $WARNINGS -gt 0 ]; then
         echo -e "${YELLOW}Note: $WARNINGS warnings found. Consider addressing them for optimal performance.${NC}"
     fi
-    
+
     echo ""
     echo "=========================="
     echo -e "${YELLOW}Note: Running in $EXECUTION_MODE mode with prefix: '$FRAMEWORK_PREFIX'${NC}"
@@ -536,18 +536,18 @@ if [ $FAILED -eq 0 ]; then
         echo "- Generate docs: /document project-name"
     fi
     echo "- Review: README.md for detailed usage guide"
-    
+
     exit 0
 else
     echo -e "${RED}❌ Framework validation FAILED!${NC}"
     echo -e "${RED}$FAILED critical issues must be resolved before using the framework.${NC}"
-    
+
     echo ""
     echo "🔧 Recommended Actions:"
     echo "- Fix missing files and directories"
     echo "- Correct YAML frontmatter syntax"
     echo "- Ensure all required fields are present"
     echo "- Restart Claude Code after fixes"
-    
+
     exit 1
 fi
