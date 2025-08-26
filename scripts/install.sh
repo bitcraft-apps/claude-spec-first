@@ -153,5 +153,5 @@ if [ -f "$CLAUDE_DIR/utils/version-utils.sh" ] && [ -f "$CLAUDE_DIR/VERSION" ]; 
 fi
 
 echo "🚀 Restart Claude Code to load the framework"
-echo "💡 Commands available: /spec-init, /implement-now, /spec-workflow, etc."
+echo "💡 Commands available: /csf:spec, /csf:implement, /csf:document, /csf:workflow, etc."
 echo "💡 Commands show in descriptions as: (project:$CSF_PREFIX) for identification"

@@ -40,8 +40,8 @@ if [ ! -d "$SCRIPT_DIR/.git" ]; then
     fi
 fi
 
-# Check if framework is currently installed
-if [ ! -f "$CLAUDE_DIR/agents/spec-analyst.md" ]; then
+# Check if framework is currently installed (check for CSF structure)
+if [ ! -f "$CLAUDE_DIR/agents/csf/spec.md" ] && [ ! -f "$CLAUDE_DIR/agents/spec-analyst.md" ]; then
     echo -e "${YELLOW}⚠️  Framework doesn't appear to be installed.${NC}"
     echo -e "${BLUE}🚀 Running initial installation instead...${NC}"
     exec "$SCRIPT_DIR/install.sh"
@@ -93,8 +93,9 @@ echo -e "${GREEN}✅ Backup created: $BACKUP_DIR${NC}"
 
 echo -e "${BLUE}🔄 Updating framework files...${NC}"
 
-# Update agents (preserve any custom agents by checking names)
+# Update agents with CSF prefix structure
 echo "Updating agents..."
+mkdir -p "$CLAUDE_DIR/agents/csf"
 shopt -s nullglob
 agent_files=("$SCRIPT_DIR/framework/agents"/*.md)
 if [ ${#agent_files[@]} -eq 0 ]; then
@@ -102,14 +103,15 @@ if [ ${#agent_files[@]} -eq 0 ]; then
 else
     for agent_file in "${agent_files[@]}"; do
         agent_name=$(basename "$agent_file")
-        cp "$agent_file" "$CLAUDE_DIR/agents/"
-        echo "  ✅ Updated: $agent_name"
+        cp "$agent_file" "$CLAUDE_DIR/agents/csf/"
+        echo "  ✅ Updated: csf/$agent_name"
     done
 fi
 shopt -u nullglob
 
-# Update commands (preserve any custom commands by checking names)  
+# Update commands with CSF prefix structure
 echo "Updating commands..."
+mkdir -p "$CLAUDE_DIR/commands/csf"
 shopt -s nullglob
 command_files=("$SCRIPT_DIR/framework/commands"/*.md)
 if [ ${#command_files[@]} -eq 0 ]; then
@@ -117,8 +119,8 @@ if [ ${#command_files[@]} -eq 0 ]; then
 else
     for command_file in "${command_files[@]}"; do
         command_name=$(basename "$command_file")
-        cp "$command_file" "$CLAUDE_DIR/commands/"
-        echo "  ✅ Updated: $command_name"
+        cp "$command_file" "$CLAUDE_DIR/commands/csf/"
+        echo "  ✅ Updated: csf/$command_name"
     done
 fi
 shopt -u nullglob
