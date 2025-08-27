@@ -45,3 +45,9 @@ coverage/
 .nyc_output/
 coverage.json
 coverage-final.json
+
+# BATS Testing Framework
+tests/test-data/
+tests/tmp/
+tests/*.tmp
+tests/test-results/
