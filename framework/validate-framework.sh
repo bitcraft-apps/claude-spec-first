@@ -10,21 +10,24 @@ echo "🔍 Validating Specification-First Development Framework..."
 echo "=================================================="
 
 # Try to load and display framework version
-# Search for version.sh in several likely locations
+# Search for version.sh in several likely locations using robust path resolution
 VERSION_SH=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CURRENT_DIR="$(pwd)"
 
-# Check multiple potential locations for version utilities
+# Check multiple potential locations for version utilities with absolute paths where possible
 if [ -f "$SCRIPT_DIR/../scripts/version.sh" ]; then
     VERSION_SH="$SCRIPT_DIR/../scripts/version.sh"
 elif [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
     VERSION_SH="$SCRIPT_DIR/scripts/version.sh"
+elif [ -f "${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh" ]; then
+    VERSION_SH="${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh"
 elif [ -f "$HOME/.claude/utils/version.sh" ]; then
     VERSION_SH="$HOME/.claude/utils/version.sh"
 elif [ -f "./scripts/version.sh" ]; then
     VERSION_SH="./scripts/version.sh"
-elif [ -f "../utils/version.sh" ]; then
-    VERSION_SH="../utils/version.sh"
+elif [ -f "$(dirname "$CURRENT_DIR")/utils/version.sh" ]; then
+    VERSION_SH="$(dirname "$CURRENT_DIR")/utils/version.sh"
 fi
 
 if [ -n "$VERSION_SH" ]; then
@@ -112,7 +115,11 @@ build_safe_path() {
 
 # Detect execution mode based on directory structure
 detect_execution_mode() {
-    # Check if we're in repository mode (has ./framework/ directory)
+    # Get absolute path of script directory for reliable detection
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local current_dir="$(pwd)"
+    
+    # Check if we're in repository mode (has ./framework/ directory with VERSION)
     if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
         EXECUTION_MODE="repository"
         FRAMEWORK_PREFIX="./framework/"
@@ -128,11 +135,30 @@ detect_execution_mode() {
         return 0
     fi
 
-    # Check if we're running from .csf directory (has ../commands/csf and ../agents/csf)
-    if [ -d "../commands/csf" ] && [ -d "../agents/csf" ]; then
+    # Check if we're running from .csf directory using absolute paths
+    # Look for Claude directory structure (commands/csf and agents/csf in parent)
+    local parent_dir="$(dirname "$current_dir")"
+    if [ -d "$parent_dir/commands/csf" ] && [ -d "$parent_dir/agents/csf" ]; then
         EXECUTION_MODE="installed"
-        FRAMEWORK_PREFIX="../"
-        print_info "Detected installed mode (.csf location) - validating parent directory"
+        FRAMEWORK_PREFIX="$parent_dir/"
+        print_info "Detected installed mode (.csf location) - validating parent directory at $parent_dir"
+        return 0
+    fi
+    
+    # Check environment variable for Claude directory
+    local claude_dir="${CLAUDE_DIR:-$HOME/.claude}"
+    if [ -d "$claude_dir/commands/csf" ] && [ -d "$claude_dir/agents/csf" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX="$claude_dir/"
+        print_info "Detected installed mode via CLAUDE_DIR - validating $claude_dir"
+        return 0
+    fi
+    
+    # Check default installed location
+    if [ -d "$HOME/.claude/commands/csf" ] && [ -d "$HOME/.claude/agents/csf" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX="$HOME/.claude/"
+        print_info "Detected installed mode - validating $HOME/.claude"
         return 0
     fi
 
@@ -140,7 +166,10 @@ detect_execution_mode() {
     echo -e "${RED}❌ Invalid execution context${NC}" >&2
     echo -e "${RED}This script must be run from either:${NC}" >&2
     echo -e "${RED}  - Repository root (with ./framework/ directory)${NC}" >&2
-    echo -e "${RED}  - Installed location (~/.claude/ or ~/.claude/.csf/)${NC}" >&2
+    echo -e "${RED}  - Installed location (~/.claude/ or \$CLAUDE_DIR)${NC}" >&2
+    echo -e "${RED}  - Framework metadata directory (~/.claude/.csf/)${NC}" >&2
+    echo -e "${RED}Current directory: $current_dir${NC}" >&2
+    echo -e "${RED}Script directory: $script_dir${NC}" >&2
     exit 1
 }
 
