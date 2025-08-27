@@ -181,7 +181,7 @@ install_framework_files() {
                 fi
                 INSTALLED+=("$target_file")
                 echo "📄 ${operation}: $CSF_PREFIX/$cmd_name"
-                ((cmd_count++))
+                cmd_count=$((cmd_count + 1))
                 echo "🔍 DEBUG: Successfully copied $cmd_name, count: $cmd_count"
             else
                 echo "🔍 DEBUG: Skipping non-file: $cmd_file"
@@ -210,7 +210,7 @@ install_framework_files() {
                 fi
                 INSTALLED+=("$target_file")
                 echo "📄 ${operation}: $CSF_PREFIX/$agent_name"
-                ((agent_count++))
+                agent_count=$((agent_count + 1))
                 echo "🔍 DEBUG: Successfully copied $agent_name, count: $agent_count"
             else
                 echo "🔍 DEBUG: Skipping non-file: $agent_file"
