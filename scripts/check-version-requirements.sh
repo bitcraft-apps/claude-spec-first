@@ -35,8 +35,8 @@ show_help() {
     echo ""
     echo "Purpose:"
     echo "  Determines if changes require a version bump based on files modified"
-    echo "  Returns whether version bump is required for the current changes"
-    echo "  Enforces framework versioning policy"
+    echo "  Only framework/ changes require version bumps (framework capabilities)"
+    echo "  Scripts, tests, docs, CI changes do not require version bumps"
 }
 
 # Parse command line arguments
@@ -108,20 +108,17 @@ set_github_output() {
 }
 
 # Define files that require version bumps when changed
-# These are files that affect the installed framework behavior
+# Only framework content affects the installed framework capabilities
 get_version_requiring_patterns() {
     echo "framework/"
-    echo "scripts/install.sh"
-    echo "scripts/uninstall.sh"
 }
 
 # Define files that do NOT require version bumps
-# These are files that don't affect installed framework
+# These are files that don't affect installed framework capabilities
 get_version_exempt_patterns() {
     echo ".github/workflows/"
     echo "tests/"
-    echo "scripts/*.test.bats"
-    echo "scripts/check-version-*.sh"
+    echo "scripts/"  # All scripts are tooling, not framework content
     echo "README.md"
     echo "docs/"
     echo "*.md"

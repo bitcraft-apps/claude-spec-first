@@ -87,14 +87,14 @@ teardown() {
     [[ "$output" == *"framework/agents/spec-analyst.md"* ]]
 }
 
-@test "requires version bump for install script" {
+@test "allows changes to install script" {
     echo "#!/bin/bash\necho updated" > scripts/install.sh
     git add scripts/install.sh
     git commit -m "Update install script" --quiet
     
     run scripts/check-version-requirements.sh
-    [ "$status" -ne 0 ]
-    [[ "$output" == *"scripts/install.sh"* ]]
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"No version bump required"* ]]
 }
 
 @test "allows changes to test files" {
