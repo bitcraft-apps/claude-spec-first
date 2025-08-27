@@ -3,9 +3,8 @@
 # Test Suite for Version Utilities
 # Validates all version utility functions with comprehensive test cases
 
-# Load bats helpers
-load '../tests/helpers/common'
-load '../tests/helpers/assertions'
+# Project root detection (inline)
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
 
 setup() {
     # Create temporary test directory

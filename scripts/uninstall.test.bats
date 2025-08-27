@@ -3,15 +3,16 @@
 # BATS tests for uninstall.sh script
 # Tests various uninstall scenarios and edge cases
 
-# Load helpers
-load '../tests/helpers/common'
-load '../tests/helpers/assertions'
-
 # Require minimum BATS version for run flags
 bats_require_minimum_version 1.5.0
 
+# Project root detection (inline)
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
+
 setup() {
-    setup_integration_test
+    # Create temporary test directory
+    TEST_DIR="$(mktemp -d)"
+    export TEST_DIR
     
     # Create unique test directories - uninstall.sh expects HOME/.claude structure
     export TEST_HOME_DIR="$TEST_DIR/home" 
@@ -24,7 +25,10 @@ setup() {
 }
 
 teardown() {
-    teardown_integration_test
+    # Cleanup test directory
+    if [ -d "$TEST_DIR" ]; then
+        rm -rf "$TEST_DIR"
+    fi
 }
 
 @test "uninstall script exists and is executable" {
