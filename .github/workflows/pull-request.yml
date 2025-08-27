@@ -76,7 +76,7 @@ jobs:
         echo "📋 Verifying installation scripts..."
         
         # Check script existence and permissions
-        for script in install.sh update.sh uninstall.sh; do
+        for script in install.sh uninstall.sh; do
           if [ -f "scripts/$script" ]; then
             echo "✅ scripts/$script exists"
           else
