@@ -12,6 +12,7 @@ help:
 	@echo "  test-verbose      Run tests with verbose output"
 	@echo "  test-integration  Run only integration tests (centralized)"
 	@echo "  test-version      Run only version utility tests (collocated)"
+	@echo "  test-scripts      Run only install/uninstall script tests (collocated)"
 	@echo "  test-unit         Run all unit tests (collocated with code)"
 	@echo "  test-e2e          Run end-to-end tests"
 	@echo "  test-parallel     Run tests in parallel"
@@ -28,6 +29,7 @@ help:
 	@echo "Examples:"
 	@echo "  make setup && make test      # Setup and run all tests"
 	@echo "  make test-unit               # Run only unit tests"
+	@echo "  make test-scripts            # Run only install/uninstall tests"
 	@echo "  make test-integration        # Run only integration tests"
 	@echo "  make test-e2e                # Run only E2E tests"
 	@echo "  make test-verbose            # Detailed test output"
@@ -62,6 +64,11 @@ test-integration: setup
 test-version: setup
 	@echo "🧪 Running version utility tests (collocated)..."
 	cd tests && ./run-tests.sh --filter version
+
+# Run install/uninstall script tests (collocated)
+test-scripts: setup
+	@echo "🧪 Running install/uninstall script tests (collocated)..."
+	cd tests && ./run-tests.sh --filter "install\|uninstall"
 
 # Run all unit tests (collocated with source code)
 test-unit: setup
