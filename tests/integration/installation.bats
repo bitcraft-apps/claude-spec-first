@@ -3,8 +3,9 @@
 # Installation Integration Tests
 # Tests framework installation and post-installation functionality
 
-# Load bats helpers
-load '../test-helper'
+# Detect project root directory
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
+export PROJECT_ROOT
 
 setup() {
     # Create clean test environment

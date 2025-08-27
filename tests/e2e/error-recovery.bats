@@ -3,18 +3,73 @@
 # Error Recovery and Edge Case E2E Tests  
 # Tests how the system handles various error conditions and edge cases
 
-# Load helpers
-load '../test-helper'
+# Detect project root directory
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
+export PROJECT_ROOT
 
 # Require minimum BATS version for run flags
 bats_require_minimum_version 1.5.0
 
+# Inline helper functions - only what's actually used
+create_mock_home() {
+    local home_dir="${1:-$TEST_DIR/mock_home}"
+    mkdir -p "$home_dir/.claude"
+    export HOME="$home_dir"
+    echo "$home_dir"
+}
+
+assert_success() {
+    [ "$status" -eq 0 ] || {
+        echo "Expected success (exit code 0), got: $status" >&2
+        echo "Output: $output" >&2
+        return 1
+    }
+}
+
+assert_failure() {
+    [ "$status" -ne 0 ] || {
+        echo "Expected failure (non-zero exit code), got: $status" >&2
+        echo "Output: $output" >&2
+        return 1
+    }
+}
+
+assert_version_format() {
+    local version="$1"
+    if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "Expected semantic version format (x.y.z), got: $version" >&2
+        return 1
+    fi
+}
+
+test_info() {
+    echo "INFO: $*" >&2
+}
+
+test_error() {
+    echo "ERROR: $*" >&2
+}
+
 setup() {
-    setup_e2e_test
+    # Create temporary test directory
+    TEST_DIR="$(mktemp -d)"
+    export TEST_DIR
+    export ORIGINAL_HOME="$HOME"
+    export ORIGINAL_PWD="$(pwd)"
 }
 
 teardown() {
-    teardown_e2e_test
+    # Restore original environment
+    if [ -n "$ORIGINAL_HOME" ]; then
+        export HOME="$ORIGINAL_HOME"
+    fi
+    if [ -n "$ORIGINAL_PWD" ] && [ -d "$ORIGINAL_PWD" ]; then
+        cd "$ORIGINAL_PWD"
+    fi
+    # Cleanup test directory
+    if [ -n "$TEST_DIR" ] && [ -d "$TEST_DIR" ]; then
+        rm -rf "$TEST_DIR"
+    fi
 }
 
 @test "recover from corrupted VERSION file" {

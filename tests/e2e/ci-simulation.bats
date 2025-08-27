@@ -3,11 +3,38 @@
 # CI Pipeline Simulation Tests
 # Simulates GitHub Actions workflows locally for testing
 
-# Load helpers
-load '../test-helper'
+# Detect project root directory
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
+export PROJECT_ROOT
+
+# Inline helper functions - only what's actually used
+test_info() {
+    echo "INFO: $*" >&2
+}
+
+assert_success() {
+    [ "$status" -eq 0 ] || {
+        echo "Expected success (exit code 0), got: $status" >&2
+        echo "Output: $output" >&2
+        return 1
+    }
+}
+
+assert_output_contains() {
+    local expected="$1"
+    [[ "$output" == *"$expected"* ]] || {
+        echo "Expected output to contain: $expected" >&2
+        echo "Actual output: $output" >&2
+        return 1
+    }
+}
 
 setup() {
-    setup_e2e_test
+    # Create temporary test directory
+    TEST_DIR="$(mktemp -d)"
+    export TEST_DIR
+    export ORIGINAL_HOME="$HOME"
+    export ORIGINAL_PWD="$(pwd)"
     
     # Set CI environment variables for testing
     export CI=true
@@ -15,7 +42,17 @@ setup() {
 }
 
 teardown() {
-    teardown_e2e_test
+    # Restore original environment
+    if [ -n "$ORIGINAL_HOME" ]; then
+        export HOME="$ORIGINAL_HOME"
+    fi
+    if [ -n "$ORIGINAL_PWD" ] && [ -d "$ORIGINAL_PWD" ]; then
+        cd "$ORIGINAL_PWD"
+    fi
+    # Cleanup test directory
+    if [ -n "$TEST_DIR" ] && [ -d "$TEST_DIR" ]; then
+        rm -rf "$TEST_DIR"
+    fi
     unset CI GITHUB_ACTIONS
 }
 
