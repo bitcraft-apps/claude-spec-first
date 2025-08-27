@@ -81,7 +81,7 @@ jobs:
           echo "**Runner**: Ubuntu Latest" >> $GITHUB_STEP_SUMMARY
           echo "**Date**: $(date)" >> $GITHUB_STEP_SUMMARY
 
-  # Single framework validation job - eliminates 3x duplication
+  # Single framework validation job
   framework-validation:
     name: Framework Validation
     runs-on: ubuntu-latest
