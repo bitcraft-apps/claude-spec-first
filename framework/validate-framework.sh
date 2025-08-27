@@ -10,8 +10,25 @@ echo "🔍 Validating Specification-First Development Framework..."
 echo "=================================================="
 
 # Try to load and display framework version
-if [ -f "../scripts/version.sh" ]; then
-    . "../scripts/version.sh"
+# Search for version.sh in several likely locations
+VERSION_SH=""
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Check multiple potential locations for version utilities
+if [ -f "$SCRIPT_DIR/../scripts/version.sh" ]; then
+    VERSION_SH="$SCRIPT_DIR/../scripts/version.sh"
+elif [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
+    VERSION_SH="$SCRIPT_DIR/scripts/version.sh"
+elif [ -f "$HOME/.claude/utils/version.sh" ]; then
+    VERSION_SH="$HOME/.claude/utils/version.sh"
+elif [ -f "./scripts/version.sh" ]; then
+    VERSION_SH="./scripts/version.sh"
+elif [ -f "../utils/version.sh" ]; then
+    VERSION_SH="../utils/version.sh"
+fi
+
+if [ -n "$VERSION_SH" ]; then
+    . "$VERSION_SH"
     FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
     echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
 else
