@@ -96,7 +96,7 @@ build_safe_path() {
 # Detect execution mode based on directory structure
 detect_execution_mode() {
     # Check if we're in repository mode (has ./framework/ directory)
-    if [ -d "./framework" ] && [ -f "./framework/CLAUDE.md" ]; then
+    if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
         EXECUTION_MODE="repository"
         FRAMEWORK_PREFIX="./framework/"
         print_info "Detected repository mode - using ./framework/ prefix"
@@ -140,14 +140,10 @@ detect_execution_mode
 
 # Check framework structure using detected mode
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    CLAUDE_MD_PATH=$(build_safe_path "CLAUDE.md")
-    if [ ! -f "$CLAUDE_MD_PATH" ]; then
-        echo -e "${RED}❌ Framework CLAUDE.md not found at: $CLAUDE_MD_PATH${NC}"
-        exit 1
-    fi
-    print_status "CLAUDE.md exists ($EXECUTION_MODE mode)" 0
+    # In repository mode, check for essential framework components
+    print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
 else
-    # In installed mode, CLAUDE.md is not installed - check for key directories instead
+    # In installed mode, check for CSF directories
     print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
 fi
 
@@ -357,29 +353,39 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     echo "📖 Validating CLAUDE.md..."
     echo "=========================="
 
-    # Check CLAUDE.md content using safe path
-    if grep -q "Specification-First Development" "$CLAUDE_MD_PATH"; then
-        print_status "CLAUDE.md contains specification-first principles" 0
-    else
-        print_status "CLAUDE.md contains specification-first principles" 1
-    fi
+    # In repository mode, CLAUDE.md is at the root level (relative to current working directory)
+    CLAUDE_MD_PATH="./CLAUDE.md"
+    
+    # Direct file check (bypassing build_safe_path for this legitimate case)
+    if [ -f "$CLAUDE_MD_PATH" ]; then
+        print_status "CLAUDE.md exists at repository root" 0
+        
+        # Check CLAUDE.md content
+        if grep -q "Claude Spec-First Framework" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md contains spec-first framework" 0
+        else
+            print_status "CLAUDE.md contains spec-first framework" 1
+        fi
 
-    if grep -q "## Core Principles" "$CLAUDE_MD_PATH"; then
-        print_status "CLAUDE.md has core principles section" 0
-    else
-        print_status "CLAUDE.md has core principles section" 1
-    fi
+        if grep -q "## Architecture Overview" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has architecture overview section" 0
+        else
+            print_status "CLAUDE.md has architecture overview section" 1
+        fi
 
-    if grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
-        print_status "CLAUDE.md has workflow section" 0
-    else
-        print_status "CLAUDE.md has workflow section" 1
-    fi
+        if grep -q "## Development Workflow" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has development workflow section" 0
+        else
+            print_status "CLAUDE.md has development workflow section" 1
+        fi
 
-    if grep -q "## Instructions for Claude" "$CLAUDE_MD_PATH"; then
-        print_status "CLAUDE.md has Claude instructions" 0
+        if grep -q "## Project Overview" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has project overview" 0
+        else
+            print_status "CLAUDE.md has project overview" 1
+        fi
     else
-        print_status "CLAUDE.md has Claude instructions" 1
+        print_status "CLAUDE.md exists at repository root" 1
     fi
 fi
 
@@ -389,7 +395,8 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     echo "📚 Checking Documentation..."
     echo "============================"
 
-    README_PATH=$(build_safe_path "README.md")
+    # In repository mode, README.md is at the root level (relative to current working directory)
+    README_PATH="./README.md"
     if [ -f "$README_PATH" ]; then
         print_status "README.md exists" 0
 
