@@ -1,106 +1,51 @@
 name: Feature Request
 description: Suggest a new feature or enhancement
 title: "[Feature] "
-labels: ["type:enhancement", "status:needs-triage"]
+labels: ["enhancement"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting a feature! Please provide detailed information to help us understand and evaluate your request.
+        Thanks for suggesting a feature! Please describe what you'd like to see added.
   
   - type: textarea
     id: feature-description
     attributes:
       label: Feature Description
-      description: A clear and concise description of the feature you'd like to see
-      placeholder: Describe the feature in detail...
+      description: What feature would you like to see?
+      placeholder: Describe the feature you'd like added...
     validations:
       required: true
   
   - type: textarea
     id: use-case
     attributes:
-      label: Use Case
-      description: Describe the specific use case and how this feature would be used
+      label: Why do you need this?
+      description: What problem would this solve for you?
       placeholder: |
-        As a [type of user], I want [functionality] so that [benefit/goal].
-        
-        Specific scenario:
-        1. I am working on...
-        2. I need to...
-        3. Currently I have to...
-        4. With this feature I could...
-    validations:
-      required: true
-  
-  - type: textarea
-    id: acceptance-criteria
-    attributes:
-      label: Acceptance Criteria
-      description: What specific, measurable criteria would indicate this feature is complete?
-      placeholder: |
-        - [ ] Criteria 1: The system should...
-        - [ ] Criteria 2: Users can...
-        - [ ] Criteria 3: The feature should handle...
+        I want to... but currently I have to...
+        This would help me...
     validations:
       required: true
   
   - type: dropdown
     id: component
     attributes:
-      label: Framework Component
-      description: Which component would this feature primarily affect?
+      label: Component
+      description: Which part would this affect?
       options:
         - "New Agent"
         - "New Command"
-        - "Agent: Spec Analyst"
-        - "Agent: Test Designer"
-        - "Agent: Arch Designer"
-        - "Agent: Impl Specialist"
-        - "Agent: QA Validator"
-        - "Command: /spec-init"
-        - "Command: /spec-review"
-        - "Command: /impl-plan"
-        - "Command: /qa-check"
-        - "Command: /spec-workflow"
-        - "Installation System"
-        - "Validation System"
-        - "Documentation"
+        - "Agent: csf-spec"
+        - "Agent: csf-implement"
+        - "Agent: csf-document"
+        - "Command: /csf:spec"
+        - "Command: /csf:implement"
+        - "Command: /csf:document"
+        - "Command: /csf:workflow"
+        - "Installation"
+        - "Validation"
         - "Core Framework"
     validations:
       required: true
-  
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Business Priority
-      description: How important is this feature to your workflow?
-      options:
-        - "Critical - Blocking current work"
-        - "High - Significantly improves productivity"
-        - "Medium - Nice to have improvement"
-        - "Low - Minor convenience feature"
-    validations:
-      required: true
-  
-  - type: textarea
-    id: implementation-ideas
-    attributes:
-      label: Implementation Ideas
-      description: Do you have any ideas about how this could be implemented?
-      placeholder: Share any technical approaches, examples from other tools, or implementation suggestions...
-  
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives Considered
-      description: What alternatives have you considered or tried?
-      placeholder: Describe any workarounds, alternative tools, or different approaches you've considered...
-  
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional Context
-      description: Any other context, screenshots, or examples
-      placeholder: Add any other context about the feature request here...

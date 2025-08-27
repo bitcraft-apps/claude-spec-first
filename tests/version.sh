@@ -7,7 +7,7 @@ set -e  # Exit on any error
 
 # Test configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION_UTILS="$SCRIPT_DIR/version-utils.sh"
+VERSION_UTILS="$SCRIPT_DIR/../scripts/version.sh"
 TEST_DIR="$SCRIPT_DIR/test-data"
 TEMP_VERSION_FILE=""
 

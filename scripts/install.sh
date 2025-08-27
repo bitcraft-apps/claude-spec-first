@@ -102,7 +102,18 @@ if [ -f "$FRAMEWORK_DIR/VERSION" ]; then
     echo "📋 VERSION file installed"
 fi
 
+# Copy validation script
+if [ -f "$FRAMEWORK_DIR/validate-framework.sh" ]; then
+    cp "$FRAMEWORK_DIR/validate-framework.sh" "$CLAUDE_DIR/.csf/"
+    chmod +x "$CLAUDE_DIR/.csf/validate-framework.sh"
+    echo "🔍 Validation script installed"
+fi
+
 echo "✅ Claude Spec-First Framework installation completed successfully!"
 echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
+echo ""
+echo "🔍 To validate the installation:"
+echo "   cd ~/.claude && ./.csf/validate-framework.sh"
+echo ""
 echo "🚀 Restart Claude Code to load the framework"
