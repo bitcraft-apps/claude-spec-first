@@ -218,8 +218,8 @@ else
     print_status "VERSION file exists" 1
 fi
 
-# Version utilities are not part of the installed framework
-# They exist only in the repository for development purposes
+# Version utilities are available in both repository and installed modes
+# The installation script copies version utilities to the installed framework
 
 # Check agents directory
 if [ "$EXECUTION_MODE" = "repository" ]; then

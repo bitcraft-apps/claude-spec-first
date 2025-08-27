@@ -114,9 +114,12 @@ fi
 
 # Copy validation script
 if [ -f "$FRAMEWORK_DIR/validate-framework.sh" ]; then
-    cp "$FRAMEWORK_DIR/validate-framework.sh" "$CLAUDE_DIR/.csf/"
-    chmod +x "$CLAUDE_DIR/.csf/validate-framework.sh"
-    echo "🔍 Validation script installed"
+    if cp "$FRAMEWORK_DIR/validate-framework.sh" "$CLAUDE_DIR/.csf/"; then
+        chmod +x "$CLAUDE_DIR/.csf/validate-framework.sh"
+        echo "🔍 Validation script installed"
+    else
+        echo "❌ Failed to install validation script"
+    fi
 fi
 
 echo "✅ Claude Spec-First Framework installation completed successfully!"
