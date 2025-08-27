@@ -29,6 +29,16 @@ teardown() {
     # Run installation with specific home directory
     cd "$PROJECT_ROOT"
     run env HOME="$HOME_DIR" ./scripts/install.sh
+    
+    # Debug: Show installation output and exit status
+    echo "DEBUG: Installation exit status: $status"
+    echo "DEBUG: Installation output:"
+    echo "$output"
+    
+    # Debug: Show what files were actually created
+    echo "DEBUG: Files in HOME_DIR/.claude:"
+    find "$HOME_DIR/.claude" -type f 2>/dev/null || echo "DEBUG: No .claude directory found"
+    
     [ "$status" -eq 0 ]
     
     # Verify installation files exist in correct locations
