@@ -5,6 +5,7 @@
 
 # Load bats helpers
 load '../tests/helpers/common'
+load '../tests/helpers/assertions'
 
 setup() {
     # Create temporary test directory

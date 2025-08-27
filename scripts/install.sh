@@ -166,14 +166,11 @@ install_framework_files() {
     
     # Install commands with CSF prefix
     if [ -d "$FRAMEWORK_DIR/commands" ]; then
-        echo "🔍 DEBUG: Processing commands directory"
         local cmd_count=0
         for cmd_file in "$FRAMEWORK_DIR/commands"/*.md; do
-            echo "🔍 DEBUG: Processing command file: $cmd_file"
             if [ -f "$cmd_file" ]; then
                 cmd_name="$(basename "$cmd_file")"
                 target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/$cmd_name"
-                echo "🔍 DEBUG: Copying $cmd_name to $target_file"
                 
                 if ! cp "$cmd_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy command $cmd_name${NC}"
@@ -182,27 +179,18 @@ install_framework_files() {
                 INSTALLED+=("$target_file")
                 echo "📄 ${operation}: $CSF_PREFIX/$cmd_name"
                 cmd_count=$((cmd_count + 1))
-                echo "🔍 DEBUG: Successfully copied $cmd_name, count: $cmd_count"
-            else
-                echo "🔍 DEBUG: Skipping non-file: $cmd_file"
             fi
         done
-        echo "🔍 DEBUG: Finished commands loop, total count: $cmd_count"
         echo "✅ $cmd_count commands $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
-    else
-        echo "🔍 DEBUG: Commands directory not found: $FRAMEWORK_DIR/commands"
     fi
     
     # Install agents with CSF prefix
     if [ -d "$FRAMEWORK_DIR/agents" ]; then
-        echo "🔍 DEBUG: Processing agents directory"
         local agent_count=0
         for agent_file in "$FRAMEWORK_DIR/agents"/*.md; do
-            echo "🔍 DEBUG: Processing agent file: $agent_file"
             if [ -f "$agent_file" ]; then
                 agent_name="$(basename "$agent_file")"
                 target_file="$CLAUDE_DIR/agents/$CSF_PREFIX/$agent_name"
-                echo "🔍 DEBUG: Copying $agent_name to $target_file"
                 
                 if ! cp "$agent_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy agent $agent_name${NC}"
@@ -211,15 +199,9 @@ install_framework_files() {
                 INSTALLED+=("$target_file")
                 echo "📄 ${operation}: $CSF_PREFIX/$agent_name"
                 agent_count=$((agent_count + 1))
-                echo "🔍 DEBUG: Successfully copied $agent_name, count: $agent_count"
-            else
-                echo "🔍 DEBUG: Skipping non-file: $agent_file"
             fi
         done
-        echo "🔍 DEBUG: Finished agents loop, total count: $agent_count"
         echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
-    else
-        echo "🔍 DEBUG: Agents directory not found: $FRAMEWORK_DIR/agents"
     fi
 }
 
@@ -244,23 +226,12 @@ fi
 
 # Create/Update utils directory and copy version utilities
 mkdir -p "$CLAUDE_DIR/utils"
-echo "🔍 DEBUG: Looking for version.sh at: $SCRIPT_DIR/scripts/version.sh"
-echo "🔍 DEBUG: File exists check: $([ -f "$SCRIPT_DIR/scripts/version.sh" ] && echo "YES" || echo "NO")"
 if [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
     target_file="$CLAUDE_DIR/utils/version.sh"
-    echo "🔍 DEBUG: Copying to: $target_file"
-    if cp "$SCRIPT_DIR/scripts/version.sh" "$target_file"; then
-        chmod +x "$target_file"
-        INSTALLED+=("$target_file")
-        echo "🔧 Version utilities $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
-        echo "🔍 DEBUG: Successfully copied and made executable"
-    else
-        echo "🔍 DEBUG: Failed to copy version utilities"
-        exit 1
-    fi
-else
-    echo "🔍 DEBUG: version.sh not found, checking directory contents:"
-    ls -la "$SCRIPT_DIR/scripts/" || echo "🔍 DEBUG: scripts directory doesn't exist"
+    cp "$SCRIPT_DIR/scripts/version.sh" "$target_file"
+    chmod +x "$target_file"
+    INSTALLED+=("$target_file")
+    echo "🔧 Version utilities $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
 fi
 
 # Copy/Update validation script

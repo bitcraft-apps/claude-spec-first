@@ -4,7 +4,8 @@
 # Tests various uninstall scenarios and edge cases
 
 # Load helpers
-load '../tests/test-helper'
+load '../tests/helpers/common'
+load '../tests/helpers/assertions'
 
 # Require minimum BATS version for run flags
 bats_require_minimum_version 1.5.0
