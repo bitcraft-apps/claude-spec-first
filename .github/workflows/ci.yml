@@ -28,11 +28,11 @@ env:
 
 jobs:
   tests:
-    name: Test Suite
+    name: Tests (${{ matrix.test-type }})
     runs-on: ubuntu-latest
-
-    outputs:
-      test-status: ${{ steps.test-execution.outcome }}
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e]
 
     steps:
       - name: Checkout repository
@@ -52,7 +52,7 @@ jobs:
 
       - name: Setup test environment
         run: |
-          echo "Setting up consolidated test environment..."
+          echo "Setting up test environment for ${{ matrix.test-type }} tests..."
 
           # Ensure submodules are properly initialized
           git submodule update --init --recursive
@@ -65,19 +65,19 @@ jobs:
           chmod +x scripts/check-version-requirements.sh
           chmod +x framework/validate-framework.sh
 
-      - name: Run comprehensive test suite
+      - name: Run ${{ matrix.test-type }} tests
         id: test-execution
         run: |
-          echo "Running comprehensive test suite."
+          echo "Running ${{ matrix.test-type }} test suite..."
           cd tests
-          ./run-tests.sh --verbose --tap
+          ./run-tests.sh --verbose --tap --${{ matrix.test-type }}
 
       - name: Generate test summary
         if: always()
         run: |
-          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "## ${{ matrix.test-type }} Test Results" >> $GITHUB_STEP_SUMMARY
           echo "**Status**: ${{ steps.test-execution.outcome }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Framework**: Claude Spec-First Framework" >> $GITHUB_STEP_SUMMARY
+          echo "**Test Type**: ${{ matrix.test-type }}" >> $GITHUB_STEP_SUMMARY
           echo "**Runner**: Ubuntu Latest" >> $GITHUB_STEP_SUMMARY
           echo "**Date**: $(date)" >> $GITHUB_STEP_SUMMARY
 
