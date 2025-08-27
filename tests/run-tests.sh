@@ -22,6 +22,7 @@ VERBOSE=0
 PARALLEL=0
 FILTER=""
 TAP_OUTPUT=0
+TEST_TYPE=""  # unit, integration, e2e, or empty for all
 
 # Parse command line arguments
 parse_args() {
@@ -41,6 +42,18 @@ parse_args() {
                 ;;
             -t|--tap)
                 TAP_OUTPUT=1
+                shift
+                ;;
+            --unit)
+                TEST_TYPE="unit"
+                shift
+                ;;
+            --integration)
+                TEST_TYPE="integration"
+                shift
+                ;;
+            --e2e)
+                TEST_TYPE="e2e"
                 shift
                 ;;
             -h|--help)
@@ -66,12 +79,18 @@ show_help() {
     echo "  -p, --parallel    Run tests in parallel"
     echo "  -f, --filter STR  Filter tests by name pattern"
     echo "  -t, --tap         Output in TAP format"
+    echo "  --unit            Run only unit tests (collocated)"
+    echo "  --integration     Run only integration tests"
+    echo "  --e2e             Run only E2E tests"
     echo "  -h, --help        Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0                          # Run all tests"
     echo "  $0 -v                       # Run with verbose output"
     echo "  $0 -f 'version'             # Run only version-related tests"
+    echo "  $0 --unit                   # Run only unit tests"
+    echo "  $0 --integration            # Run only integration tests"
+    echo "  $0 --e2e                    # Run only E2E tests"
     echo "  $0 -p                       # Run tests in parallel"
     echo "  $0 -t                       # Output in TAP format for CI"
 }
@@ -102,9 +121,47 @@ check_prerequisites() {
     # Make bats executable
     chmod +x "$BATS_EXECUTABLE"
     
-    # Check if test files exist
-    if [ ! -f "$SCRIPT_DIR/version_utilities.bats" ] || [ ! -f "$SCRIPT_DIR/framework_integration.bats" ]; then
-        echo -e "${RED}❌ Test files not found${NC}" >&2
+    # Check if test files exist - organized directory approach
+    local test_files_found=0
+    
+    # Check for unit tests (collocated)
+    for unit_test in "$PROJECT_ROOT/scripts"/*.test.bats; do
+        if [ -f "$unit_test" ]; then
+            test_files_found=$((test_files_found + 1))
+            break
+        fi
+    done
+    
+    # Check for integration tests
+    for integration_test in "$SCRIPT_DIR/integration"/*.bats; do
+        if [ -f "$integration_test" ]; then
+            test_files_found=$((test_files_found + 1))
+            break
+        fi
+    done
+    
+    # Check for E2E tests
+    for e2e_test in "$SCRIPT_DIR/e2e"/*.bats; do
+        if [ -f "$e2e_test" ]; then
+            test_files_found=$((test_files_found + 1))
+            break
+        fi
+    done
+    
+    # Check for any remaining tests in root
+    for root_test in "$SCRIPT_DIR"/*.bats; do
+        if [ -f "$root_test" ]; then
+            test_files_found=$((test_files_found + 1))
+            break
+        fi
+    done
+    
+    if [ $test_files_found -eq 0 ]; then
+        echo -e "${RED}❌ No test files found${NC}" >&2
+        echo "Expected test files in:" >&2
+        echo "  - $PROJECT_ROOT/scripts/*.test.bats (unit tests)" >&2
+        echo "  - $SCRIPT_DIR/integration/*.bats (integration tests)" >&2
+        echo "  - $SCRIPT_DIR/e2e/*.bats (E2E tests)" >&2
         exit 1
     fi
     
@@ -144,7 +201,20 @@ build_bats_command() {
 
 # Run test suite
 run_tests() {
-    echo "🧪 Running Claude Spec-First Framework Test Suite"
+    local suite_name="Claude Spec-First Framework Test Suite"
+    case "$TEST_TYPE" in
+        "unit")
+            suite_name="$suite_name (Unit Tests)"
+            ;;
+        "integration")
+            suite_name="$suite_name (Integration Tests)"
+            ;;
+        "e2e")
+            suite_name="$suite_name (E2E Tests)"
+            ;;
+    esac
+    
+    echo "🧪 Running $suite_name"
     echo "=================================================="
     echo ""
     
@@ -152,10 +222,66 @@ run_tests() {
     export PROJECT_ROOT
     cd "$SCRIPT_DIR"
     
-    # Build test file list
+    # Build test file list - organized directory approach
     local test_files=()
-    test_files+=("version_utilities.bats")
-    test_files+=("framework_integration.bats")
+    
+    # Filter by test type if specified
+    case "$TEST_TYPE" in
+        "unit")
+            # Add only unit tests (collocated with scripts)
+            for unit_test in "$PROJECT_ROOT/scripts"/*.test.bats; do
+                if [ -f "$unit_test" ]; then
+                    test_files+=("$unit_test")
+                fi
+            done
+            ;;
+        "integration")
+            # Add only integration tests
+            for integration_test in "$SCRIPT_DIR/integration"/*.bats; do
+                if [ -f "$integration_test" ]; then
+                    test_files+=("$integration_test")
+                fi
+            done
+            ;;
+        "e2e")
+            # Add only E2E tests
+            for e2e_test in "$SCRIPT_DIR/e2e"/*.bats; do
+                if [ -f "$e2e_test" ]; then
+                    test_files+=("$e2e_test")
+                fi
+            done
+            ;;
+        *)
+            # Add all tests (default behavior)
+            # Unit tests (collocated with scripts)
+            for unit_test in "$PROJECT_ROOT/scripts"/*.test.bats; do
+                if [ -f "$unit_test" ]; then
+                    test_files+=("$unit_test")
+                fi
+            done
+            
+            # Integration tests (organized in tests/integration/)
+            for integration_test in "$SCRIPT_DIR/integration"/*.bats; do
+                if [ -f "$integration_test" ]; then
+                    test_files+=("$integration_test")
+                fi
+            done
+            
+            # E2E tests (organized in tests/e2e/)
+            for e2e_test in "$SCRIPT_DIR/e2e"/*.bats; do
+                if [ -f "$e2e_test" ]; then
+                    test_files+=("$e2e_test")
+                fi
+            done
+            
+            # Any remaining .bats files in tests root (for backward compatibility)
+            for root_test in "$SCRIPT_DIR"/*.bats; do
+                if [ -f "$root_test" ]; then
+                    test_files+=("$root_test")
+                fi
+            done
+            ;;
+    esac
     
     # Filter test files if pattern specified
     if [ -n "$FILTER" ]; then
@@ -203,31 +329,6 @@ run_tests() {
     fi
 }
 
-# Run legacy tests for comparison (if they exist)
-run_legacy_tests() {
-    echo ""
-    echo "🔄 Running legacy tests for comparison..."
-    echo "======================================="
-    
-    # Run old shell-based tests if they exist
-    if [ -x "$SCRIPT_DIR/integration.sh" ]; then
-        echo "Running integration.sh..."
-        if "$SCRIPT_DIR/integration.sh"; then
-            echo -e "${GREEN}✅ Legacy integration tests passed${NC}"
-        else
-            echo -e "${YELLOW}⚠️  Legacy integration tests failed${NC}"
-        fi
-    fi
-    
-    if [ -x "$SCRIPT_DIR/version.sh" ]; then
-        echo "Running version.sh tests..."
-        if "$SCRIPT_DIR/version.sh"; then
-            echo -e "${GREEN}✅ Legacy version tests passed${NC}"
-        else
-            echo -e "${YELLOW}⚠️  Legacy version tests failed${NC}"
-        fi
-    fi
-}
 
 # Generate test report
 generate_report() {
@@ -260,10 +361,6 @@ main() {
         test_result=1
     fi
     
-    # Run legacy tests if not in CI mode
-    if [ $TAP_OUTPUT -eq 0 ] && [ $test_result -eq 0 ]; then
-        run_legacy_tests
-    fi
     
     # Generate report
     generate_report

@@ -4,7 +4,7 @@
 # Validates all version utility functions with comprehensive test cases
 
 # Load bats helpers
-load 'test_helper'
+load '../tests/helpers/common'
 
 setup() {
     # Create temporary test directory
@@ -18,7 +18,25 @@ setup() {
     
     # Source the version utilities for function testing, but handle set -e
     set +e  # Temporarily disable exit on error
-    source "$PROJECT_ROOT/scripts/version.sh"
+    # Source the version utilities - handle different execution contexts
+    # Find the actual scripts directory regardless of where bats is run from
+    if [ -f "$(dirname "${BASH_SOURCE[0]}")/version.sh" ]; then
+        # Running from same directory or with full path
+        source "$(dirname "${BASH_SOURCE[0]}")/version.sh"
+    elif [ -f "$PROJECT_ROOT/scripts/version.sh" ]; then
+        # Running through test runner
+        source "$PROJECT_ROOT/scripts/version.sh"
+    else
+        # Fallback - try to find it
+        local version_script
+        version_script=$(find "$PROJECT_ROOT" -name "version.sh" -path "*/scripts/*" -type f 2>/dev/null | head -1)
+        if [ -n "$version_script" ]; then
+            source "$version_script"
+        else
+            echo "ERROR: Cannot find version.sh script" >&2
+            exit 1
+        fi
+    fi
     set -e  # Re-enable for BATS
 }
 

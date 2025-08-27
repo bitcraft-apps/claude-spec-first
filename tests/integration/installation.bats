@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
 
-# Integration Test for Versioning System MVP
-# Tests the complete versioning system in both repository and installed modes
+# Installation Integration Tests
+# Tests framework installation and post-installation functionality
 
 # Load bats helpers
-load 'test_helper'
+load '../test-helper'
 
 setup() {
     # Create clean test environment
@@ -18,52 +18,6 @@ teardown() {
     if [ -d "$TEST_DIR" ]; then
         rm -rf "$TEST_DIR"
     fi
-}
-
-@test "framework directory structure exists" {
-    [ -f "$PROJECT_ROOT/CLAUDE.md" ]
-    [ -f "$PROJECT_ROOT/framework/VERSION" ]
-    [ -d "$PROJECT_ROOT/framework/commands" ]
-    [ -d "$PROJECT_ROOT/framework/agents" ]
-    [ -x "$PROJECT_ROOT/framework/validate-framework.sh" ]
-}
-
-@test "version utilities are executable" {
-    [ -x "$PROJECT_ROOT/scripts/version.sh" ]
-}
-
-@test "can get framework version" {
-    cd "$PROJECT_ROOT"
-    run ./scripts/version.sh get
-    [ "$status" -eq 0 ]
-    [[ "$output" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-}
-
-@test "version validation works" {
-    cd "$PROJECT_ROOT"
-    run ./scripts/version.sh validate "1.2.3"
-    [ "$status" -eq 0 ]
-}
-
-@test "version comparison works" {
-    cd "$PROJECT_ROOT"
-    run ./scripts/version.sh compare "1.0.0" "2.0.0"
-    [ "$status" -eq 0 ]
-    [[ "$output" == *"<"* ]]
-}
-
-@test "framework validation includes version" {
-    cd "$PROJECT_ROOT"
-    run ./framework/validate-framework.sh
-    [ "$status" -eq 0 ]
-    [[ "$output" == *"Framework Version:"* ]]
-}
-
-@test "framework validation passes" {
-    cd "$PROJECT_ROOT"
-    run ./framework/validate-framework.sh
-    [ "$status" -eq 0 ]
-    [[ "$output" == *"Framework validation PASSED"* ]]
 }
 
 @test "installation creates proper structure" {

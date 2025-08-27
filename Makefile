@@ -1,6 +1,6 @@
 # Makefile for Claude Spec-First Framework
 
-.PHONY: help test test-verbose test-integration test-version setup install validate clean
+.PHONY: help test test-verbose test-integration test-version test-unit test-e2e test-parallel setup install validate clean
 
 # Default target
 help:
@@ -10,10 +10,12 @@ help:
 	@echo "Available targets:"
 	@echo "  test              Run all BATS tests"
 	@echo "  test-verbose      Run tests with verbose output"
-	@echo "  test-integration  Run only integration tests"
-	@echo "  test-version      Run only version utility tests"
+	@echo "  test-integration  Run only integration tests (centralized)"
+	@echo "  test-version      Run only version utility tests (collocated)"
+	@echo "  test-unit         Run all unit tests (collocated with code)"
+	@echo "  test-e2e          Run end-to-end tests"
 	@echo "  test-parallel     Run tests in parallel"
-	@echo "  test-legacy       Run legacy shell-based tests"
+	@echo ""
 	@echo "  setup             Initialize git submodules and setup"
 	@echo "  install           Install framework to ~/.claude"
 	@echo "  validate          Validate framework configuration"
@@ -25,6 +27,9 @@ help:
 	@echo ""
 	@echo "Examples:"
 	@echo "  make setup && make test      # Setup and run all tests"
+	@echo "  make test-unit               # Run only unit tests"
+	@echo "  make test-integration        # Run only integration tests"
+	@echo "  make test-e2e                # Run only E2E tests"
 	@echo "  make test-verbose            # Detailed test output"
 	@echo "  make test-parallel           # Faster parallel execution"
 
@@ -32,7 +37,7 @@ help:
 setup:
 	@echo "🔧 Setting up Claude Spec-First Framework..."
 	git submodule update --init --recursive
-	chmod +x tests/run_tests.sh
+	chmod +x tests/run-tests.sh
 	chmod +x tests/bats-core/bin/bats
 	chmod +x scripts/*.sh
 	chmod +x framework/validate-framework.sh
@@ -41,41 +46,38 @@ setup:
 # Run all tests
 test: setup
 	@echo "🧪 Running BATS test suite..."
-	cd tests && ./run_tests.sh $(if $(FILTER),--filter $(FILTER))
+	cd tests && ./run-tests.sh $(if $(FILTER),--filter $(FILTER))
 
 # Run tests with verbose output
 test-verbose: setup
 	@echo "🧪 Running BATS test suite (verbose)..."
-	cd tests && ./run_tests.sh --verbose $(if $(FILTER),--filter $(FILTER))
+	cd tests && ./run-tests.sh --verbose $(if $(FILTER),--filter $(FILTER))
 
-# Run only integration tests
+# Run only integration tests (organized structure)
 test-integration: setup
 	@echo "🧪 Running integration tests..."
-	cd tests && ./run_tests.sh --filter integration
+	cd tests && ./run-tests.sh --integration
 
-# Run only version utility tests
+# Run only version utility tests (collocated)
 test-version: setup
-	@echo "🧪 Running version utility tests..."
-	cd tests && ./run_tests.sh --filter version
+	@echo "🧪 Running version utility tests (collocated)..."
+	cd tests && ./run-tests.sh --filter version
+
+# Run all unit tests (collocated with source code)
+test-unit: setup
+	@echo "🧪 Running unit tests (collocated)..."
+	cd tests && ./run-tests.sh --unit
+
+# Run end-to-end tests
+test-e2e: setup
+	@echo "🧪 Running E2E tests..."
+	cd tests && ./run-tests.sh --e2e
 
 # Run tests in parallel
 test-parallel: setup
 	@echo "🧪 Running BATS test suite (parallel)..."
-	cd tests && ./run_tests.sh --parallel $(if $(FILTER),--filter $(FILTER))
+	cd tests && ./run-tests.sh --parallel $(if $(FILTER),--filter $(FILTER))
 
-# Run legacy shell-based tests
-test-legacy: setup
-	@echo "🔄 Running legacy shell-based tests..."
-	@if [ -f tests/integration.sh ]; then \
-		echo "Running integration.sh..."; \
-		chmod +x tests/integration.sh; \
-		tests/integration.sh; \
-	fi
-	@if [ -f tests/version.sh ]; then \
-		echo "Running version.sh..."; \
-		chmod +x tests/version.sh; \
-		tests/version.sh; \
-	fi
 
 # Install framework
 install: validate
@@ -99,7 +101,7 @@ clean:
 # CI/CD targets
 ci-test: setup
 	@echo "🚀 Running CI test suite..."
-	cd tests && ./run_tests.sh --tap
+	cd tests && ./run-tests.sh --tap
 
 ci-validate: setup validate
 
@@ -137,5 +139,5 @@ version-info:
 dev: clean setup test-verbose
 
 # Release preparation
-release-check: clean setup test-legacy ci-test validate
+release-check: clean setup ci-test validate
 	@echo "🎉 Release check complete - ready for deployment!"
