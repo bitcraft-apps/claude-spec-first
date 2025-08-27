@@ -226,12 +226,23 @@ fi
 
 # Create/Update utils directory and copy version utilities
 mkdir -p "$CLAUDE_DIR/utils"
+echo "🔍 DEBUG: Looking for version.sh at: $SCRIPT_DIR/scripts/version.sh"
+echo "🔍 DEBUG: File exists check: $([ -f "$SCRIPT_DIR/scripts/version.sh" ] && echo "YES" || echo "NO")"
 if [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
     target_file="$CLAUDE_DIR/utils/version.sh"
-    cp "$SCRIPT_DIR/scripts/version.sh" "$target_file"
-    chmod +x "$target_file"
-    INSTALLED+=("$target_file")
-    echo "🔧 Version utilities $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
+    echo "🔍 DEBUG: Copying to: $target_file"
+    if cp "$SCRIPT_DIR/scripts/version.sh" "$target_file"; then
+        chmod +x "$target_file"
+        INSTALLED+=("$target_file")
+        echo "🔧 Version utilities $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
+        echo "🔍 DEBUG: Successfully copied and made executable"
+    else
+        echo "🔍 DEBUG: Failed to copy version utilities"
+        exit 1
+    fi
+else
+    echo "🔍 DEBUG: version.sh not found, checking directory contents:"
+    ls -la "$SCRIPT_DIR/scripts/" || echo "🔍 DEBUG: scripts directory doesn't exist"
 fi
 
 # Copy/Update validation script
