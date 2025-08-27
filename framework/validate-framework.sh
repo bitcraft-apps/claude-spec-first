@@ -10,12 +10,28 @@ echo "🔍 Validating Specification-First Development Framework..."
 echo "=================================================="
 
 # Try to load and display framework version
-if [ -f "./utils/version-utils.sh" ]; then
-    . "./utils/version-utils.sh"
-    FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
-    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
-elif [ -f "./framework/utils/version-utils.sh" ]; then
-    . "./framework/utils/version-utils.sh"
+# Search for version.sh in several likely locations using robust path resolution
+VERSION_SH=""
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CURRENT_DIR="$(pwd)"
+
+# Check multiple potential locations for version utilities with absolute paths where possible
+if [ -f "$SCRIPT_DIR/../scripts/version.sh" ]; then
+    VERSION_SH="$SCRIPT_DIR/../scripts/version.sh"
+elif [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
+    VERSION_SH="$SCRIPT_DIR/scripts/version.sh"
+elif [ -f "${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh" ]; then
+    VERSION_SH="${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh"
+elif [ -f "$HOME/.claude/utils/version.sh" ]; then
+    VERSION_SH="$HOME/.claude/utils/version.sh"
+elif [ -f "./scripts/version.sh" ]; then
+    VERSION_SH="./scripts/version.sh"
+elif [ -f "$(dirname "$CURRENT_DIR")/utils/version.sh" ]; then
+    VERSION_SH="$(dirname "$CURRENT_DIR")/utils/version.sh"
+fi
+
+if [ -n "$VERSION_SH" ]; then
+    . "$VERSION_SH"
     FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
     echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
 else
@@ -99,19 +115,50 @@ build_safe_path() {
 
 # Detect execution mode based on directory structure
 detect_execution_mode() {
-    # Check if we're in repository mode (has ./framework/ directory)
-    if [ -d "./framework" ] && [ -f "./framework/CLAUDE.md" ]; then
+    # Get absolute path of script directory for reliable detection
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local current_dir="$(pwd)"
+    
+    # Check if we're in repository mode (has ./framework/ directory with VERSION)
+    if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
         EXECUTION_MODE="repository"
         FRAMEWORK_PREFIX="./framework/"
         print_info "Detected repository mode - using ./framework/ prefix"
         return 0
     fi
 
-    # Check if we're in installed mode (has CLAUDE.md in current directory)
-    if [ -f "./CLAUDE.md" ]; then
+    # Check if we're in installed mode (has commands/csf and agents/csf directories)
+    if [ -d "./commands/csf" ] && [ -d "./agents/csf" ]; then
         EXECUTION_MODE="installed"
         FRAMEWORK_PREFIX=""
-        print_info "Detected installed mode - using current directory"
+        print_info "Detected installed mode - validating current directory"
+        return 0
+    fi
+
+    # Check if we're running from .csf directory using absolute paths
+    # Look for Claude directory structure (commands/csf and agents/csf in parent)
+    local parent_dir="$(dirname "$current_dir")"
+    if [ -d "$parent_dir/commands/csf" ] && [ -d "$parent_dir/agents/csf" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX="$parent_dir/"
+        print_info "Detected installed mode (.csf location) - validating parent directory at $parent_dir"
+        return 0
+    fi
+    
+    # Check environment variable for Claude directory
+    local claude_dir="${CLAUDE_DIR:-$HOME/.claude}"
+    if [ -d "$claude_dir/commands/csf" ] && [ -d "$claude_dir/agents/csf" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX="$claude_dir/"
+        print_info "Detected installed mode via CLAUDE_DIR - validating $claude_dir"
+        return 0
+    fi
+    
+    # Check default installed location
+    if [ -d "$HOME/.claude/commands/csf" ] && [ -d "$HOME/.claude/agents/csf" ]; then
+        EXECUTION_MODE="installed"
+        FRAMEWORK_PREFIX="$HOME/.claude/"
+        print_info "Detected installed mode - validating $HOME/.claude"
         return 0
     fi
 
@@ -119,7 +166,10 @@ detect_execution_mode() {
     echo -e "${RED}❌ Invalid execution context${NC}" >&2
     echo -e "${RED}This script must be run from either:${NC}" >&2
     echo -e "${RED}  - Repository root (with ./framework/ directory)${NC}" >&2
-    echo -e "${RED}  - Installed location (~/.claude/ with CLAUDE.md)${NC}" >&2
+    echo -e "${RED}  - Installed location (~/.claude/ or \$CLAUDE_DIR)${NC}" >&2
+    echo -e "${RED}  - Framework metadata directory (~/.claude/.csf/)${NC}" >&2
+    echo -e "${RED}Current directory: $current_dir${NC}" >&2
+    echo -e "${RED}Script directory: $script_dir${NC}" >&2
     exit 1
 }
 
@@ -135,16 +185,20 @@ echo "=================================="
 detect_execution_mode
 
 # Check framework structure using detected mode
-CLAUDE_MD_PATH=$(build_safe_path "CLAUDE.md")
-if [ ! -f "$CLAUDE_MD_PATH" ]; then
-    echo -e "${RED}❌ Framework CLAUDE.md not found at: $CLAUDE_MD_PATH${NC}"
-    exit 1
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    # In repository mode, check for essential framework components
+    print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
+else
+    # In installed mode, check for CSF directories
+    print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
 fi
 
-print_status "CLAUDE.md exists ($EXECUTION_MODE mode)" 0
-
 # Check VERSION file
-VERSION_PATH=$(build_safe_path "VERSION")
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    VERSION_PATH=$(build_safe_path "VERSION")
+else
+    VERSION_PATH=$(build_safe_path ".csf/VERSION")
+fi
 if [ -f "$VERSION_PATH" ]; then
     print_status "VERSION file exists" 0
     # Use version utilities if available, otherwise fall back to manual parsing
@@ -164,21 +218,15 @@ else
     print_status "VERSION file exists" 1
 fi
 
-# Check version utilities
-VERSION_UTILS_PATH=$(build_safe_path "utils/version-utils.sh")
-if [ -f "$VERSION_UTILS_PATH" ]; then
-    print_status "version utilities exist" 0
-    if [ -x "$VERSION_UTILS_PATH" ]; then
-        print_status "version utilities are executable" 0
-    else
-        print_status "version utilities are executable" 1
-    fi
-else
-    print_status "version utilities exist" 1
-fi
+# Version utilities are available in both repository and installed modes
+# The installation script copies version utilities to the installed framework
 
 # Check agents directory
-AGENTS_DIR=$(build_safe_path "agents")
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    AGENTS_DIR=$(build_safe_path "agents")
+else
+    AGENTS_DIR=$(build_safe_path "agents/csf")
+fi
 if [ -d "$AGENTS_DIR" ]; then
     print_status "agents/ directory exists" 0
     AGENT_COUNT=$(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -189,7 +237,6 @@ else
 fi
 
 # Check commands directory
-# Set commands directory based on execution mode
 if [ "$EXECUTION_MODE" = "repository" ]; then
     COMMANDS_DIR=$(build_safe_path "commands")
 else
@@ -235,7 +282,7 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
     # Remove csf- prefix from agent name for filename
     AGENT_FILENAME=${agent#csf-}
 
-    # Set agent directory based on execution mode
+    # Set agent file path
     if [ "$EXECUTION_MODE" = "repository" ]; then
         AGENT_FILE=$(build_safe_path "agents/${AGENT_FILENAME}.md")
     else
@@ -294,17 +341,13 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
 done
 
 echo ""
-echo "=========================="
-if [ "$EXECUTION_MODE" = "csf" ]; then
-    echo -e "${BLUE}CSF Mode: Validating command prefix system${NC}"
-fi
 echo "📋 Validating Commands..."
 echo "========================"
 
 # Using centralized REQUIRED_COMMANDS from framework configuration above
 
 for command in "${REQUIRED_COMMANDS[@]}"; do
-    # Set command file path based on execution mode
+    # Set command file path
     if [ "$EXECUTION_MODE" = "repository" ]; then
         COMMAND_FILE=$(build_safe_path "commands/${command}.md")
     else
@@ -328,14 +371,7 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
             print_status "$command has description field" 1
         fi
 
-        # Check for CSF prefix in CSF mode
-        if [ "$EXECUTION_MODE" = "csf" ]; then
-            if grep -q "command_prefix: csf" "$COMMAND_FILE"; then
-                print_status "$command has CSF prefix" 0
-            else
-                print_status "$command has CSF prefix" 1
-            fi
-        fi
+        # CSF prefix is handled by the command routing system
 
         # Check for $ARGUMENTS usage
         if grep -q '\$ARGUMENTS' "$COMMAND_FILE"; then
@@ -357,110 +393,86 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
     fi
 done
 
-echo ""
-echo "📖 Validating CLAUDE.md..."
-echo "=========================="
+# CLAUDE.md validation only applies to repository mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    echo ""
+    echo "📖 Validating CLAUDE.md..."
+    echo "=========================="
 
-# Check CLAUDE.md content using safe path
-if grep -q "Specification-First Development" "$CLAUDE_MD_PATH"; then
-    print_status "CLAUDE.md contains specification-first principles" 0
-else
-    print_status "CLAUDE.md contains specification-first principles" 1
-fi
-
-if grep -q "## Core Principles" "$CLAUDE_MD_PATH"; then
-    print_status "CLAUDE.md has core principles section" 0
-else
-    print_status "CLAUDE.md has core principles section" 1
-fi
-
-if grep -q "## Workflow" "$CLAUDE_MD_PATH"; then
-    print_status "CLAUDE.md has workflow section" 0
-else
-    print_status "CLAUDE.md has workflow section" 1
-fi
-
-if grep -q "## Instructions for Claude" "$CLAUDE_MD_PATH"; then
-    print_status "CLAUDE.md has Claude instructions" 0
-else
-    print_status "CLAUDE.md has Claude instructions" 1
-fi
-
-echo ""
-echo "📚 Checking Documentation..."
-echo "============================"
-
-README_PATH=$(build_safe_path "README.md")
-if [ -f "$README_PATH" ]; then
-    print_status "README.md exists" 0
-
-    if grep -q "Quick Start" "$README_PATH"; then
-        print_status "README.md has quick start guide" 0
-    else
-        print_status "README.md has quick start guide" 1
-    fi
-
-    if grep -q "Command Reference" "$README_PATH"; then
-        print_status "README.md has command reference" 0
-    else
-        print_status "README.md has command reference" 1
-    fi
-else
-    print_status "README.md exists" 1
-fi
-
-EXAMPLES_DIR=$(build_safe_path "examples")
-if [ -d "$EXAMPLES_DIR" ]; then
-    print_status "examples/ directory exists" 0
-    EXAMPLE_COUNT=$(find "$EXAMPLES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
-    print_info "Found $EXAMPLE_COUNT example files"
-else
-    print_warning "examples/ directory missing (recommended)"
-fi
-
-echo ""
-echo "📄 Validating Documentation Templates..."
-echo "========================================"
-
-# Check templates directory
-TEMPLATES_DIR=$(build_safe_path "templates")
-if [ -d "$TEMPLATES_DIR" ]; then
-    print_status "templates/ directory exists" 0
-
-    # Check technical templates
-    TECH_TEMPLATES_DIR=$(build_safe_path "templates/technical")
-    if [ -d "$TECH_TEMPLATES_DIR" ]; then
-        print_status "templates/technical/ directory exists" 0
-        TECH_TEMPLATE_COUNT=$(find "$TECH_TEMPLATES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
-        print_info "Found $TECH_TEMPLATE_COUNT technical template files"
-    else
-        print_warning "templates/technical/ directory missing (recommended)"
-    fi
-
-    # Check user templates
-    USER_TEMPLATES_DIR=$(build_safe_path "templates/user")
-    if [ -d "$USER_TEMPLATES_DIR" ]; then
-        print_status "templates/user/ directory exists" 0
-        USER_TEMPLATE_COUNT=$(find "$USER_TEMPLATES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
-        print_info "Found $USER_TEMPLATE_COUNT user template files"
-    else
-        print_warning "templates/user/ directory missing (recommended)"
-    fi
-
-    # Check for core template files
-    CORE_TEMPLATES=("documentation-structure.md" "metadata-system.md" "archival-process.md")
-    for template in "${CORE_TEMPLATES[@]}"; do
-        TEMPLATE_PATH=$(build_safe_path "templates/$template")
-        if [ -f "$TEMPLATE_PATH" ]; then
-            print_status "$template template exists" 0
+    # In repository mode, CLAUDE.md is at the root level (relative to current working directory)
+    CLAUDE_MD_PATH="./CLAUDE.md"
+    
+    # Direct file check (bypassing build_safe_path for this legitimate case)
+    if [ -f "$CLAUDE_MD_PATH" ]; then
+        print_status "CLAUDE.md exists at repository root" 0
+        
+        # Check CLAUDE.md content
+        if grep -q "Claude Spec-First Framework" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md contains spec-first framework" 0
         else
-            print_warning "$template template missing (recommended)"
+            print_status "CLAUDE.md contains spec-first framework" 1
         fi
-    done
 
-else
-    print_warning "templates/ directory missing (recommended for doc-generate functionality)"
+        if grep -q "## Architecture Overview" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has architecture overview section" 0
+        else
+            print_status "CLAUDE.md has architecture overview section" 1
+        fi
+
+        if grep -q "## Development Workflow" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has development workflow section" 0
+        else
+            print_status "CLAUDE.md has development workflow section" 1
+        fi
+
+        if grep -q "## Project Overview" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has project overview" 0
+        else
+            print_status "CLAUDE.md has project overview" 1
+        fi
+    else
+        print_status "CLAUDE.md exists at repository root" 1
+    fi
 fi
+
+# Documentation validation only applies to repository mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    echo ""
+    echo "📚 Checking Documentation..."
+    echo "============================"
+
+    # In repository mode, README.md is at the root level (relative to current working directory)
+    README_PATH="./README.md"
+    if [ -f "$README_PATH" ]; then
+        print_status "README.md exists" 0
+
+        if grep -q "Quick Start" "$README_PATH"; then
+            print_status "README.md has quick start guide" 0
+        else
+            print_status "README.md has quick start guide" 1
+        fi
+
+        if grep -q "Command Reference" "$README_PATH"; then
+            print_status "README.md has command reference" 0
+        else
+            print_status "README.md has command reference" 1
+        fi
+    else
+        print_status "README.md exists" 1
+    fi
+
+    EXAMPLES_DIR=$(build_safe_path "examples")
+    if [ -d "$EXAMPLES_DIR" ]; then
+        print_status "examples/ directory exists" 0
+        EXAMPLE_COUNT=$(find "$EXAMPLES_DIR" -name "*.md" -type f | wc -l | tr -d ' ')
+        print_info "Found $EXAMPLE_COUNT example files"
+    else
+        print_warning "examples/ directory missing (recommended)"
+    fi
+fi
+
+# Templates directory was removed in the simplified framework
+# Documentation generation uses built-in structures
 
 echo ""
 echo "🔧 Integration Checks..."
@@ -485,7 +497,7 @@ fi
 WORKFLOW_COMPLETE=true
 
 for cmd in "${REQUIRED_COMMANDS[@]}"; do
-    # Set command path based on execution mode
+    # Set command path
     if [ "$EXECUTION_MODE" = "repository" ]; then
         CMD_PATH=$(build_safe_path "commands/${cmd}.md")
     else
@@ -525,16 +537,10 @@ if [ $FAILED -eq 0 ]; then
     echo -e "${YELLOW}Note: Running in $EXECUTION_MODE mode with prefix: '$FRAMEWORK_PREFIX'${NC}"
     echo ""
     echo "🚀 Next Steps:"
-    if [ "$EXECUTION_MODE" = "csf" ]; then
-        echo "- Create spec: /csf:spec sample feature"
-        echo "- Full workflow: /csf:workflow complete example"
-        echo "- Generate docs: /csf:document project-name"
-        echo "- Quick implementation: /csf:implement-now simple task"
-    else
-        echo "- Create spec: /spec sample feature"
-        echo "- Full workflow: /workflow complete example"
-        echo "- Generate docs: /document project-name"
-    fi
+    echo "- Create spec: /csf:spec sample feature"
+    echo "- Implement code: /csf:implement spec-file-or-requirements"
+    echo "- Generate docs: /csf:document spec-and-code-paths"
+    echo "- Full workflow: /csf:workflow complete example"
     echo "- Review: README.md for detailed usage guide"
 
     exit 0

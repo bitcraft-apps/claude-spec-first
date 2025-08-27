@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Framework Documentation
-    url: https://github.com/bitcraft-apps/claude-spec-first/blob/main/README.md
-    about: Please read the documentation before opening an issue
-  - name: Discussion Forum
-    url: https://github.com/bitcraft-apps/claude-spec-first/discussions
-    about: For general questions and community discussions

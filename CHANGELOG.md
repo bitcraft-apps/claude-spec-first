@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [0.6.0] - 2025-08-27
+
+### Added
+- **Installation Validation**: Added validation script to installation process (installed at `~/.claude/.csf/validate-framework.sh`)
+- **Development Testing**: Added `tests/` directory with integration and version testing scripts
+- **Version Management**: Added `scripts/version.sh` for semantic version management
+
+### Changed
+- **Framework Structure**: Streamlined framework directory to contain only essential installable components
+- **Validation Script**: Enhanced dual-mode operation with proper installed mode support
+- **Installation Process**: Now installs validation script and provides validation instructions
+- **Issue Templates**: Simplified GitHub issue templates to focus on bug reports and feature requests only
+
+### Removed
+- **Outdated Documentation**: Removed entire `docs/` directory with obsolete 6-agent system documentation
+- **Framework Bloat**: Removed unused `framework/config/`, `framework/templates/`, and outdated examples
+- **Redundant Files**: Removed duplicate `framework/README.md` and `framework/CLAUDE.md`
+- **Development Utils**: Moved `framework/utils/` to `scripts/` and `tests/` directories
+- **Issue Template Complexity**: Removed documentation, installation, and usage question templates
+
+### Fixed
+- **Validation Paths**: Fixed validation script to properly handle `.csf/` installation directory
+- **Component References**: Updated all validation checks to use current 3-agent, 4-command structure
+
 ## [0.5.0] - 2025-08-26
 
 ### Added

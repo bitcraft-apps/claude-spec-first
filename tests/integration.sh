@@ -68,10 +68,10 @@ cd "$TEST_DIR"
 # Test repository mode functionality
 run_test "Framework directory detection" "[ -f framework/CLAUDE.md ]"
 run_test "VERSION file exists" "[ -f framework/VERSION ]"
-run_test "Version utilities exist and are executable" "[ -x framework/utils/version-utils.sh ]"
-run_test "Get framework version" "framework/utils/version-utils.sh get | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'"
-run_test "Version validation" "framework/utils/version-utils.sh validate 1.2.3"
-run_test "Version comparison" "framework/utils/version-utils.sh compare 1.0.0 2.0.0 | grep -q '<'"
+run_test "Version utilities exist and are executable" "[ -x scripts/version.sh ]"
+run_test "Get framework version" "scripts/version.sh get | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'"
+run_test "Version validation" "scripts/version.sh validate 1.2.3"
+run_test "Version comparison" "scripts/version.sh compare 1.0.0 2.0.0 | grep -q '<'"
 run_test "Framework validation includes version" "framework/validate-framework.sh | grep 'Framework Version:'"
 run_test "Validation script passes" "framework/validate-framework.sh | grep 'Framework validation PASSED'"
 
@@ -92,9 +92,9 @@ cd "$TEST_DIR/home/.claude"
 
 # Test installed mode functionality
 run_test "Installation creates VERSION file" "[ -f VERSION ]"
-run_test "Installation creates version utilities" "[ -x utils/version-utils.sh ]"
-run_test "Get version in installed mode" "utils/version-utils.sh get | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'"
-run_test "Version info shows correct location" "utils/version-utils.sh info | grep 'Location: .'"
+run_test "Installation creates version utilities" "[ -x utils/version.sh ]"
+run_test "Get version in installed mode" "utils/version.sh get | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'"
+run_test "Version info shows correct location" "utils/version.sh info | grep 'Location: .'"
 run_test "Installed validation includes version" "./validate-framework.sh | grep 'Framework Version:'"
 run_test "Installed validation passes" "./validate-framework.sh | grep 'Framework validation PASSED'"
 
@@ -103,12 +103,12 @@ echo "⚙️  Phase 3: Version Operations Tests"
 echo "===================================="
 
 # Test version operations
-CURRENT_VERSION=$(utils/version-utils.sh get)
-run_test "Version increment patch" "utils/version-utils.sh increment patch | grep 'SUCCESS'"
-NEW_VERSION=$(utils/version-utils.sh get)
+CURRENT_VERSION=$(utils/version.sh get)
+run_test "Version increment patch" "utils/version.sh increment patch | grep 'SUCCESS'"
+NEW_VERSION=$(utils/version.sh get)
 run_test "Version was incremented" "[ '$NEW_VERSION' != '$CURRENT_VERSION' ]"
-run_test "Reset version" "utils/version-utils.sh set '$CURRENT_VERSION' | grep 'SUCCESS'"
-run_test "Version was reset" "[ \$(utils/version-utils.sh get) = '$CURRENT_VERSION' ]"
+run_test "Reset version" "utils/version.sh set '$CURRENT_VERSION' | grep 'SUCCESS'"
+run_test "Version was reset" "[ \$(utils/version.sh get) = '$CURRENT_VERSION' ]"
 
 echo ""
 echo "🔄 Phase 4: Backward Compatibility Tests"
@@ -117,7 +117,7 @@ echo "========================================"
 # Test framework without VERSION file
 mv VERSION VERSION.backup
 run_test "Framework works without VERSION file" "! ./validate-framework.sh | grep 'VERSION file exists' | grep '✅'"
-run_test "Version utilities handle missing file gracefully" "! utils/version-utils.sh get"
+run_test "Version utilities handle missing file gracefully" "! utils/version.sh get"
 mv VERSION.backup VERSION
 
 echo ""

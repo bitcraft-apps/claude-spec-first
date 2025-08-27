@@ -1,131 +1,58 @@
 name: Bug Report
 description: Report a bug or unexpected behavior
 title: "[Bug] "
-labels: ["type:bug", "status:needs-triage"]
+labels: ["bug"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting a bug! Please provide the following information to help us resolve the issue quickly.
+        Thanks for reporting a bug! Please provide the essential information below.
   
   - type: textarea
     id: description
     attributes:
-      label: Bug Description
-      description: A clear and concise description of what the bug is
-      placeholder: Describe the bug in detail...
-    validations:
-      required: true
-  
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behavior
-      description: What did you expect to happen?
-      placeholder: Describe what should have happened...
-    validations:
-      required: true
-  
-  - type: textarea
-    id: actual
-    attributes:
-      label: Actual Behavior
-      description: What actually happened?
-      placeholder: Describe what actually happened...
+      label: What happened?
+      description: Clear description of the bug and what you expected instead
+      placeholder: Describe what went wrong and what should have happened...
     validations:
       required: true
   
   - type: textarea
     id: steps
     attributes:
-      label: Steps to Reproduce
-      description: Please provide step-by-step instructions
+      label: How to reproduce
+      description: Steps to reproduce the issue
       placeholder: |
-        1. Navigate to...
-        2. Run command...
-        3. Observe error...
+        1. Run command: ./scripts/install.sh
+        2. Try to use: /csf:spec
+        3. Error occurs: ...
     validations:
       required: true
   
   - type: dropdown
     id: component
     attributes:
-      label: Framework Component
-      description: Which component is affected?
+      label: Component
+      description: Which part has the issue?
       options:
-        - "Installation (scripts/install.sh)"
-        - "Validation (validate-framework.sh)"
-        - "Agent: Spec Analyst"
-        - "Agent: Test Designer"
-        - "Agent: Arch Designer"
-        - "Agent: Impl Specialist"
-        - "Agent: QA Validator"
-        - "Command: /spec-init"
-        - "Command: /spec-review"
-        - "Command: /impl-plan"
-        - "Command: /qa-check"
-        - "Command: /spec-workflow"
-        - "Documentation"
-        - "Other/Unknown"
+        - "Installation"
+        - "Agent: csf-spec"
+        - "Agent: csf-implement" 
+        - "Agent: csf-document"
+        - "Command: /csf:spec"
+        - "Command: /csf:implement"
+        - "Command: /csf:document"
+        - "Command: /csf:workflow"
+        - "Validation script"
+        - "Other"
     validations:
       required: true
   
   - type: input
-    id: os
+    id: environment
     attributes:
-      label: Operating System
-      placeholder: "e.g., macOS 13.0, Ubuntu 22.04, Windows 11"
+      label: Environment
+      placeholder: "macOS 13, Claude Code v1.0.0"
     validations:
       required: true
-  
-  - type: input
-    id: claude-version
-    attributes:
-      label: Claude Code Version
-      placeholder: "e.g., v1.0.0"
-    validations:
-      required: true
-  
-  - type: input
-    id: framework-version
-    attributes:
-      label: Framework Version
-      placeholder: "e.g., v1.0.0"
-    validations:
-      required: true
-  
-  - type: input
-    id: shell
-    attributes:
-      label: Shell
-      placeholder: "e.g., bash, zsh, fish"
-    validations:
-      required: true
-  
-  - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: If applicable, add screenshots to help explain the problem
-      placeholder: Drag and drop images here or paste from clipboard
-  
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional Context
-      description: Any other context about the problem
-      placeholder: Add any other context about the problem here...
-  
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Pre-submission Checklist
-      description: Please confirm you have completed the following
-      options:
-        - label: I have read the documentation
-          required: true
-        - label: I have searched for existing issues
-          required: true
-        - label: I have provided all required information
-          required: true
