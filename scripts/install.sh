@@ -262,9 +262,6 @@ fi
 
 echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
-if [ -d "$CLAUDE_DIR/.csf/templates" ]; then
-    echo "📁 Templates installed to: $CLAUDE_DIR/.csf/templates/"
-fi
 echo ""
 echo -e "${BLUE}🔍 To validate the installation:${NC}"
 echo "   cd ~/.claude && ./.csf/validate-framework.sh"
