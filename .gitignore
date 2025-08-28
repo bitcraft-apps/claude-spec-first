@@ -18,6 +18,8 @@ Thumbs.db
 # Framework-Generated Files
 .claude/
 *.backup.*
+*.backup
+*backup*
 *.bak
 *.bak.*
 VERSION.bak.*
@@ -51,4 +53,3 @@ tests/test-data/
 tests/tmp/
 tests/*.tmp
 tests/test-results/
-framework.backup/
