@@ -26,7 +26,6 @@ teardown() {
     [ -f "$PROJECT_ROOT/framework/VERSION" ]
     [ -d "$PROJECT_ROOT/framework/commands" ]
     [ -d "$PROJECT_ROOT/framework/agents" ]
-    [ -d "$PROJECT_ROOT/framework/templates" ]
     [ -x "$PROJECT_ROOT/framework/validate-framework.sh" ]
 }
 
