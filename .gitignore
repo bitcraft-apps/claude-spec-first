@@ -51,3 +51,4 @@ tests/test-data/
 tests/tmp/
 tests/*.tmp
 tests/test-results/
+framework.backup/
