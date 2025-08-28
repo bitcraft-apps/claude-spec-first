@@ -46,6 +46,10 @@ setup() {
     git add .
     git commit -m "Initial commit" --quiet
     git branch -M main
+    
+    # Set up origin/main reference for version comparison
+    git remote add origin "$(pwd)"
+    git update-ref refs/remotes/origin/main HEAD
 }
 
 teardown() {

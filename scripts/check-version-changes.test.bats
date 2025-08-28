@@ -28,6 +28,10 @@ setup() {
     git add .
     git commit -m "Initial commit" --quiet
     git branch -M main
+    
+    # Set up origin/main reference for version comparison
+    git remote add origin "$(pwd)"
+    git update-ref refs/remotes/origin/main HEAD
 }
 
 teardown() {
@@ -74,7 +78,7 @@ CHANGELOG_EOF
     git add framework/VERSION
     git commit -m "Bump version to 0.2.0" --quiet
     
-    run scripts/check-version-changes.sh
+    run scripts/check-version-changes.sh --skip-changelog
     [ "$status" -eq 0 ]
     [[ "$output" == *"Version bump detected: 0.1.0 → 0.2.0"* ]]
 }

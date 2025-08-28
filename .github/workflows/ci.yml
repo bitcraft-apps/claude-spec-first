@@ -132,6 +132,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup git references for version checking
+        run: |
+          # Ensure we have the main branch reference for comparison
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin main:refs/remotes/origin/main
+          fi
+
       - name: Check version requirements
         id: version-requirements
         run: |

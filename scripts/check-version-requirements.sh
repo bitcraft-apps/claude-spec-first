@@ -189,10 +189,10 @@ analyze_changes() {
         return 1
     fi
     
-    # Get patterns
+    # Get patterns (using more compatible approach)
     local version_requiring_patterns version_exempt_patterns
-    readarray -t version_requiring_patterns < <(get_version_requiring_patterns)
-    readarray -t version_exempt_patterns < <(get_version_exempt_patterns)
+    version_requiring_patterns=($(get_version_requiring_patterns))
+    version_exempt_patterns=($(get_version_exempt_patterns))
     
     # Categorize changed files
     local framework_files=()
