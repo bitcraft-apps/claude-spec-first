@@ -256,8 +256,8 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("csf-spec" "csf-implement" "csf-document")
-REQUIRED_COMMANDS=("spec" "implement" "document" "workflow")
+REQUIRED_AGENTS=("csf-spec" "csf-plan" "csf-implement" "csf-document")
+REQUIRED_COMMANDS=("spec" "plan" "implement" "document" "workflow")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 
 # Function to build agent pattern dynamically from REQUIRED_AGENTS array

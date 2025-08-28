@@ -1,6 +1,6 @@
 # Claude Spec-First Framework
 
-A streamlined specification-first development framework for Claude Code that transforms it into a professional development environment following a clean 3-phase workflow: Specification → Implementation → Documentation.
+A streamlined specification-first development framework for Claude Code that transforms it into a professional development environment following a clean 4-phase workflow: Specification → Planning → Implementation → Documentation.
 
 ## Quick Start
 
@@ -14,8 +14,8 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Features
 
-- 3 specialized agents for focused development phases (namespaced as `csf-*`)
-- 4 streamlined commands for clean workflow execution
+- 4 specialized agents for focused development phases (namespaced as `csf-*`)
+- 5 streamlined commands for clean workflow execution
 - Context clearing between phases for focused work
 - Smart installation with backup and merge capabilities
 - Comprehensive documentation generation from artifacts
@@ -23,19 +23,21 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Command Reference
 
-The framework provides 4 streamlined workflow commands:
+The framework provides 5 streamlined workflow commands:
 
 **Workflow Commands:**
 - `/csf:spec` - Create specifications from business requirements
-- `/csf:implement` - Implement code from specifications
+- `/csf:plan` - Create technical implementation plan from specifications
+- `/csf:implement` - Implement code following specifications and plans
 - `/csf:document` - Generate documentation from spec and implementation
-- `/csf:workflow` - Execute complete spec → implement → document cycle
+- `/csf:workflow` - Execute complete spec → plan → implement → document cycle
 
 ## Agent Namespacing
 
 All framework agents use the `csf-` prefix to avoid conflicts with other Claude Code tools:
 
 - `csf-spec` - Requirements analysis and specification creation
+- `csf-plan` - Technical planning and implementation strategy creation
 - `csf-implement` - Code implementation specialist
 - `csf-document` - Documentation synthesis specialist
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the **Claude Spec-First Framework** - a comprehensive specification-first development framework for Claude Code. The framework transforms Claude Code into a professional development environment that follows structured workflows: Requirements → Specifications → Tests → Architecture → Implementation → Quality Assurance → Documentation.
+This is the **Claude Spec-First Framework** - a comprehensive specification-first development framework for Claude Code. The framework transforms Claude Code into a professional development environment that follows structured workflows: Requirements → Specifications → Planning → Implementation → Documentation.
 
 ## Development Commands
 
@@ -43,8 +43,9 @@ cd ~/.claude && ./validate-framework.sh
 **Framework Structure:**
 - `/framework/` - Core framework files that get installed to `~/.claude/`
 - `/framework/CLAUDE.md` - Global workflow principles for all Claude Code sessions
-- `/framework/agents/` - 6 specialized sub-agents with YAML frontmatter
-- `/framework/commands/` - 6 workflow commands with YAML frontmatter
+- `/framework/agents/` - 4 specialized sub-agents with YAML frontmatter  
+- `/framework/commands/` - 4 workflow commands with YAML frontmatter
+- `/framework/templates/` - Planning templates for different scenarios
 - `/framework/examples/` - Usage examples and templates
 
 **Installation System:**
@@ -53,14 +54,12 @@ cd ~/.claude && ./validate-framework.sh
 
 ### Sub-Agent Architecture
 
-The framework provides 6 specialized sub-agents, each with specific roles:
+The framework provides 4 specialized sub-agents, each with specific roles:
 
-1. **spec-analyst** - Requirements analysis and specification creation
-2. **test-designer** - Test-first development with comprehensive test suites
-3. **arch-designer** - System architecture and technical design decisions
-4. **impl-specialist** - Code implementation following specifications and tests
-5. **qa-validator** - Quality assurance and deployment readiness validation
-6. **doc-synthesizer** - Documentation synthesis from development artifacts
+1. **csf-spec** - Requirements analysis and specification creation
+2. **csf-plan** - Technical planning and implementation strategy creation  
+3. **csf-implement** - Code implementation following specifications and plans
+4. **csf-document** - Documentation synthesis from development artifacts
 
 Each agent is defined with YAML frontmatter specifying:
 - `name` - Agent identifier for Claude Code's Task tool
@@ -69,14 +68,13 @@ Each agent is defined with YAML frontmatter specifying:
 
 ### Command System
 
-6 workflow commands orchestrate the development process:
+4 workflow commands orchestrate the development process:
 
-1. **`/spec-init`** - Initialize specification process for new features
-2. **`/spec-review`** - Multi-agent specification validation
-3. **`/impl-plan`** - Implementation planning with architecture decisions
-4. **`/qa-check`** - Quality validation and deployment readiness
-5. **`/doc-generate`** - Generate comprehensive documentation from artifacts
-6. **`/spec-workflow`** - Complete end-to-end workflow automation
+1. **`/csf:spec`** - Create clear, actionable specifications from business requirements
+2. **`/csf:plan`** - Create technical implementation plan from existing specification  
+3. **`/csf:implement`** - Implement features following specifications and plans
+4. **`/csf:document`** - Generate comprehensive documentation from artifacts
+5. **`/csf:workflow`** - Complete end-to-end 4-phase workflow automation
 
 Commands use YAML frontmatter with `description` field and delegate to appropriate agents using `$ARGUMENTS` placeholder.
 
@@ -96,17 +94,45 @@ Commands use YAML frontmatter with `description` field and delegate to appropria
 
 ## Development Workflow
 
+The framework follows a structured 4-phase approach:
+
+### Phase 1: Specification
+- Analyze business requirements and create clear, actionable specifications
+- Define functional requirements, acceptance criteria, and constraints
+- Ensure specifications are implementation-ready
+
+### Phase 2: Planning  
+- Translate specifications into technical implementation strategies
+- Analyze existing codebase to understand patterns and architecture
+- Create step-by-step implementation plans with risk assessment
+- Identify files to modify, dependencies, and testing strategies
+
+### Phase 3: Implementation
+- Follow implementation plan step-by-step
+- Write clean code that matches specifications exactly
+- Validate each step according to plan success criteria
+- Execute testing strategy from the plan
+
+### Phase 4: Documentation
+- Create comprehensive technical and user documentation
+- Ensure documentation accuracy against actual implementation
+- Generate API references, guides, and examples
+
+### Framework Development Guidelines
+
 When working on this framework:
 
 1. **Agent Development**: Agents in `/framework/agents/` must have proper YAML frontmatter with `name`, `description`, and `tools` fields
 2. **Command Development**: Commands in `/framework/commands/` must have `description` field and use `$ARGUMENTS` for parameter passing
-3. **Validation**: Always run `./framework/validate-framework.sh` before commits
-4. **Documentation**: Update examples in `/framework/examples/` for new features
-5. **Installation Testing**: Test installation process with `./scripts/install.sh` on clean systems
+3. **Planning Templates**: Templates in `/framework/templates/planning/` provide structure for different planning scenarios
+4. **Validation**: Always run `./framework/validate-framework.sh` before commits
+5. **Documentation**: Update examples in `/framework/examples/` for new features
+6. **Installation Testing**: Test installation process with `./scripts/install.sh` on clean systems
 
 ## File Organization Standards
 
 - **Specifications**: `docs/specifications/` (when framework is used)
+- **Implementation Plans**: `docs/plans/` (when framework is used)
 - **Architecture decisions**: `docs/architecture/` (when framework is used)
 - **Context and examples**: `docs/context/` (when framework is used)
 - **Framework source**: `/framework/` (this repository)

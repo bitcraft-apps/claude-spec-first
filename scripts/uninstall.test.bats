@@ -181,7 +181,7 @@ teardown() {
     # .csf should be completely removed
     [ ! -d "$TEST_CLAUDE_DIR/.csf" ]
     
-    assert_output_contains "✅ Removed: .csf/ (metadata and backups)"
+    assert_output_contains "✅ Removed: .csf/ (metadata, templates, and backups)"
     
     test_info "✅ Removes .csf metadata directory when user confirms"
 }
@@ -255,7 +255,7 @@ teardown() {
     assert_output_contains "📋 Uninstallation Summary:"
     assert_output_contains "All CSF commands removed"
     assert_output_contains "All CSF agents removed"
-    assert_output_contains "Framework metadata and backups removed"
+    assert_output_contains "Framework metadata, templates, and backups removed"
     assert_output_contains "✨ Framework successfully uninstalled!"
     
     test_info "✅ Shows correct success messages"
@@ -277,7 +277,7 @@ teardown() {
     assert_output_contains "⚠️  This will remove:"
     assert_output_contains "All CSF commands from"
     assert_output_contains "All CSF agents from"
-    assert_output_contains "Framework metadata and backups from"
+    assert_output_contains "Framework metadata, templates, and backups from"
     
     test_info "✅ Shows analysis of what will be removed"
 }
