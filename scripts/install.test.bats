@@ -26,6 +26,38 @@ assert_failure() {
     fi
 }
 
+assert_directory_structure() {
+    local base_dir="$1"
+    shift
+    for dir in "$@"; do
+        [ -d "$base_dir/$dir" ] || {
+            echo "Expected directory: $base_dir/$dir" >&2
+            return 1
+        }
+    done
+}
+
+assert_version_format() {
+    local version="$1"
+    if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "Expected semantic version format (x.y.z), got: $version" >&2
+        return 1
+    fi
+}
+
+assert_output_contains() {
+    local expected="$1"
+    [[ "$output" == *"$expected"* ]] || {
+        echo "Expected output to contain: $expected" >&2
+        echo "Actual output: $output" >&2
+        return 1
+    }
+}
+
+test_info() {
+    echo "INFO: $*" >&2
+}
+
 setup() {
     # Create temporary test directory
     TEST_DIR="$(mktemp -d)"

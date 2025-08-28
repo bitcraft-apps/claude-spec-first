@@ -36,6 +36,10 @@ assert_output_contains() {
     fi
 }
 
+test_info() {
+    echo "INFO: $*" >&2
+}
+
 setup() {
     # Create temporary test directory
     TEST_DIR="$(mktemp -d)"
