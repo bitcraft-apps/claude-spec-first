@@ -127,34 +127,40 @@ check_prerequisites() {
     # Check for unit tests (collocated)
     for unit_test in "$PROJECT_ROOT/scripts"/*.test.bats; do
         if [ -f "$unit_test" ]; then
-            test_files_found=$((test_files_found + 1))
+            test_files_found=1
             break
         fi
     done
     
     # Check for integration tests
-    for integration_test in "$SCRIPT_DIR/integration"/*.bats; do
-        if [ -f "$integration_test" ]; then
-            test_files_found=$((test_files_found + 1))
-            break
-        fi
-    done
+    if [ $test_files_found -eq 0 ]; then
+        for integration_test in "$SCRIPT_DIR/integration"/*.bats; do
+            if [ -f "$integration_test" ]; then
+                test_files_found=1
+                break
+            fi
+        done
+    fi
     
     # Check for E2E tests
-    for e2e_test in "$SCRIPT_DIR/e2e"/*.bats; do
-        if [ -f "$e2e_test" ]; then
-            test_files_found=$((test_files_found + 1))
-            break
-        fi
-    done
+    if [ $test_files_found -eq 0 ]; then
+        for e2e_test in "$SCRIPT_DIR/e2e"/*.bats; do
+            if [ -f "$e2e_test" ]; then
+                test_files_found=1
+                break
+            fi
+        done
+    fi
     
     # Check for any remaining tests in root
-    for root_test in "$SCRIPT_DIR"/*.bats; do
-        if [ -f "$root_test" ]; then
-            test_files_found=$((test_files_found + 1))
-            break
-        fi
-    done
+    if [ $test_files_found -eq 0 ]; then
+        for root_test in "$SCRIPT_DIR"/*.bats; do
+            if [ -f "$root_test" ]; then
+                test_files_found=1
+                break
+            fi
+        done
+    fi
     
     if [ $test_files_found -eq 0 ]; then
         echo -e "${RED}❌ No test files found${NC}" >&2
