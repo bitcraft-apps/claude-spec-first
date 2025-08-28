@@ -26,7 +26,6 @@ teardown() {
     [ -f "$PROJECT_ROOT/framework/VERSION" ]
     [ -d "$PROJECT_ROOT/framework/commands" ]
     [ -d "$PROJECT_ROOT/framework/agents" ]
-    [ -d "$PROJECT_ROOT/framework/templates" ]
     [ -x "$PROJECT_ROOT/framework/validate-framework.sh" ]
 }
 
@@ -64,14 +63,16 @@ teardown() {
     grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/plan.md"
 }
 
-@test "planning templates exist and are complete" {
-    [ -d "$PROJECT_ROOT/framework/templates/planning" ]
-    [ -f "$PROJECT_ROOT/framework/templates/planning/standard-plan.md" ]
-    [ -f "$PROJECT_ROOT/framework/templates/planning/refactoring-plan.md" ]
-    [ -f "$PROJECT_ROOT/framework/templates/planning/migration-plan.md" ]
+@test "planning agent has built-in output format instructions" {
+    # Verify csf-plan agent has comprehensive built-in output format
+    grep -q "## Output Format" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Implementation Plan Summary" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Technical Approach" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Implementation Steps" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Testing Strategy" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Rollback Plan" "$PROJECT_ROOT/framework/agents/plan.md"
     
-    # Verify templates have proper structure
-    grep -q "Implementation Plan:" "$PROJECT_ROOT/framework/templates/planning/standard-plan.md"
-    grep -q "Refactoring Plan:" "$PROJECT_ROOT/framework/templates/planning/refactoring-plan.md"
-    grep -q "Migration Plan:" "$PROJECT_ROOT/framework/templates/planning/migration-plan.md"
+    # Verify agent has comprehensive planning guidance (87+ lines of instructions)
+    line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/plan.md")
+    [ "$line_count" -gt 80 ]
 }
