@@ -10,11 +10,8 @@ This is the **Claude Spec-First Framework** - a comprehensive specification-firs
 
 ### Framework Management
 ```bash
-# Install framework globally
+# Install or update framework (auto-detects existing installations)
 ./scripts/install.sh
-
-# Update existing installation (preserves customizations)
-./scripts/update.sh
 
 # Validate framework installation
 ./framework/validate-framework.sh
@@ -51,8 +48,7 @@ cd ~/.claude && ./validate-framework.sh
 - `/framework/examples/` - Usage examples and templates
 
 **Installation System:**
-- `scripts/install.sh` - Smart installer with backup/merge capabilities for existing configurations
-- `scripts/update.sh` - Updates framework while preserving user customizations
+- `scripts/install.sh` - Unified installer/updater with auto-detection, backup capabilities, and customization preservation
 - `scripts/uninstall.sh` - Clean removal with restoration of original configs
 
 ### Sub-Agent Architecture

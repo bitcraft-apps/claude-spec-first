@@ -34,7 +34,8 @@ echo "• Framework metadata and backups from $CLAUDE_DIR/.csf/"
 echo ""
 
 # Confirmation prompt
-read -p "Are you sure you want to uninstall? (y/N): " -n 1 -r
+echo -n "Are you sure you want to uninstall? (y/N): "
+read -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo -e "${BLUE}❌ Uninstallation cancelled.${NC}"
