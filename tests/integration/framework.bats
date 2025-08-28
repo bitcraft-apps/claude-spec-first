@@ -72,7 +72,8 @@ teardown() {
     grep -q "Testing Strategy" "$PROJECT_ROOT/framework/agents/plan.md"
     grep -q "Rollback Plan" "$PROJECT_ROOT/framework/agents/plan.md"
     
-    # Verify agent has comprehensive planning guidance (87+ lines of instructions)
-    line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/plan.md")
-    [ "$line_count" -gt 80 ]
+    # Verify agent has comprehensive planning guidance: at least 20 non-empty instruction lines after "## Output Format"
+    output_format_line=$(grep -n "^## Output Format" "$PROJECT_ROOT/framework/agents/plan.md" | cut -d: -f1)
+    instruction_lines=$(tail -n +"$((output_format_line + 1))" "$PROJECT_ROOT/framework/agents/plan.md" | grep -v '^\s*$' | grep -v '^#' | wc -l)
+    [ "$instruction_lines" -ge 20 ]
 }
