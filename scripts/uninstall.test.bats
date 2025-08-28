@@ -9,6 +9,33 @@ bats_require_minimum_version 1.5.0
 # Project root detection (inline)
 PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
 
+# Simple inline assertion functions
+assert_success() {
+    if [ "$status" -ne 0 ]; then
+        echo "Expected success (exit code 0), got: $status" >&2
+        echo "Output: $output" >&2
+        return 1
+    fi
+}
+
+assert_failure() {
+    if [ "$status" -eq 0 ]; then
+        echo "Expected failure (non-zero exit code), got: $status" >&2
+        echo "Output: $output" >&2
+        return 1
+    fi
+}
+
+assert_output_contains() {
+    local expected="$1"
+    if ! echo "$output" | grep -q "$expected"; then
+        echo "Expected output to contain: '$expected'" >&2
+        echo "Actual output:" >&2
+        echo "$output" >&2
+        return 1
+    fi
+}
+
 setup() {
     # Create temporary test directory
     TEST_DIR="$(mktemp -d)"

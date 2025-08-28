@@ -6,7 +6,7 @@
 setup() {
     # Create temporary directory for tests
     export TEST_TEMP_DIR="$(mktemp -d)"
-    export ORIGINAL_DIR="$PWD"
+    export ORIGINAL_DIR="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
     
     # Initialize git repo in temp dir
     cd "$TEST_TEMP_DIR"
