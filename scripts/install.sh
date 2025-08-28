@@ -203,6 +203,7 @@ install_framework_files() {
         done
         echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
+    
 }
 
 # Install/Update framework files

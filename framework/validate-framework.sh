@@ -256,8 +256,8 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("csf-spec" "csf-implement" "csf-document")
-REQUIRED_COMMANDS=("spec" "implement" "document" "workflow")
+REQUIRED_AGENTS=("csf-spec" "csf-plan" "csf-implement" "csf-document")
+REQUIRED_COMMANDS=("spec" "plan" "implement" "document" "workflow")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 
 # Function to build agent pattern dynamically from REQUIRED_AGENTS array
@@ -471,8 +471,6 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     fi
 fi
 
-# Templates directory was removed in the simplified framework
-# Documentation generation uses built-in structures
 
 echo ""
 echo "🔧 Integration Checks..."
@@ -491,6 +489,62 @@ if [ $COMMAND_AGENT_REFS -gt 0 ]; then
     print_status "Commands integrate with agents" 0
 else
     print_status "Commands integrate with agents" 1
+fi
+
+# Documentation consistency validation
+echo ""
+echo "📋 Documentation Consistency..."
+echo "=============================="
+
+# Only validate documentation consistency in repository mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    # Count actual agents and commands
+    ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
+    ACTUAL_COMMAND_COUNT=$(echo "${#REQUIRED_COMMANDS[@]}")
+    
+    # Check CLAUDE.md for consistent agent count references
+    if [ -f "./CLAUDE.md" ]; then
+        # Check for "4 specialized sub-agents" reference
+        if grep -q "$ACTUAL_AGENT_COUNT specialized sub-agents" "./CLAUDE.md"; then
+            print_status "CLAUDE.md agent count is consistent" 0
+        else
+            if grep -q "[0-9] specialized sub-agents" "./CLAUDE.md"; then
+                print_status "CLAUDE.md agent count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] specialized sub-agents" "./CLAUDE.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_AGENT_COUNT specialized sub-agents'"
+            else
+                print_warning "CLAUDE.md agent count reference not found"
+            fi
+        fi
+        
+        # Check for workflow command count references
+        if grep -q "$ACTUAL_COMMAND_COUNT workflow commands" "./CLAUDE.md"; then
+            print_status "CLAUDE.md command count is consistent" 0
+        else
+            if grep -q "[0-9] workflow commands" "./CLAUDE.md"; then
+                print_status "CLAUDE.md command count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] workflow commands" "./CLAUDE.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT workflow commands'"
+            else
+                print_warning "CLAUDE.md command count reference not found"
+            fi
+        fi
+    fi
+    
+    # Check README.md for command count consistency
+    if [ -f "./README.md" ]; then
+        if grep -q "$ACTUAL_COMMAND_COUNT streamlined commands" "./README.md"; then
+            print_status "README.md command count is consistent" 0
+        else
+            if grep -q "[0-9] streamlined commands" "./README.md"; then
+                print_status "README.md command count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] streamlined commands" "./README.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT streamlined commands'"
+            else
+                print_warning "README.md command count reference not found"
+            fi
+        fi
+    fi
 fi
 
 # Check workflow completeness (using centralized command list)

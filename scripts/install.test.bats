@@ -111,7 +111,10 @@ teardown() {
     
     # Verify specific expected commands exist
     [ -f "$TEST_INSTALL_DIR/commands/csf/spec.md" ]
+    [ -f "$TEST_INSTALL_DIR/commands/csf/plan.md" ]
     [ -f "$TEST_INSTALL_DIR/commands/csf/implement.md" ]
+    [ -f "$TEST_INSTALL_DIR/commands/csf/document.md" ]
+    [ -f "$TEST_INSTALL_DIR/commands/csf/workflow.md" ]
     
     test_info "✅ Fresh installation installs commands correctly"
 }
@@ -127,10 +130,13 @@ teardown() {
     
     # Verify specific expected agents exist
     [ -f "$TEST_INSTALL_DIR/agents/csf/spec.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/plan.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/implement.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/document.md" ]
     
     test_info "✅ Fresh installation installs agents correctly"
 }
+
 
 @test "fresh installation copies VERSION file" {
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"

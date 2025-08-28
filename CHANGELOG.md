@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [0.7.0] - 2025-08-28
+
+### Added
+- **Planning Phase**: New technical planning phase between specification and implementation
+- **Planning Agent (`csf-plan`)**: Specialized agent for creating technical implementation strategies
+- **Planning Command (`/csf:plan`)**: Command for generating implementation plans from specifications
+- **Planning Templates**: Comprehensive templates for standard, refactoring, and migration planning
+- **4-Phase Workflow**: Enhanced workflow: Specification → Planning → Implementation → Documentation
+
+### Changed
+- **Framework Architecture**: Updated from 3-agent to 4-agent system with planning integration
+- **Workflow Command**: Enhanced `/csf:workflow` to include planning phase between spec and implementation
+- **Template Organization**: Templates moved to `.csf/templates/` directory to avoid Claude Code conflicts
+- **Installation Process**: Updated to install planning templates in framework-specific location
+
+### Enhanced
+- **Risk Mitigation**: Planning phase provides safe research before execution
+- **Implementation Strategy**: Technical approach validated before coding begins
+- **Test Coverage**: Added comprehensive tests for all planning components (118 total tests)
+- **Documentation**: Updated CLAUDE.md and README.md with 4-phase workflow details
+
 ## [0.6.0] - 2025-08-27
 
 ### Added
