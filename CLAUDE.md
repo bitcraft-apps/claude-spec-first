@@ -125,8 +125,7 @@ When working on this framework:
 2. **Command Development**: Commands in `/framework/commands/` must have `description` field and use `$ARGUMENTS` for parameter passing
 3. **Documentation**: Update examples in `/framework/examples/` for new features
 4. **Validation**: Always run `./framework/validate-framework.sh` before commits
-5. **Documentation**: Update examples in `/framework/examples/` for new features
-6. **Installation Testing**: Test installation process with `./scripts/install.sh` on clean systems
+5. **Installation Testing**: Test installation process with `./scripts/install.sh` on clean systems
 
 ## File Organization Standards
 
