@@ -471,8 +471,52 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     fi
 fi
 
-# Templates directory was removed in the simplified framework
-# Documentation generation uses built-in structures
+echo ""
+echo "📝 Validating Templates..."
+echo "========================"
+
+# Check planning templates directory
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    TEMPLATES_DIR=$(build_safe_path "templates/planning")
+else
+    TEMPLATES_DIR=$(build_safe_path ".csf/templates/planning")
+fi
+
+if [ -d "$TEMPLATES_DIR" ]; then
+    print_status "templates/planning/ directory exists" 0
+    TEMPLATE_COUNT=$(find "$TEMPLATES_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+    print_info "Found $TEMPLATE_COUNT planning templates"
+    
+    # Validate each template structure
+    if ls "$TEMPLATES_DIR"/*.md >/dev/null 2>&1; then
+        for template in "$TEMPLATES_DIR"/*.md; do
+            template_name=$(basename "$template" .md)
+            
+            # Check template has proper markdown structure
+            if grep -q "^# " "$template"; then
+                print_status "$template_name has proper heading structure" 0
+            else
+                print_status "$template_name has proper heading structure" 1
+            fi
+            
+            # Check template has placeholder format [placeholder]
+            if grep -q "\[.*\]" "$template"; then
+                print_status "$template_name uses consistent placeholder format" 0
+            else
+                print_warning "$template_name missing placeholders (may be intentional)"
+            fi
+            
+            # Check template ends properly (not truncated)
+            if tail -1 "$template" | grep -E '^[[:space:]]*$|^-.*:.*$|^#.*$' >/dev/null; then
+                print_status "$template_name appears complete" 0
+            else
+                print_warning "$template_name may be truncated or incomplete"
+            fi
+        done
+    fi
+else
+    print_warning "templates/planning/ directory missing (optional)"
+fi
 
 echo ""
 echo "🔧 Integration Checks..."
@@ -491,6 +535,62 @@ if [ $COMMAND_AGENT_REFS -gt 0 ]; then
     print_status "Commands integrate with agents" 0
 else
     print_status "Commands integrate with agents" 1
+fi
+
+# Documentation consistency validation
+echo ""
+echo "📋 Documentation Consistency..."
+echo "=============================="
+
+# Only validate documentation consistency in repository mode
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    # Count actual agents and commands
+    ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
+    ACTUAL_COMMAND_COUNT=$(echo "${#REQUIRED_COMMANDS[@]}")
+    
+    # Check CLAUDE.md for consistent agent count references
+    if [ -f "./CLAUDE.md" ]; then
+        # Check for "4 specialized sub-agents" reference
+        if grep -q "$ACTUAL_AGENT_COUNT specialized sub-agents" "./CLAUDE.md"; then
+            print_status "CLAUDE.md agent count is consistent" 0
+        else
+            if grep -q "[0-9] specialized sub-agents" "./CLAUDE.md"; then
+                print_status "CLAUDE.md agent count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] specialized sub-agents" "./CLAUDE.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_AGENT_COUNT specialized sub-agents'"
+            else
+                print_warning "CLAUDE.md agent count reference not found"
+            fi
+        fi
+        
+        # Check for workflow command count references
+        if grep -q "$ACTUAL_COMMAND_COUNT workflow commands" "./CLAUDE.md"; then
+            print_status "CLAUDE.md command count is consistent" 0
+        else
+            if grep -q "[0-9] workflow commands" "./CLAUDE.md"; then
+                print_status "CLAUDE.md command count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] workflow commands" "./CLAUDE.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT workflow commands'"
+            else
+                print_warning "CLAUDE.md command count reference not found"
+            fi
+        fi
+    fi
+    
+    # Check README.md for command count consistency
+    if [ -f "./README.md" ]; then
+        if grep -q "$ACTUAL_COMMAND_COUNT streamlined commands" "./README.md"; then
+            print_status "README.md command count is consistent" 0
+        else
+            if grep -q "[0-9] streamlined commands" "./README.md"; then
+                print_status "README.md command count is consistent" 1
+                INCORRECT_COUNT=$(grep -o "[0-9] streamlined commands" "./README.md" | head -1)
+                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT streamlined commands'"
+            else
+                print_warning "README.md command count reference not found"
+            fi
+        fi
+    fi
 fi
 
 # Check workflow completeness (using centralized command list)

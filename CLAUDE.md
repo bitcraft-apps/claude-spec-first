@@ -44,7 +44,7 @@ cd ~/.claude && ./validate-framework.sh
 - `/framework/` - Core framework files that get installed to `~/.claude/`
 - `/framework/CLAUDE.md` - Global workflow principles for all Claude Code sessions
 - `/framework/agents/` - 4 specialized sub-agents with YAML frontmatter  
-- `/framework/commands/` - 4 workflow commands with YAML frontmatter
+- `/framework/commands/` - 5 workflow commands with YAML frontmatter
 - `/framework/templates/` - Planning templates for different scenarios
 - `/framework/examples/` - Usage examples and templates
 
@@ -68,7 +68,7 @@ Each agent is defined with YAML frontmatter specifying:
 
 ### Command System
 
-4 workflow commands orchestrate the development process:
+5 workflow commands orchestrate the development process:
 
 1. **`/csf:spec`** - Create clear, actionable specifications from business requirements
 2. **`/csf:plan`** - Create technical implementation plan from existing specification  
