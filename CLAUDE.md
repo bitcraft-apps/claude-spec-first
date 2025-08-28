@@ -45,7 +45,6 @@ cd ~/.claude && ./validate-framework.sh
 - `/framework/CLAUDE.md` - Global workflow principles for all Claude Code sessions
 - `/framework/agents/` - 4 specialized sub-agents with YAML frontmatter  
 - `/framework/commands/` - 5 workflow commands with YAML frontmatter
-- `/framework/templates/` - Planning templates for different scenarios
 - `/framework/examples/` - Usage examples and templates
 
 **Installation System:**
@@ -124,7 +123,7 @@ When working on this framework:
 
 1. **Agent Development**: Agents in `/framework/agents/` must have proper YAML frontmatter with `name`, `description`, and `tools` fields
 2. **Command Development**: Commands in `/framework/commands/` must have `description` field and use `$ARGUMENTS` for parameter passing
-3. **Planning Templates**: Templates in `/framework/templates/planning/` provide structure for different planning scenarios
+3. **Documentation**: Update examples in `/framework/examples/` for new features
 4. **Validation**: Always run `./framework/validate-framework.sh` before commits
 5. **Documentation**: Update examples in `/framework/examples/` for new features
 6. **Installation Testing**: Test installation process with `./scripts/install.sh` on clean systems

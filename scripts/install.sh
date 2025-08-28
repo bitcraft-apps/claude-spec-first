@@ -204,19 +204,6 @@ install_framework_files() {
         echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
     
-    # Install templates if they exist (to .csf directory to avoid conflicts)
-    if [ -d "$FRAMEWORK_DIR/templates" ]; then
-        local templates_target="$CLAUDE_DIR/.csf/templates"
-        if [ ! -d "$templates_target" ]; then
-            mkdir -p "$templates_target"
-        fi
-        
-        if cp -r "$FRAMEWORK_DIR/templates/"* "$templates_target/" 2>/dev/null; then
-            echo "📋 Templates $(echo "$operation" | tr '[:upper:]' '[:lower:]')d"
-        else
-            echo -e "${YELLOW}⚠️  No templates to ${operation}${NC}"
-        fi
-    fi
 }
 
 # Install/Update framework files
@@ -275,9 +262,6 @@ fi
 
 echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
-if [ -d "$CLAUDE_DIR/.csf/templates" ]; then
-    echo "📁 Templates installed to: $CLAUDE_DIR/.csf/templates/"
-fi
 echo ""
 echo -e "${BLUE}🔍 To validate the installation:${NC}"
 echo "   cd ~/.claude && ./.csf/validate-framework.sh"

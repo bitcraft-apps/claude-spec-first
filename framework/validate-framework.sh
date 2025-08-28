@@ -471,52 +471,6 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     fi
 fi
 
-echo ""
-echo "📝 Validating Templates..."
-echo "========================"
-
-# Check planning templates directory
-if [ "$EXECUTION_MODE" = "repository" ]; then
-    TEMPLATES_DIR=$(build_safe_path "templates/planning")
-else
-    TEMPLATES_DIR=$(build_safe_path ".csf/templates/planning")
-fi
-
-if [ -d "$TEMPLATES_DIR" ]; then
-    print_status "templates/planning/ directory exists" 0
-    TEMPLATE_COUNT=$(find "$TEMPLATES_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
-    print_info "Found $TEMPLATE_COUNT planning templates"
-    
-    # Validate each template structure
-    if ls "$TEMPLATES_DIR"/*.md >/dev/null 2>&1; then
-        for template in "$TEMPLATES_DIR"/*.md; do
-            template_name=$(basename "$template" .md)
-            
-            # Check template has proper markdown structure
-            if grep -q "^# " "$template"; then
-                print_status "$template_name has proper heading structure" 0
-            else
-                print_status "$template_name has proper heading structure" 1
-            fi
-            
-            # Check template has placeholder format [placeholder]
-            if grep -q "\[.*\]" "$template"; then
-                print_status "$template_name uses consistent placeholder format" 0
-            else
-                print_warning "$template_name missing placeholders (may be intentional)"
-            fi
-            
-            # Check template ends properly (not truncated)
-            if tail -1 "$template" | grep -E '^[[:space:]]*$|^-.*:.*$|^#.*$' >/dev/null; then
-                print_status "$template_name appears complete" 0
-            else
-                print_warning "$template_name may be truncated or incomplete"
-            fi
-        done
-    fi
-else
-    print_warning "templates/planning/ directory missing (optional)"
-fi
 
 echo ""
 echo "🔧 Integration Checks..."

@@ -137,21 +137,6 @@ teardown() {
     test_info "✅ Fresh installation installs agents correctly"
 }
 
-@test "fresh installation installs templates" {
-    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
-    assert_success
-    
-    # Check that templates directory was created in .csf
-    [ -d "$TEST_INSTALL_DIR/.csf/templates" ]
-    
-    # Check that planning templates exist
-    [ -d "$TEST_INSTALL_DIR/.csf/templates/planning" ]
-    [ -f "$TEST_INSTALL_DIR/.csf/templates/planning/standard-plan.md" ]
-    [ -f "$TEST_INSTALL_DIR/.csf/templates/planning/refactoring-plan.md" ]
-    [ -f "$TEST_INSTALL_DIR/.csf/templates/planning/migration-plan.md" ]
-    
-    test_info "✅ Fresh installation installs templates correctly"
-}
 
 @test "fresh installation copies VERSION file" {
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"

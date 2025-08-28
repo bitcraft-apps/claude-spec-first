@@ -30,7 +30,7 @@ echo -e "${BLUE}📋 Analyzing current installation...${NC}"
 echo -e "${YELLOW}⚠️  This will remove:${NC}"
 echo "• All CSF commands from $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "• All CSF agents from $CLAUDE_DIR/agents/$CSF_PREFIX/"
-echo "• Framework metadata, templates, and backups from $CLAUDE_DIR/.csf/"
+echo "• Framework metadata and backups from $CLAUDE_DIR/.csf/"
 echo ""
 
 # Confirmation prompt
@@ -56,10 +56,10 @@ if [ -d "$CLAUDE_DIR/agents/$CSF_PREFIX" ]; then
     echo "  ✅ Removed: agents/$CSF_PREFIX/"
 fi
 
-# Remove framework metadata directory (includes templates)
+# Remove framework metadata directory
 if [ -d "$CLAUDE_DIR/.csf" ]; then
     rm -rf "$CLAUDE_DIR/.csf"
-    echo "  ✅ Removed: .csf/ (metadata, templates, and backups)"
+    echo "  ✅ Removed: .csf/ (metadata and backups)"
 fi
 
 # Clean up empty parent directories
@@ -72,7 +72,7 @@ echo ""
 echo -e "${BLUE}📋 Uninstallation Summary:${NC}"
 echo "• All CSF commands removed"
 echo "• All CSF agents removed"
-echo "• Framework metadata, templates, and backups removed"
+echo "• Framework metadata and backups removed"
 echo ""
 echo -e "${BLUE}🔧 Next Steps:${NC}"
 echo "1. Restart Claude Code to unload framework components"
