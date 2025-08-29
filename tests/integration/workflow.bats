@@ -97,14 +97,16 @@ teardown() {
 }
 
 @test "planning agent is properly configured for safe research" {
-    # Verify planning agent only has read-only tools for safe codebase research
-    grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
+    # Verify planning agent has research tools plus Write for file persistence
+    grep -q "tools: Read, Write, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
     
-    # Should NOT have write tools (Write, Edit, MultiEdit, Bash)
-    ! grep -q "Write" "$PROJECT_ROOT/framework/agents/plan.md" || true
-    ! grep -q "Edit" "$PROJECT_ROOT/framework/agents/plan.md" || true
-    ! grep -q "MultiEdit" "$PROJECT_ROOT/framework/agents/plan.md" || true
-    ! grep -q "Bash" "$PROJECT_ROOT/framework/agents/plan.md" || true
+    # Should have Write for file persistence but not Edit/MultiEdit/Bash for safety
+    run grep -q "Edit" "$PROJECT_ROOT/framework/agents/plan.md"
+    [ "$status" -eq 1 ]
+    run grep -q "MultiEdit" "$PROJECT_ROOT/framework/agents/plan.md"
+    [ "$status" -eq 1 ]
+    run grep -q "Bash" "$PROJECT_ROOT/framework/agents/plan.md"
+    [ "$status" -eq 1 ]
 }
 
 @test "implementation agent can follow plans" {

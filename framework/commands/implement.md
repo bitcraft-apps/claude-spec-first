@@ -19,6 +19,8 @@ This command delegates to the `csf-implement` agent to create working code from 
 - Tests implementation to ensure it works
 - Documents complex logic with clear comments
 
+**This command is ideal for critical work** where you need clean context boundaries. Use `/clear` after planning phase to ensure clean implementation context. For rapid prototyping, consider using `/csf:workflow` instead.
+
 ## Example
 ```
 /csf:implement docs/specifications/user-auth-spec.md
@@ -40,12 +42,14 @@ Use the Task tool to delegate to the csf-implement agent:
 **Prompt:** Implement the feature described in: $ARGUMENTS
 
 Please:
-1. Read and understand the specification thoroughly
-2. Examine existing codebase to understand patterns and conventions
-3. Write clean, working code that matches the specification exactly
-4. Handle all specified error cases and edge conditions
-5. Add appropriate comments for complex logic
-6. Test your implementation to ensure it works correctly
-7. Provide a summary of what was implemented and where
+1. Read the implementation plan from `.csf/current/plan.md` if it exists, or from the provided path if specified, or ask user for plan location if neither exists
+2. Read the specification from `.csf/current/spec.md` if it exists for additional context
+3. Follow the implementation plan step-by-step
+4. Write clean, working code that matches the specification exactly
+5. Handle all specified error cases and edge conditions
+6. Add appropriate comments for complex logic
+7. Test your implementation to ensure it works correctly
+
+**IMPORTANT**: Write a complete implementation summary to `.csf/current/implementation-summary.md` using the Write tool, following the format specified in the csf-implement agent instructions. Provide a brief summary to the terminal after saving the file.
 
 Focus on creating maintainable code that fulfills all specified requirements.

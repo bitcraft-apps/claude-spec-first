@@ -118,7 +118,7 @@ detect_execution_mode() {
     # Get absolute path of script directory for reliable detection
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local current_dir="$(pwd)"
-    
+
     # Check if we're in repository mode (has ./framework/ directory with VERSION)
     if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
         EXECUTION_MODE="repository"
@@ -144,7 +144,7 @@ detect_execution_mode() {
         print_info "Detected installed mode (.csf location) - validating parent directory at $parent_dir"
         return 0
     fi
-    
+
     # Check environment variable for Claude directory
     local claude_dir="${CLAUDE_DIR:-$HOME/.claude}"
     if [ -d "$claude_dir/commands/csf" ] && [ -d "$claude_dir/agents/csf" ]; then
@@ -153,7 +153,7 @@ detect_execution_mode() {
         print_info "Detected installed mode via CLAUDE_DIR - validating $claude_dir"
         return 0
     fi
-    
+
     # Check default installed location
     if [ -d "$HOME/.claude/commands/csf" ] && [ -d "$HOME/.claude/agents/csf" ]; then
         EXECUTION_MODE="installed"
@@ -401,11 +401,11 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
 
     # In repository mode, CLAUDE.md is at the root level (relative to current working directory)
     CLAUDE_MD_PATH="./CLAUDE.md"
-    
+
     # Direct file check (bypassing build_safe_path for this legitimate case)
     if [ -f "$CLAUDE_MD_PATH" ]; then
         print_status "CLAUDE.md exists at repository root" 0
-        
+
         # Check CLAUDE.md content
         if grep -q "Claude Spec-First Framework" "$CLAUDE_MD_PATH"; then
             print_status "CLAUDE.md contains spec-first framework" 0
@@ -471,7 +471,6 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     fi
 fi
 
-
 echo ""
 echo "🔧 Integration Checks..."
 echo "======================="
@@ -501,7 +500,7 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     # Count actual agents and commands
     ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
     ACTUAL_COMMAND_COUNT=$(echo "${#REQUIRED_COMMANDS[@]}")
-    
+
     # Check CLAUDE.md for consistent agent count references
     if [ -f "./CLAUDE.md" ]; then
         # Check for "4 specialized sub-agents" reference
@@ -516,7 +515,7 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
                 print_warning "CLAUDE.md agent count reference not found"
             fi
         fi
-        
+
         # Check for workflow command count references
         if grep -q "$ACTUAL_COMMAND_COUNT workflow commands" "./CLAUDE.md"; then
             print_status "CLAUDE.md command count is consistent" 0
@@ -530,7 +529,7 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
             fi
         fi
     fi
-    
+
     # Check README.md for command count consistency
     if [ -f "./README.md" ]; then
         if grep -q "$ACTUAL_COMMAND_COUNT streamlined commands" "./README.md"; then

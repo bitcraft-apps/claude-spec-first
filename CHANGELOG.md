@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No unreleased changes.
 
+## [0.8.0] - 2025-08-29
+
+### Added
+- **File Persistence System**: Persistent `.csf/` directory for development artifacts enabling safe context clearing
+- **Poison Context Awareness**: Built-in guidance and mitigations for context contamination between phases
+- **Workflow Archival**: Automatic archiving of previous workflow runs with timestamped backups
+- **Context-Safe Operations**: Enhanced agents with standalone task messaging and explicit phase boundaries
+
+### Enhanced
+- **Agent Instructions**: Updated all agents with file input/output requirements and persistence capabilities
+- **Command Documentation**: Added context management guidance and best practices for individual vs workflow commands
+- **Framework Architecture**: Integrated file persistence with existing 4-phase workflow
+- **User Guidance**: Comprehensive documentation on when to use `/clear` and individual commands vs workflow
+
+### Changed
+- **Agent Behavior**: All agents now write artifacts to `.csf/current/` directory for persistent storage
+- **Workflow Process**: Enhanced with archival step and persistent artifact management
+- **Documentation Approach**: Framework now enterprise-ready with professional audit trail capabilities
+
 ## [0.7.0] - 2025-08-28
 
 ### Added

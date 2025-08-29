@@ -18,6 +18,8 @@ This command delegates to the `csf-spec` agent to create specifications from bus
 - Identifies key constraints and edge cases
 - Produces clear requirements ready for implementation
 
+**This command is ideal for critical work** where you need clean context boundaries. For rapid prototyping, consider using `/csf:workflow` instead.
+
 ## Example
 ```
 /csf:spec Add user authentication with email/password login
@@ -43,5 +45,7 @@ Please analyze the requirements, ask any clarifying questions needed, and produc
 - Concrete acceptance criteria  
 - Key constraints and edge cases
 - Any questions that need resolution before implementation
+
+**IMPORTANT**: Write the complete specification to `.csf/current/spec.md` using the Write tool, following the format specified in the csf-spec agent instructions. Provide a brief summary to the terminal after saving the file.
 
 Focus on creating specifications that can be implemented directly without additional interpretation.

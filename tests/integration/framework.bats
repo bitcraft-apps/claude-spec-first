@@ -49,7 +49,7 @@ teardown() {
     # Check YAML frontmatter
     grep -q "name: csf-plan" "$PROJECT_ROOT/framework/agents/plan.md"
     grep -q "description:" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "tools: Read, Write, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
 }
 
 @test "planning command exists and delegates properly" {
@@ -63,14 +63,11 @@ teardown() {
     grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/plan.md"
 }
 
-@test "planning agent has built-in output format instructions" {
-    # Verify csf-plan agent has comprehensive built-in output format
-    grep -q "## Output Format" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Implementation Plan Summary" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Technical Approach" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Implementation Steps" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Testing Strategy" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Rollback Plan" "$PROJECT_ROOT/framework/agents/plan.md"
+@test "planning agent has built-in file persistence instructions" {
+    # Verify csf-plan agent has file persistence capabilities
+    grep -q "File Input/Output Requirements" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "\.csf/current/plan\.md" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "Write tool" "$PROJECT_ROOT/framework/agents/plan.md"
     
     # Verify agent has comprehensive planning guidance: at least 20 non-empty instruction lines after "## Output Format"
     output_format_line=$(grep -n "^## Output Format" "$PROJECT_ROOT/framework/agents/plan.md" | cut -d: -f1)

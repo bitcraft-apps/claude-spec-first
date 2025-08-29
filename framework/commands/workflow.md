@@ -11,6 +11,17 @@ This command orchestrates the complete specification-first development process u
 /csf:workflow [REQUIREMENTS]
 ```
 
+## ⚠️ Important Notes
+
+**Context Considerations**: This command runs all phases sequentially without clearing context between phases. While convenient for rapid development, this can lead to "poison context" where behavioral patterns from one phase affect subsequent phases.
+
+**For Critical Work**: Consider running individual phase commands (`/csf:spec`, `/csf:plan`, `/csf:implement`, `/csf:document`) separately with `/clear` between phases.
+
+**Best Use Cases**: 
+- Rapid prototyping and proof-of-concept work
+- Initial exploration of new features
+- Small, self-contained features
+
 ## What it does
 Executes the full development cycle in sequence:
 1. **Specification** - Creates clear requirements and acceptance criteria
@@ -24,27 +35,24 @@ Executes the full development cycle in sequence:
 ```
 
 ## Process
-The workflow executes these phases in order with context clearing between each:
+The workflow executes these phases in order:
 
 ### Phase 1: Specification Creation
 - Delegates to `csf-spec` agent
 - Analyzes requirements and creates actionable specifications
 - Produces clear acceptance criteria and constraints
-- **Context cleared before next phase**
 
 ### Phase 2: Planning
 - Delegates to `csf-plan` agent
 - Analyzes specification and existing codebase
 - Creates detailed technical implementation strategy
 - Identifies risks, dependencies, and step-by-step approach
-- **Context cleared before next phase**
 
 ### Phase 3: Implementation
 - Delegates to `csf-implement` agent  
 - Reads plan and follows implementation strategy exactly
 - Executes planned changes in specified order
 - Validates each step according to plan success criteria
-- **Context cleared before next phase**
 
 ### Phase 4: Documentation
 - Delegates to `csf-document` agent
@@ -61,6 +69,30 @@ The workflow executes these phases in order with context clearing between each:
 
 ---
 
+**Before Starting: Archive Previous Workflow**
+
+If `.csf/current/` directory exists with content, archive it:
+```bash
+# Create archive directory structure
+mkdir -p .csf/archived
+
+# Only archive if current directory exists and has content
+if [ -d ".csf/current" ] && [ "$(ls -A .csf/current 2>/dev/null)" ]; then
+  ARCHIVE_DIR=".csf/archived/$(date +%Y%m%d_%H%M%S)"
+  mkdir -p "$ARCHIVE_DIR"
+  
+  # Move files with error checking
+  if mv .csf/current/* "$ARCHIVE_DIR/" 2>/dev/null; then
+    echo "Previous workflow archived to $ARCHIVE_DIR"
+  else
+    echo "Warning: Could not archive previous workflow - continuing with new workflow"
+  fi
+fi
+
+# Ensure current directory exists
+mkdir -p .csf/current
+```
+
 **Phase 1: Create Specification**
 
 Use the Task tool to delegate to the csf-spec agent:
@@ -76,6 +108,8 @@ Please analyze the requirements, ask any clarifying questions needed, and produc
 - Key constraints and edge cases
 - Any questions that need resolution before implementation
 
+**IMPORTANT**: Write the complete specification to `.csf/current/spec.md` using the Write tool. Provide a brief summary to the terminal.
+
 **Wait for Phase 1 to complete before proceeding to Phase 2.**
 
 ---
@@ -86,10 +120,10 @@ Use the Task tool to delegate to the csf-plan agent:
 
 **Task Description:** Create implementation plan from specification
 **Agent Type:** csf-plan
-**Prompt:** Create a detailed technical implementation plan for the specification created in Phase 1.
+**Prompt:** Create a detailed technical implementation plan for the specification in `.csf/current/spec.md`.
 
 Please:
-1. Read and analyze the specification thoroughly to understand all requirements
+1. Read and analyze the specification from `.csf/current/spec.md` thoroughly
 2. Explore the existing codebase to understand architecture, patterns, and conventions
 3. Create a comprehensive implementation plan that includes:
    - Step-by-step implementation approach
@@ -100,6 +134,8 @@ Please:
 4. Ensure the plan follows existing code patterns and architectural decisions
 5. Break complex changes into manageable, ordered steps
 6. Provide clear success criteria for each step
+
+**IMPORTANT**: Write the complete implementation plan to `.csf/current/plan.md` using the Write tool. Provide a brief summary to the terminal.
 
 **Wait for Phase 2 to complete before proceeding to Phase 3.**
 
@@ -114,13 +150,15 @@ Use the Task tool to delegate to the csf-implement agent:
 **Prompt:** Implement the feature by following the implementation plan created in Phase 2.
 
 Please:
-1. Read and understand both the specification and implementation plan thoroughly
-2. Follow the implementation plan step-by-step in the exact order specified
-3. Validate each step according to the success criteria in the plan
-4. Write clean, working code that matches the specification exactly
-5. Handle all specified error cases and edge conditions as outlined in the plan
-6. Execute the testing strategy defined in the plan
-7. Provide a summary of what was implemented and verification that plan was followed
+1. Read the implementation plan from `.csf/current/plan.md` thoroughly
+2. Read the specification from `.csf/current/spec.md` for additional context
+3. Follow the implementation plan step-by-step in the exact order specified
+4. Validate each step according to the success criteria in the plan
+5. Write clean, working code that matches the specification exactly
+6. Handle all specified error cases and edge conditions as outlined in the plan
+7. Execute the testing strategy defined in the plan
+
+**IMPORTANT**: Write a complete implementation summary to `.csf/current/implementation-summary.md` using the Write tool. Provide a brief summary to the terminal.
 
 **Wait for Phase 3 to complete before proceeding to Phase 4.**
 
@@ -132,20 +170,25 @@ Use the Task tool to delegate to the csf-document agent:
 
 **Task Description:** Generate documentation from specification and implementation
 **Agent Type:** csf-document  
-**Prompt:** Create comprehensive documentation based on the specification, plan, and implementation from the previous phases.
+**Prompt:** Create comprehensive documentation based on the specification, plan, and implementation artifacts in `.csf/current/`.
 
 Please:
-1. Read and analyze the specification, implementation plan, and implementation code
-2. Create technical documentation for developers including:
+1. Read development artifacts from `.csf/current/` directory (spec.md, plan.md, implementation-summary.md)
+2. Analyze the actual implementation files and code structure
+3. Create technical documentation for developers including:
    - Architecture overview
    - API reference  
    - Setup and usage instructions
-3. Generate user-facing documentation including:
+4. Generate user-facing documentation including:
    - Feature guides
    - Getting started instructions
    - Common use cases and examples
-4. Ensure all documentation is accurate against the actual implementation
-5. Use clear, consistent writing throughout
-6. Organize documentation in a logical, navigable structure
+5. Ensure all documentation is accurate against the actual implementation
+6. Use clear, consistent writing throughout
+7. Organize documentation in a logical, navigable structure
+
+Create documentation files in the appropriate project locations (docs/, docs/user/, etc.). Provide a summary of generated documentation to the terminal.
 
 **Workflow complete when all four phases finish successfully.**
+
+**Final Summary**: All development artifacts are preserved in `.csf/current/` for reference and can be safely accessed even after context clearing.
