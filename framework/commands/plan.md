@@ -16,6 +16,8 @@ This command delegates to the `csf-plan` agent to create detailed technical impl
 - Specification should be complete and contain clear requirements
 - Codebase should be accessible for analysis
 
+**This command is ideal for critical work** where you need clean context boundaries. Use `/clear` after specification phase to ensure clean planning context. For rapid prototyping, consider using `/csf:workflow` instead.
+
 ## What it does
 - Analyzes existing codebase to understand patterns and architecture
 - Translates specification requirements into technical implementation steps
@@ -57,10 +59,10 @@ Use the Task tool to delegate to the csf-plan agent:
 
 **Task Description:** Create implementation plan from specification
 **Agent Type:** csf-plan  
-**Prompt:** Create a detailed technical implementation plan for the specification: $ARGUMENTS
+**Prompt:** Create a detailed technical implementation plan for: $ARGUMENTS
 
 Please:
-1. Read and analyze the specification thoroughly to understand all requirements
+1. Read the specification from `.csf/current/spec.md` (or the provided path if specified)
 2. Explore the existing codebase to understand architecture, patterns, and conventions
 3. Create a comprehensive implementation plan that includes:
    - Step-by-step implementation approach
@@ -71,5 +73,7 @@ Please:
 4. Ensure the plan follows existing code patterns and architectural decisions
 5. Break complex changes into manageable, ordered steps
 6. Provide clear success criteria for each step
+
+**IMPORTANT**: Write the complete implementation plan to `.csf/current/plan.md` using the Write tool, following the format specified in the csf-plan agent instructions. Provide a brief summary to the terminal after saving the file.
 
 Focus on creating a plan that can be followed step-by-step by the implementation agent to build exactly what the specification requires.

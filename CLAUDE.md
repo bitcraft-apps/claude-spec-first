@@ -136,6 +136,87 @@ When working on this framework:
 - **Framework source**: `/framework/` (this repository)
 - **Installation target**: `~/.claude/` (user systems)
 
+## Poison Context Awareness
+
+The framework is designed to handle "poison context" - where behavioral patterns from one phase contaminate subsequent phases. This awareness is built into the framework design:
+
+### Context Contamination Risks
+- **Sequential Execution**: When using `/csf:workflow`, all phases run in the same context
+- **Behavioral Associations**: Claude may form unintended connections between phases (e.g., assuming every spec needs immediate implementation)
+- **Context Accumulation**: Long conversations can degrade performance due to accumulated context
+
+### Built-in Mitigations
+- **Agent Isolation**: Each agent uses the Task tool, providing natural context boundaries
+- **Explicit Boundaries**: Agents include explicit instructions to focus only on their specific phase
+- **Standalone Task Messaging**: Each agent is told this is a standalone task without automatic next steps
+
+### Best Practices
+- **Use Individual Commands**: For critical work, run `/csf:spec`, `/csf:plan`, `/csf:implement`, `/csf:document` separately
+- **Context Reset**: Use `/clear` command between phases when running individual commands
+- **Workflow Command Usage**: Reserve `/csf:workflow` for rapid prototyping or proof-of-concept work
+- **Monitor for Associations**: Watch for signs that Claude is making assumptions about automatic phase transitions
+
+### Warning Signs of Poisoned Context
+- Claude automatically suggesting next phases without being asked
+- Assumptions about immediate implementation when only planning was requested
+- Mixing concerns between different development phases
+- Degraded performance or confused responses
+
+When these signs appear, use the `/clear` command to reset context and continue with individual phase commands.
+
+## File Persistence System
+
+The framework uses a `.csf/` directory for persistent storage of development artifacts, enabling safe context clearing between phases.
+
+### Directory Structure
+```
+.csf/
+├── current/                    # Active workflow artifacts
+│   ├── spec.md                # Current specification
+│   ├── plan.md                # Current implementation plan
+│   └── implementation-summary.md  # Current implementation summary
+└── archived/                   # Previous workflow runs
+    └── YYYYMMDD_HHMMSS/        # Timestamped archives
+        ├── spec.md
+        ├── plan.md
+        └── implementation-summary.md
+```
+
+### How File Persistence Works
+
+**Specification Phase**: `csf-spec` agent writes complete specifications to `.csf/current/spec.md`
+**Planning Phase**: `csf-plan` agent reads the spec file and writes plans to `.csf/current/plan.md`  
+**Implementation Phase**: `csf-implement` agent reads both files and writes summary to `.csf/current/implementation-summary.md`
+**Documentation Phase**: `csf-document` agent reads all artifacts and generates project documentation
+
+### Benefits
+
+1. **Context Clearing**: Safe to use `/clear` between phases without losing work
+2. **Work Resumption**: Continue interrupted workflows by referencing existing files
+3. **Audit Trail**: Review decision history through archived artifacts
+4. **Debugging**: Inspect intermediate outputs when troubleshooting
+5. **Version Control**: `.csf/` can be gitignored or committed based on team preferences
+
+### Archival Process
+
+The `/csf:workflow` command automatically archives previous runs:
+- Existing `.csf/current/` content moves to `.csf/archived/YYYYMMDD_HHMMSS/`
+- Fresh `.csf/current/` directory created for new workflow
+- No data loss between workflow executions
+
+### Git Integration
+
+Add to `.gitignore` to keep artifacts local:
+```
+.csf/
+```
+
+Or commit for team visibility:
+```
+.csf/current/
+!.csf/archived/
+```
+
 ## Quality Standards
 
 - All agents must pass validation script checks
