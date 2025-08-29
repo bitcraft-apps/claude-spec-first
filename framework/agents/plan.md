@@ -106,7 +106,7 @@ Create `.csf/` directory if it doesn't exist, then write to `.csf/current/plan.m
 ---
 generated_by: csf-plan
 generated_date: YYYY-MM-DD HH:MM:SS
-specification_source: "[path to specification file]"
+specification_source: "[Path to the specification file read, e.g., '.csf/current/spec.md']"
 status: active
 ---
 

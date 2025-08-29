@@ -106,27 +106,27 @@ Create `.csf/` directory if it doesn't exist, then write to `.csf/current/implem
 ---
 generated_by: csf-implement
 generated_date: YYYY-MM-DD HH:MM:SS
-plan_source: "[path to plan file]"
-specification_source: "[path to specification file]"
+plan_source: "[Path to the plan file read, e.g., '.csf/current/plan.md']"
+specification_source: "[Path to the specification file read, e.g., '.csf/current/spec.md']"
 status: completed
 ---
 
-# Implementation Summary: [Feature Name]
+# Implementation Summary: [Name of the feature/component implemented]
 
 ## What Was Implemented
-- [List of main components built]
+- [Bullet list of main components/modules built]
 
 ## Files Created/Modified
-- [List of all files changed with brief description]
+- [List each file created/modified with one-line description of changes made]
 
 ## Key Implementation Decisions
-- [Important technical choices made]
+- [Key architectural decisions and technology choices]
 
 ## Testing Results
-- [Summary of tests run and results]
+- [Test commands executed and their pass/fail status]
 
 ## Known Issues/Limitations
-- [Any known limitations or issues to address later]
+- [Technical debt, TODOs, or limitations that need future work]
 ```
 
 ### Terminal Output

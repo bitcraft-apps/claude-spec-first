@@ -63,7 +63,7 @@ Create `.csf/` directory if it doesn't exist, then write to `.csf/current/spec.m
 ---
 generated_by: csf-spec
 generated_date: YYYY-MM-DD HH:MM:SS
-requirements_source: "[original requirements description]"
+requirements_source: "[Summarize the original user requirements/request that prompted this specification]"
 status: active
 ---
 
