@@ -54,10 +54,10 @@ You are a specification agent who converts business requirements into clear, act
 
 ## File Output Requirements
 
-**IMPORTANT**: Always write the complete specification to `.csf/current/spec.md` using the Write tool.
+**IMPORTANT**: Always write the complete specification to `.csf/current/spec.md` using the Write tool. If `.csf/current/` directory creation fails, write to a fallback location and inform the user.
 
 ### File Structure
-Create `.csf/` directory if it doesn't exist, then write to `.csf/current/spec.md` with the following format:
+Create `.csf/` directory if it doesn't exist, then write to `.csf/current/spec.md` with the following format. If directory creation fails due to permissions or other issues, use `spec-[timestamp].md` in the current directory as fallback:
 
 ```markdown
 ---

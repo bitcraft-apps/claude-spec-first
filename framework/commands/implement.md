@@ -42,8 +42,8 @@ Use the Task tool to delegate to the csf-implement agent:
 **Prompt:** Implement the feature described in: $ARGUMENTS
 
 Please:
-1. Read the implementation plan from `.csf/current/plan.md` (or the provided path if specified)
-2. Read the specification from `.csf/current/spec.md` for additional context
+1. Read the implementation plan from `.csf/current/plan.md` if it exists, or from the provided path if specified, or ask user for plan location if neither exists
+2. Read the specification from `.csf/current/spec.md` if it exists for additional context
 3. Follow the implementation plan step-by-step
 4. Write clean, working code that matches the specification exactly
 5. Handle all specified error cases and edge conditions

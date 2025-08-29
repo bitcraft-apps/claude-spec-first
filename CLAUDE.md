@@ -208,13 +208,84 @@ The `/csf:workflow` command automatically archives previous runs:
 
 Add to `.gitignore` to keep artifacts local:
 ```
+# Claude Spec-First Framework artifacts (recommended for most projects)
 .csf/
 ```
 
-Or commit for team visibility:
+Or commit for team visibility while keeping archives local:
 ```
+# Commit current workflow but ignore archived runs
 .csf/current/
 !.csf/archived/
+```
+
+Or commit everything for full audit trail:
+```
+# Commit all workflow artifacts (use with caution - can grow large)
+# .csf/ - commented out to include all
+```
+
+### Troubleshooting File Operations
+
+#### Permission Issues
+If you encounter permission errors when creating `.csf/` directory:
+
+**Problem**: `mkdir: cannot create directory '.csf': Permission denied`
+**Solution**: 
+```bash
+# Check current directory permissions
+ls -la
+
+# If needed, ensure you have write permissions in the project directory
+# or choose a different base directory for your project
+```
+
+#### Disk Space Issues
+If archival fails due to disk space:
+
+**Problem**: `No space left on device`
+**Solutions**:
+- Clean up old archived workflows: `rm -rf .csf/archived/YYYYMMDD_*`
+- Move archives to external storage
+- Add `.csf/archived/` to `.gitignore` and don't commit archived workflows
+
+#### Missing Files
+If agents can't find expected files:
+
+**Problem**: `spec.md not found in .csf/current/`
+**Solutions**:
+- Run previous phases first (`/csf:spec`, `/csf:plan`)
+- Provide file paths directly when running commands
+- Use individual phase commands instead of `/csf:workflow` if files exist elsewhere
+
+#### Corrupted Workflow State
+If workflow artifacts become inconsistent:
+
+**Problem**: Mismatched or outdated files between phases
+**Solutions**:
+```bash
+# Reset workflow state
+rm -rf .csf/current/
+mkdir -p .csf/current
+
+# Start fresh with /csf:workflow or run phases individually
+```
+
+#### File System Compatibility
+For Windows users or case-sensitive file systems:
+
+**Issue**: File path case sensitivity problems
+**Solution**: Framework uses lowercase filenames consistently (`spec.md`, `plan.md`, `implementation-summary.md`)
+
+#### Network File Systems
+For projects on NFS, SMB, or other network file systems:
+
+**Issue**: File locking or permission issues
+**Solution**: Consider using local temporary directory:
+```bash
+# Create symlink to local storage if needed
+mkdir -p /tmp/project-csf
+ln -s /tmp/project-csf .csf
 ```
 
 ## Quality Standards

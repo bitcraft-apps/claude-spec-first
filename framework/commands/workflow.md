@@ -62,10 +62,25 @@ The workflow executes these phases in order:
 
 **Before Starting: Archive Previous Workflow**
 
-If `.csf/current/` directory exists, archive it:
+If `.csf/current/` directory exists with content, archive it:
 ```bash
-mkdir -p .csf/archived/$(date +%Y%m%d_%H%M%S)
-mv .csf/current/* .csf/archived/$(date +%Y%m%d_%H%M%S)/ 2>/dev/null || true
+# Create archive directory structure
+mkdir -p .csf/archived
+
+# Only archive if current directory exists and has content
+if [ -d ".csf/current" ] && [ "$(ls -A .csf/current 2>/dev/null)" ]; then
+  ARCHIVE_DIR=".csf/archived/$(date +%Y%m%d_%H%M%S)"
+  mkdir -p "$ARCHIVE_DIR"
+  
+  # Move files with error checking
+  if mv .csf/current/* "$ARCHIVE_DIR/" 2>/dev/null; then
+    echo "Previous workflow archived to $ARCHIVE_DIR"
+  else
+    echo "Warning: Could not archive previous workflow - continuing with new workflow"
+  fi
+fi
+
+# Ensure current directory exists
 mkdir -p .csf/current
 ```
 

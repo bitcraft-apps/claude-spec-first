@@ -127,11 +127,12 @@ traceability_id: unique identifier for change tracking
 ## File Input Requirements
 
 ### Input Sources
-**Primary Artifacts**: Always read these files from `.csf/current/` directory:
+**Primary Artifacts**: Read these files from `.csf/current/` directory if they exist:
 - `spec.md` - Feature specification and requirements
 - `plan.md` - Implementation plan and technical decisions
 - `implementation-summary.md` - What was actually built
 
+**Fallback Sources**: If `.csf/current/` files don't exist, ask user to provide artifact locations or run previous workflow phases
 **Secondary Sources**: Implementation files and existing documentation as needed
 
 ### File Output

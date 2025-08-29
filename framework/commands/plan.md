@@ -62,7 +62,7 @@ Use the Task tool to delegate to the csf-plan agent:
 **Prompt:** Create a detailed technical implementation plan for: $ARGUMENTS
 
 Please:
-1. Read the specification from `.csf/current/spec.md` (or the provided path if specified)
+1. Read the specification from `.csf/current/spec.md` if it exists, or from the provided path if specified, or ask user for specification location if neither exists
 2. Explore the existing codebase to understand architecture, patterns, and conventions
 3. Create a comprehensive implementation plan that includes:
    - Step-by-step implementation approach

@@ -91,15 +91,16 @@ You are an implementation agent who writes clean, working code that matches spec
 ## File Input/Output Requirements
 
 ### Input Sources
-**Primary**: Read implementation plan from `.csf/current/plan.md` if no path provided
-**Secondary**: Read specification from `.csf/current/spec.md` for additional context
+**Primary**: Read implementation plan from `.csf/current/plan.md` if it exists and no path provided
+**Secondary**: Read specification from `.csf/current/spec.md` if it exists for additional context
 **Alternative**: If specific file paths are provided, use those instead
+**Fallback**: If required files don't exist, ask user for file locations or request they run previous phases
 
 ### File Output
-**IMPORTANT**: Always write an implementation summary to `.csf/current/implementation-summary.md` using the Write tool.
+**IMPORTANT**: Always write an implementation summary to `.csf/current/implementation-summary.md` using the Write tool. If `.csf/current/` directory creation fails, write to a fallback location and inform the user.
 
 ### File Structure
-Create `.csf/` directory if it doesn't exist, then write to `.csf/current/implementation-summary.md` with the following format:
+Create `.csf/` directory if it doesn't exist, then write to `.csf/current/implementation-summary.md` with the following format. If directory creation fails due to permissions or other issues, use `implementation-summary-[timestamp].md` in the current directory as fallback:
 
 ```markdown
 ---

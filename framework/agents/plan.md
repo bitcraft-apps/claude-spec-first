@@ -92,14 +92,15 @@ You are a technical planning agent who translates completed specifications into 
 ## File Input/Output Requirements
 
 ### Input Sources
-**Primary**: Read specification from `.csf/current/spec.md` if no path provided
-**Alternative**: If specification path is provided, use that file instead
+**Primary**: Read specification from `.csf/current/spec.md` if it exists and no path provided
+**Secondary**: If `.csf/current/spec.md` doesn't exist or path is provided, use the specified path
+**Fallback**: If neither exists, ask user for specification location or content
 
 ### File Output
-**IMPORTANT**: Always write the complete implementation plan to `.csf/current/plan.md` using the Write tool.
+**IMPORTANT**: Always write the complete implementation plan to `.csf/current/plan.md` using the Write tool. If `.csf/current/` directory creation fails, write to a fallback location and inform the user.
 
 ### File Structure
-Create `.csf/` directory if it doesn't exist, then write to `.csf/current/plan.md` with the following format:
+Create `.csf/` directory if it doesn't exist, then write to `.csf/current/plan.md` with the following format. If directory creation fails due to permissions or other issues, use `plan-[timestamp].md` in the current directory as fallback:
 
 ```markdown
 ---

@@ -42,7 +42,7 @@ Use the Task tool to delegate to the csf-document agent:
 **Prompt:** Create comprehensive documentation for the completed feature.
 
 Please:
-1. Read development artifacts from `.csf/current/` directory (spec.md, plan.md, implementation-summary.md)
+1. Read development artifacts from `.csf/current/` directory (spec.md, plan.md, implementation-summary.md) if they exist, or ask user for artifact locations if missing
 2. Analyze the actual implementation files and code structure
 3. Create technical documentation for developers including:
    - Architecture overview
