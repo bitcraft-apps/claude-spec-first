@@ -123,7 +123,7 @@ Use the Task tool to delegate to the csf-implement agent:
 
 **Task Description:** Implement feature following plan
 **Agent Type:** csf-implement
-**Prompt:** Implement the feature by following the implementation plan in `.csf/current/plan.md`.
+**Prompt:** Implement the feature by following the implementation plan created in Phase 2.
 
 Please:
 1. Read the implementation plan from `.csf/current/plan.md` thoroughly
@@ -146,7 +146,7 @@ Use the Task tool to delegate to the csf-document agent:
 
 **Task Description:** Generate documentation from specification and implementation
 **Agent Type:** csf-document  
-**Prompt:** Create comprehensive documentation based on the artifacts in `.csf/current/`.
+**Prompt:** Create comprehensive documentation based on the specification, plan, and implementation artifacts in `.csf/current/`.
 
 Please:
 1. Read development artifacts from `.csf/current/` directory (spec.md, plan.md, implementation-summary.md)
