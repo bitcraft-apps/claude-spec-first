@@ -49,7 +49,7 @@ teardown() {
     # Check YAML frontmatter
     grep -q "name: csf-plan" "$PROJECT_ROOT/framework/agents/plan.md"
     grep -q "description:" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
+    grep -q "tools: Read, Write, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
 }
 
 @test "planning command exists and delegates properly" {
