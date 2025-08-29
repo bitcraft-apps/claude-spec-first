@@ -1,7 +1,7 @@
 ---
 name: csf-plan
 description: Technical planning agent that translates specifications into concrete implementation strategies. Use this agent to create actionable plans from existing specifications.
-tools: Read, Grep, Glob
+tools: Read, Write, Grep, Glob
 ---
 
 # Planning Agent
