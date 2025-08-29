@@ -11,14 +11,23 @@ This command orchestrates the complete specification-first development process u
 /csf:workflow [REQUIREMENTS]
 ```
 
+## ⚠️ Important Notes
+
+**Context Considerations**: This command runs all phases sequentially without clearing context between phases. While convenient for rapid development, this can lead to "poison context" where behavioral patterns from one phase affect subsequent phases.
+
+**For Critical Work**: Consider running individual phase commands (`/csf:spec`, `/csf:plan`, `/csf:implement`, `/csf:document`) separately with `/clear` between phases.
+
+**Best Use Cases**: 
+- Rapid prototyping and proof-of-concept work
+- Initial exploration of new features
+- Small, self-contained features
+
 ## What it does
 Executes the full development cycle in sequence:
 1. **Specification** - Creates clear requirements and acceptance criteria
 2. **Planning** - Creates technical implementation strategy from specifications
 3. **Implementation** - Builds working code that follows the plan exactly
 4. **Documentation** - Generates comprehensive docs from spec and code
-
-**Note**: This command runs all phases sequentially without clearing context between phases. While convenient for rapid development, this can lead to "poison context" where behavioral patterns from one phase affect subsequent phases. For critical work, consider running individual phase commands (`/csf:spec`, `/csf:plan`, `/csf:implement`, `/csf:document`) separately.
 
 ## Example
 ```
