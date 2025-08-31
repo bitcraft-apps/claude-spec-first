@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-No unreleased changes.
+### Changed
+- **CLAUDE.md Simplification**: Radically simplified project guidance from 296 to 93 lines (69% reduction)
+  - Established minimalist engineering principles (YAGNI, KISS, SRP, MVP-first)
+  - Added anti-patterns to avoid (enterprise solutions, blind pattern following, unnecessary complexity)
+  - Introduced "Smart Implementation" guidance for choosing between direct CLI usage vs code
+  - Enabled "Challenge Mode" to question requirements for robustness
+  - Merged planning phase into specification phase to reduce redundancy
+  - Removed verbose documentation in favor of self-documenting, actionable rules
 
 ## [0.8.0] - 2025-08-29
 
