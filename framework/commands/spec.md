@@ -1,51 +1,23 @@
 ---
-description: Create clear, actionable specifications from business requirements
+description: Create clear, actionable specifications from requirements
 ---
 
 # Spec Command
 
-This command delegates to the `csf-spec` agent to create specifications from business requirements.
+Creates specifications from requirements with integrated planning.
 
 ## Usage
 ```
 /csf:spec [REQUIREMENTS]
 ```
 
-## What it does
-- Analyzes business requirements and asks clarifying questions
-- Breaks down features into implementable components  
-- Creates specifications with concrete acceptance criteria
-- Identifies key constraints and edge cases
-- Produces clear requirements ready for implementation
-
-**This command is ideal for critical work** where you need clean context boundaries. For rapid prototyping, consider using `/csf:workflow` instead.
-
-## Example
-```
-/csf:spec Add user authentication with email/password login
-```
-
-## Agent
-Uses the `csf-spec` agent with the following capabilities:
-- Read, Write, Edit, Grep, Glob tools
-- Requirements analysis and specification creation
-- Clear, actionable output focused on implementation readiness
-
 ---
 
 Use the Task tool to delegate to the csf-spec agent:
 
 **Task Description:** Create specification from requirements
-**Agent Type:** csf-spec  
-**Prompt:** Create a clear, actionable specification for: $ARGUMENTS
+**Agent Type:** csf-spec
+**Prompt:** Create a specification with implementation plan for: $ARGUMENTS
 
-Please analyze the requirements, ask any clarifying questions needed, and produce a specification that includes:
-- Requirements summary with clear scope
-- Functional specifications broken into implementable components
-- Concrete acceptance criteria  
-- Key constraints and edge cases
-- Any questions that need resolution before implementation
-
-**IMPORTANT**: Write the complete specification to `.csf/current/spec.md` using the Write tool, following the format specified in the csf-spec agent instructions. Provide a brief summary to the terminal after saving the file.
-
-Focus on creating specifications that can be implemented directly without additional interpretation.
+Challenge assumptions, clarify ambiguities, and deliver the narrowest viable specification.
+Output to `.csf/spec.md`.
