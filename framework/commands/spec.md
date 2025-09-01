@@ -31,11 +31,11 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 After clarification (if needed), run micro-agents:
 
 **Batch 1 (Parallel):**
-- Task: csf-define-scope with requirements: $ARGUMENTS
-- Task: csf-create-criteria with requirements: $ARGUMENTS  
-- Task: csf-identify-risks with requirements: $ARGUMENTS
+- Task: define-scope with requirements: $ARGUMENTS
+- Task: create-criteria with requirements: $ARGUMENTS  
+- Task: identify-risks with requirements: $ARGUMENTS
 
 **Batch 2:**
-- Task: csf-synthesize-spec to combine all research
+- Task: synthesize-spec to combine all research
 
 Output: `.csf/spec.md`

@@ -1,5 +1,5 @@
 ---
-name: csf-create-criteria
+name: create-criteria
 description: Generate acceptance criteria
 tools: Write
 ---

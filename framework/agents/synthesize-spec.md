@@ -1,5 +1,5 @@
 ---
-name: csf-synthesize-spec
+name: synthesize-spec
 description: Combine research into final specification
 tools: Read, Write
 ---

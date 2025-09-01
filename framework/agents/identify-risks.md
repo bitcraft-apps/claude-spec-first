@@ -1,5 +1,5 @@
 ---
-name: csf-identify-risks
+name: identify-risks
 description: Find edge cases and risks
 tools: Write
 ---

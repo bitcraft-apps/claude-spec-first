@@ -1,5 +1,5 @@
 ---
-name: csf-define-scope
+name: define-scope
 description: Define boundaries and MVP scope
 tools: Write
 ---
