@@ -1,10 +1,10 @@
 ---
-description: Create clear, actionable specifications from requirements
+description: Create specifications through parallel analysis
 ---
 
 # Spec Command
 
-Creates specifications from requirements with integrated planning.
+Creates specifications with intelligent clarification.
 
 ## Usage
 ```
@@ -13,11 +13,29 @@ Creates specifications from requirements with integrated planning.
 
 ---
 
-Use the Task tool to delegate to the csf-spec agent:
+## Clarification Check
 
-**Task Description:** Create specification from requirements
-**Agent Type:** csf-spec
-**Prompt:** Create a specification with implementation plan for: $ARGUMENTS
+If requirements are vague (< 15 words or unclear), ask for clarification:
 
-Challenge assumptions, clarify ambiguities, and deliver the narrowest viable specification.
-Output to `.csf/spec.md`.
+**Questions to consider:**
+- What specific problem are you solving?
+- Who are the users?
+- What's the desired outcome?
+- Any technical constraints?
+- What's the minimal viable version?
+
+If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
+
+## Execution
+
+After clarification (if needed), run micro-agents:
+
+**Batch 1 (Parallel):**
+- Task: csf-define-scope with requirements: $ARGUMENTS
+- Task: csf-create-criteria with requirements: $ARGUMENTS  
+- Task: csf-identify-risks with requirements: $ARGUMENTS
+
+**Batch 2:**
+- Task: csf-synthesize-spec to combine all research
+
+Output: `.csf/spec.md`
