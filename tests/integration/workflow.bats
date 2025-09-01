@@ -58,9 +58,11 @@ teardown() {
     [ -f "$PROJECT_ROOT/framework/agents/synthesize-spec.md" ]
     grep -q "name: synthesize-spec" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     
-    # Phase 2: Implementation
-    [ -f "$PROJECT_ROOT/framework/agents/implement.md" ]
-    grep -q "name: csf-implement" "$PROJECT_ROOT/framework/agents/implement.md"
+    # Phase 2: Implementation micro-agents
+    [ -f "$PROJECT_ROOT/framework/agents/explore-patterns.md" ]
+    grep -q "name: explore-patterns" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
+    [ -f "$PROJECT_ROOT/framework/agents/implement-minimal.md" ]
+    grep -q "name: implement-minimal" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
     
     # Phase 3: Documentation
     [ -f "$PROJECT_ROOT/framework/agents/document.md" ]
@@ -74,7 +76,8 @@ teardown() {
     
     # Phase 2: Implementation
     [ -f "$PROJECT_ROOT/framework/commands/implement.md" ]
-    grep -q "csf-implement" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "explore-patterns" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "implement-minimal" "$PROJECT_ROOT/framework/commands/implement.md"
     
     # Phase 3: Documentation
     [ -f "$PROJECT_ROOT/framework/commands/document.md" ]
@@ -97,12 +100,15 @@ teardown() {
     grep -q "tools: Read, Write" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
 
-@test "implementation agent can follow plans" {
-    # Verify implementation agent has all necessary tools
-    grep -q "tools: Read, Write, Edit, MultiEdit, Bash, Grep, Glob" "$PROJECT_ROOT/framework/agents/implement.md"
+@test "implementation micro-agents have appropriate tools" {
+    # Verify explore-patterns has research tools
+    grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
     
-    # Check that implementation agent is instructed to work with specifications
-    grep -q -i "specification" "$PROJECT_ROOT/framework/agents/implement.md"
+    # Verify implement-minimal has implementation tools
+    grep -q "tools: Read, Write, Edit, MultiEdit, Bash" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
+    
+    # Check that implement-minimal works with specifications
+    grep -q -i "spec" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
 }
 
 @test "specification micro-agents execute in parallel" {
@@ -126,6 +132,16 @@ teardown() {
     # Verify synthesize-spec agent reads from micro-agent outputs
     grep -q ".csf/research" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     grep -q "Inputs.*\.csf/research/\*.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+}
+
+@test "implementation follows sequential workflow" {
+    # Verify implement command uses sequential execution (Step 1, Step 2)
+    grep -q "Step 1.*Learn" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "Step 2.*Implement" "$PROJECT_ROOT/framework/commands/implement.md"
+    
+    # Verify the philosophy of pattern-first implementation
+    grep -q "Pattern consistency over creativity" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "Working code over perfect code" "$PROJECT_ROOT/framework/commands/implement.md"
 }
 
 @test "risk agent focuses on essential risks" {
