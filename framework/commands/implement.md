@@ -24,10 +24,10 @@ Creates minimal implementation following existing patterns.
 After input resolution, run sequential micro-agents:
 
 **Step 1: Learn**
-- Task: explore-patterns with requirements: $ARGUMENTS
+- Task: explore-patterns with requirements: $SPECIFICATION
 
 **Step 2: Implement**  
-- Task: implement-minimal with spec: $ARGUMENTS
+- Task: implement-minimal with spec: $SPECIFICATION
 
 Output: Implementation + `.csf/implementation-summary.md`
 
