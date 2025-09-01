@@ -256,8 +256,8 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("csf-spec" "csf-plan" "csf-implement" "csf-document")
-REQUIRED_COMMANDS=("spec" "plan" "implement" "document" "workflow")
+REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "csf-implement" "csf-document")
+REQUIRED_COMMANDS=("spec" "implement" "document")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 
 # Function to build agent pattern dynamically from REQUIRED_AGENTS array
@@ -413,22 +413,22 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
             print_status "CLAUDE.md contains spec-first framework" 1
         fi
 
-        if grep -q "## Architecture Overview" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has architecture overview section" 0
+        if grep -q "## Core Philosophy" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has core philosophy section" 0
         else
-            print_status "CLAUDE.md has architecture overview section" 1
+            print_status "CLAUDE.md has core philosophy section" 1
         fi
 
-        if grep -q "## Development Workflow" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has development workflow section" 0
+        if grep -q "## Engineering Principles" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has engineering principles section" 0
         else
-            print_status "CLAUDE.md has development workflow section" 1
+            print_status "CLAUDE.md has engineering principles section" 1
         fi
 
-        if grep -q "## Project Overview" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has project overview" 0
+        if grep -q "## Framework Rules" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has framework rules section" 0
         else
-            print_status "CLAUDE.md has project overview" 1
+            print_status "CLAUDE.md has framework rules section" 1
         fi
     else
         print_status "CLAUDE.md exists at repository root" 1
@@ -593,7 +593,7 @@ if [ $FAILED -eq 0 ]; then
     echo "- Create spec: /csf:spec sample feature"
     echo "- Implement code: /csf:implement spec-file-or-requirements"
     echo "- Generate docs: /csf:document spec-and-code-paths"
-    echo "- Full workflow: /csf:workflow complete example"
+    echo "- Spec creation: /csf:spec [requirements] for creating specifications"
     echo "- Review: README.md for detailed usage guide"
 
     exit 0

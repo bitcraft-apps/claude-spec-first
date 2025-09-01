@@ -53,3 +53,6 @@ tests/test-data/
 tests/tmp/
 tests/*.tmp
 tests/test-results/
+
+# Claude Specification Files
+.csf/

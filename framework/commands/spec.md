@@ -1,51 +1,49 @@
 ---
-description: Create clear, actionable specifications from business requirements
+description: Create specifications through parallel analysis
 ---
 
 # Spec Command
 
-This command delegates to the `csf-spec` agent to create specifications from business requirements.
+Creates specifications with intelligent clarification.
 
 ## Usage
 ```
 /csf:spec [REQUIREMENTS]
 ```
 
-## What it does
-- Analyzes business requirements and asks clarifying questions
-- Breaks down features into implementable components  
-- Creates specifications with concrete acceptance criteria
-- Identifies key constraints and edge cases
-- Produces clear requirements ready for implementation
-
-**This command is ideal for critical work** where you need clean context boundaries. For rapid prototyping, consider using `/csf:workflow` instead.
-
-## Example
-```
-/csf:spec Add user authentication with email/password login
-```
-
-## Agent
-Uses the `csf-spec` agent with the following capabilities:
-- Read, Write, Edit, Grep, Glob tools
-- Requirements analysis and specification creation
-- Clear, actionable output focused on implementation readiness
-
 ---
 
-Use the Task tool to delegate to the csf-spec agent:
+## Clarification Check
 
-**Task Description:** Create specification from requirements
-**Agent Type:** csf-spec  
-**Prompt:** Create a clear, actionable specification for: $ARGUMENTS
+If requirements are vague (< 15 words or unclear), ask for clarification:
 
-Please analyze the requirements, ask any clarifying questions needed, and produce a specification that includes:
-- Requirements summary with clear scope
-- Functional specifications broken into implementable components
-- Concrete acceptance criteria  
-- Key constraints and edge cases
-- Any questions that need resolution before implementation
+**Questions to consider:**
+- What specific problem are you solving?
+- Who are the users?
+- What's the desired outcome?
+- Any technical constraints?
+- What's the minimal viable version?
 
-**IMPORTANT**: Write the complete specification to `.csf/current/spec.md` using the Write tool, following the format specified in the csf-spec agent instructions. Provide a brief summary to the terminal after saving the file.
+If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
 
-Focus on creating specifications that can be implemented directly without additional interpretation.
+## Execution
+
+After clarification (if needed), run micro-agents:
+
+**Batch 1 (Parallel):**
+- Task: define-scope with requirements: $ARGUMENTS
+- Task: create-criteria with requirements: $ARGUMENTS  
+- Task: identify-risks with requirements: $ARGUMENTS
+
+**Batch 2:**
+- Task: synthesize-spec to combine all research
+
+Output: `.csf/spec.md`
+
+## Error Recovery
+
+If any micro-agent fails:
+1. Claude Code shows the specific error
+2. Fix the issue (usually unclear requirements)
+3. Re-run /csf:spec with clearer input
+4. No partial state - each run starts fresh

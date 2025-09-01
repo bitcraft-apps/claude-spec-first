@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2025-09-01
+
+### Added
+- **Micro-Agent Architecture**: Transformed /csf:spec from monolithic to parallel micro-agents (#28)
+  - csf-define-scope: Define narrowest viable solution (18 lines)
+  - csf-create-criteria: Generate minimal acceptance criteria (18 lines) 
+  - csf-identify-risks: Identify essential risks only (18 lines)
+  - csf-synthesize-spec: Combine research into 50-line specifications (18 lines)
+  - Command-level clarification logic for vague requirements
+  - Parallel execution of research agents for improved performance
+
 ### Changed
 - **CLAUDE.md Simplification**: Radically simplified project guidance from 296 to 93 lines (69% reduction)
   - Established minimalist engineering principles (YAGNI, KISS, SRP, MVP-first)
@@ -15,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enabled "Challenge Mode" to question requirements for robustness
   - Merged planning phase into specification phase to reduce redundancy
   - Removed verbose documentation in favor of self-documenting, actionable rules
+
+- **Agent Output Philosophy**: Embedded minimalist principles directly in agent outputs
+  - Agents now produce MVP-focused specifications (51 lines vs 122 lines previously)
+  - Automatic YAGNI application: "Last 5 actions (not 10 - YAGNI)"
+  - KISS technical approaches: Cache over real-time, progressive enhancement
+  - Challenge assumptions: Agents ask clarifying questions instead of assuming enterprise needs
+  - Prevent overengineering: No enterprise metrics unless explicitly requested
 
 ## [0.8.0] - 2025-08-29
 
