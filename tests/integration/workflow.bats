@@ -44,69 +44,57 @@ teardown() {
     fi
 }
 
-@test "all 4 phases have corresponding agents" {
-    # Phase 1: Specification
-    [ -f "$PROJECT_ROOT/framework/agents/spec.md" ]
-    grep -q "name: csf-spec" "$PROJECT_ROOT/framework/agents/spec.md"
+@test "all phases have corresponding agents" {
+    # Phase 1: Specification micro-agents
+    [ -f "$PROJECT_ROOT/framework/agents/define-scope.md" ]
+    grep -q "name: define-scope" "$PROJECT_ROOT/framework/agents/define-scope.md"
     
-    # Phase 2: Planning  
-    [ -f "$PROJECT_ROOT/framework/agents/plan.md" ]
-    grep -q "name: csf-plan" "$PROJECT_ROOT/framework/agents/plan.md"
+    [ -f "$PROJECT_ROOT/framework/agents/create-criteria.md" ]
+    grep -q "name: create-criteria" "$PROJECT_ROOT/framework/agents/create-criteria.md"
     
-    # Phase 3: Implementation
+    [ -f "$PROJECT_ROOT/framework/agents/identify-risks.md" ]
+    grep -q "name: identify-risks" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+    
+    [ -f "$PROJECT_ROOT/framework/agents/synthesize-spec.md" ]
+    grep -q "name: synthesize-spec" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    
+    # Phase 2: Implementation
     [ -f "$PROJECT_ROOT/framework/agents/implement.md" ]
     grep -q "name: csf-implement" "$PROJECT_ROOT/framework/agents/implement.md"
     
-    # Phase 4: Documentation
+    # Phase 3: Documentation
     [ -f "$PROJECT_ROOT/framework/agents/document.md" ]
     grep -q "name: csf-document" "$PROJECT_ROOT/framework/agents/document.md"
 }
 
-@test "all 4 phases have corresponding commands" {
+@test "all phases have corresponding commands" {
     # Phase 1: Specification
     [ -f "$PROJECT_ROOT/framework/commands/spec.md" ]
-    grep -q "csf-spec" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "spec" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Phase 2: Planning
-    [ -f "$PROJECT_ROOT/framework/commands/plan.md" ]
-    grep -q "csf-plan" "$PROJECT_ROOT/framework/commands/plan.md"
-    
-    # Phase 3: Implementation
+    # Phase 2: Implementation
     [ -f "$PROJECT_ROOT/framework/commands/implement.md" ]
     grep -q "csf-implement" "$PROJECT_ROOT/framework/commands/implement.md"
     
-    # Phase 4: Documentation
+    # Phase 3: Documentation
     [ -f "$PROJECT_ROOT/framework/commands/document.md" ]
     grep -q "csf-document" "$PROJECT_ROOT/framework/commands/document.md"
 }
 
-@test "workflow command includes all 4 phases" {
-    [ -f "$PROJECT_ROOT/framework/commands/workflow.md" ]
-    
-    # Check that workflow command references all 4 phases
-    grep -q "Phase 1: Specification" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "Phase 2:" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "Phase 3: Implementation" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "Phase 4: Documentation" "$PROJECT_ROOT/framework/commands/workflow.md"
-    
-    # Check that workflow delegates to all 4 agents
-    grep -q "csf-spec" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "csf-plan" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "csf-implement" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "csf-document" "$PROJECT_ROOT/framework/commands/workflow.md"
+@test "spec command orchestrates micro-agents" {
+    # Check that spec command references micro-agents
+    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "synthesize-spec" "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "planning agent is properly configured for safe research" {
-    # Verify planning agent has research tools plus Write for file persistence
-    grep -q "tools: Read, Write, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
-    
-    # Should have Write for file persistence but not Edit/MultiEdit/Bash for safety
-    run grep -q "Edit" "$PROJECT_ROOT/framework/agents/plan.md"
-    [ "$status" -eq 1 ]
-    run grep -q "MultiEdit" "$PROJECT_ROOT/framework/agents/plan.md"
-    [ "$status" -eq 1 ]
-    run grep -q "Bash" "$PROJECT_ROOT/framework/agents/plan.md"
-    [ "$status" -eq 1 ]
+@test "micro-agents are properly configured for safe research" {
+    # Verify micro-agents have minimal tool sets
+    grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/create-criteria.md"
+    grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+    grep -q "tools: Read, Write" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
 
 @test "implementation agent can follow plans" {
@@ -117,88 +105,67 @@ teardown() {
     grep -q -i "specification" "$PROJECT_ROOT/framework/agents/implement.md"
 }
 
-@test "workflow phases are properly sequenced" {
-    # Verify workflow command has proper sequencing with context clearing
-    grep -q "Phase 1.*Phase 2.*Phase 3.*Phase 4" "$PROJECT_ROOT/framework/commands/workflow.md" || {
-        # Alternative check: verify phases appear in correct order
-        phase1_line=$(grep -n "Phase 1" "$PROJECT_ROOT/framework/commands/workflow.md" | head -1 | cut -d: -f1)
-        phase2_line=$(grep -n "Phase 2" "$PROJECT_ROOT/framework/commands/workflow.md" | head -1 | cut -d: -f1)
-        phase3_line=$(grep -n "Phase 3" "$PROJECT_ROOT/framework/commands/workflow.md" | head -1 | cut -d: -f1)
-        phase4_line=$(grep -n "Phase 4" "$PROJECT_ROOT/framework/commands/workflow.md" | head -1 | cut -d: -f1)
-        
-        [ "$phase1_line" -lt "$phase2_line" ]
-        [ "$phase2_line" -lt "$phase3_line" ]  
-        [ "$phase3_line" -lt "$phase4_line" ]
-    }
+@test "specification micro-agents execute in parallel" {
+    # Verify spec command uses parallel execution
+    grep -q "Batch 1.*Parallel" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Check for context clearing instructions
-    grep -q -i "context.*clear" "$PROJECT_ROOT/framework/commands/workflow.md" ||
-    grep -q -i "wait.*complete" "$PROJECT_ROOT/framework/commands/workflow.md"
+    # Verify micro-agents are listed
+    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "planning phase is properly integrated between spec and implementation" {
-    # Verify planning phase comes after specification phase in workflow
-    grep -q "Phase 1.*Specification" "$PROJECT_ROOT/framework/commands/workflow.md"
-    grep -q "Phase 2.*Planning" "$PROJECT_ROOT/framework/commands/workflow.md" 
-    grep -q "Phase 3.*Implementation" "$PROJECT_ROOT/framework/commands/workflow.md"
-    
-    # Verify workflow refers to plan from Phase 2 in Phase 3
-    grep -q "implementation plan created in Phase 2" "$PROJECT_ROOT/framework/commands/workflow.md"
-    
-    # Planning command should require specification as input
-    grep -q -i "specification.*input\|spec.*input\|from.*specification\|existing.*specification" "$PROJECT_ROOT/framework/commands/plan.md"
+@test "micro-agents follow minimalist principles" {
+    # Verify micro-agents enforce MVP principles
+    grep -q "MVP" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "YAGNI" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "KISS" "$PROJECT_ROOT/framework/agents/create-criteria.md"
 }
 
-@test "error handling for missing specifications in planning phase" {
-    # Planning command should have prerequisites about needing specifications
-    grep -q -i "prerequisite\|requirement" "$PROJECT_ROOT/framework/commands/plan.md"
-    grep -q -i "specification.*exist\|spec.*complete" "$PROJECT_ROOT/framework/commands/plan.md"
+@test "synthesize-spec reads from research outputs" {
+    # Verify synthesize-spec agent reads from micro-agent outputs
+    grep -q ".csf/research" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "Inputs.*\.csf/research/\*.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
 
-@test "planning agent includes risk assessment capabilities" {
-    # Verify planning agent has comprehensive risk assessment features
-    grep -q -i "risk.*assessment\|risk.*identification\|risk.*mitigation" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q -i "rollback.*plan\|rollback.*procedure" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q -i "testing.*strategy" "$PROJECT_ROOT/framework/agents/plan.md"
+@test "risk agent focuses on essential risks" {
+    # Verify risk agent focuses on blockers, not comprehensive risks
+    grep -q "essential risks" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+    grep -q "blockers" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+    grep -q "simple solutions" "$PROJECT_ROOT/framework/agents/identify-risks.md"
 }
 
-@test "documentation phase includes all previous artifacts" {
-    # Verify document agent reads from specification, plan, and implementation
+@test "documentation phase includes specification and implementation" {
+    # Verify document agent reads from specification and implementation
     grep -q -i "specification" "$PROJECT_ROOT/framework/agents/document.md"
     grep -q -i "implementation" "$PROJECT_ROOT/framework/agents/document.md"
-    
-    # Check workflow command instructs document agent to use all artifacts
-    grep -q -i "specification.*plan.*implementation\|specification.*implementation.*plan" "$PROJECT_ROOT/framework/commands/workflow.md"
 }
 
-@test "framework validation recognizes all 4 agents" {
+@test "framework validation recognizes all micro-agents" {
     cd "$PROJECT_ROOT"
     run ./framework/validate-framework.sh
     [ "$status" -eq 0 ]
     
-    # Verify all 4 agents are validated
-    [[ "$output" == *"csf-spec"* ]]
-    [[ "$output" == *"csf-plan"* ]]
-    [[ "$output" == *"csf-implement"* ]]
-    [[ "$output" == *"csf-document"* ]]
+    # Verify micro-agents are validated
+    [[ "$output" == *"define-scope"* ]]
+    [[ "$output" == *"create-criteria"* ]]
+    [[ "$output" == *"identify-risks"* ]]
+    [[ "$output" == *"synthesize-spec"* ]]
 }
 
-@test "framework validation recognizes all 5 commands" {
+@test "framework validation recognizes all 3 commands" {
     cd "$PROJECT_ROOT"
     run ./framework/validate-framework.sh
     [ "$status" -eq 0 ]
     
-    # Check that framework finds 5 command files
-    [[ "$output" == *"Found 5 command files"* ]]
+    # Check that framework finds 3 command files (spec, implement, document)
+    [[ "$output" == *"Found 3 command files"* ]]
 }
 
-@test "planning phase maintains specification-first philosophy" {
-    # Verify planning agent emphasizes specification-driven planning
-    grep -q -i "specification.*driven\|specification.*align" "$PROJECT_ROOT/framework/agents/plan.md"
+@test "specification maintains minimalist philosophy" {
+    # Verify spec command maintains specification-first philosophy
+    grep -q "specification" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Planning command should emphasize specification as primary input
-    grep -q -i "from.*specification\|specification.*input" "$PROJECT_ROOT/framework/commands/plan.md"
-    
-    # Verify planning doesn't bypass specification phase
-    ! grep -q -i "skip.*spec\|bypass.*spec" "$PROJECT_ROOT/framework/agents/plan.md"
+    # Verify synthesize-spec enforces line limits
+    grep -q "under 50 lines" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }

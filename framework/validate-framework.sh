@@ -413,22 +413,22 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
             print_status "CLAUDE.md contains spec-first framework" 1
         fi
 
-        if grep -q "## Architecture Overview" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has architecture overview section" 0
+        if grep -q "## Core Philosophy" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has core philosophy section" 0
         else
-            print_status "CLAUDE.md has architecture overview section" 1
+            print_status "CLAUDE.md has core philosophy section" 1
         fi
 
-        if grep -q "## Development Workflow" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has development workflow section" 0
+        if grep -q "## Engineering Principles" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has engineering principles section" 0
         else
-            print_status "CLAUDE.md has development workflow section" 1
+            print_status "CLAUDE.md has engineering principles section" 1
         fi
 
-        if grep -q "## Project Overview" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has project overview" 0
+        if grep -q "## Framework Rules" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md has framework rules section" 0
         else
-            print_status "CLAUDE.md has project overview" 1
+            print_status "CLAUDE.md has framework rules section" 1
         fi
     else
         print_status "CLAUDE.md exists at repository root" 1

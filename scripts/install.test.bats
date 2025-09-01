@@ -111,10 +111,8 @@ teardown() {
     
     # Verify specific expected commands exist
     [ -f "$TEST_INSTALL_DIR/commands/csf/spec.md" ]
-    [ -f "$TEST_INSTALL_DIR/commands/csf/plan.md" ]
     [ -f "$TEST_INSTALL_DIR/commands/csf/implement.md" ]
     [ -f "$TEST_INSTALL_DIR/commands/csf/document.md" ]
-    [ -f "$TEST_INSTALL_DIR/commands/csf/workflow.md" ]
     
     test_info "✅ Fresh installation installs commands correctly"
 }
@@ -129,8 +127,10 @@ teardown() {
     [ "$agent_count" -gt 0 ]
     
     # Verify specific expected agents exist
-    [ -f "$TEST_INSTALL_DIR/agents/csf/spec.md" ]
-    [ -f "$TEST_INSTALL_DIR/agents/csf/plan.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/define-scope.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/create-criteria.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/identify-risks.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/synthesize-spec.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/implement.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/document.md" ]
     
