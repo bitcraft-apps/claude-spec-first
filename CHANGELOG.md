@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2025-09-01
+
 ### Added
 - **Micro-Agent Architecture**: Transformed /csf:spec from monolithic to parallel micro-agents (#28)
   - csf-define-scope: Define narrowest viable solution (18 lines)
