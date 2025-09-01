@@ -39,3 +39,11 @@ After clarification (if needed), run micro-agents:
 - Task: synthesize-spec to combine all research
 
 Output: `.csf/spec.md`
+
+## Error Recovery
+
+If any micro-agent fails:
+1. Claude Code shows the specific error
+2. Fix the issue (usually unclear requirements)
+3. Re-run /csf:spec with clearer input
+4. No partial state - each run starts fresh
