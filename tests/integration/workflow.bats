@@ -130,7 +130,7 @@ teardown() {
 
 @test "risk agent focuses on essential risks" {
     # Verify risk agent focuses on blockers, not comprehensive risks
-    grep -q "essential risks" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+    grep -q -i "essential risks" "$PROJECT_ROOT/framework/agents/identify-risks.md"
     grep -q "blockers" "$PROJECT_ROOT/framework/agents/identify-risks.md"
     grep -q "simple solutions" "$PROJECT_ROOT/framework/agents/identify-risks.md"
 }

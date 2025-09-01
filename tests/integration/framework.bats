@@ -43,34 +43,43 @@ teardown() {
     [[ "$output" == *"Framework validation PASSED"* ]]
 }
 
-@test "planning agent exists and is properly configured" {
-    [ -f "$PROJECT_ROOT/framework/agents/plan.md" ]
+@test "micro-agents exist and are properly configured" {
+    # Check all 4 micro-agents exist
+    [ -f "$PROJECT_ROOT/framework/agents/define-scope.md" ]
+    [ -f "$PROJECT_ROOT/framework/agents/create-criteria.md" ]
+    [ -f "$PROJECT_ROOT/framework/agents/identify-risks.md" ]
+    [ -f "$PROJECT_ROOT/framework/agents/synthesize-spec.md" ]
     
-    # Check YAML frontmatter
-    grep -q "name: csf-plan" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "description:" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "tools: Read, Write, Grep, Glob" "$PROJECT_ROOT/framework/agents/plan.md"
+    # Check YAML frontmatter for define-scope
+    grep -q "name: define-scope" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "description:" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/define-scope.md"
 }
 
-@test "planning command exists and delegates properly" {
-    [ -f "$PROJECT_ROOT/framework/commands/plan.md" ]
+@test "spec command delegates to micro-agents properly" {
+    [ -f "$PROJECT_ROOT/framework/commands/spec.md" ]
     
     # Check YAML frontmatter  
-    grep -q "description:" "$PROJECT_ROOT/framework/commands/plan.md"
+    grep -q "description:" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Check delegation to csf-plan agent
-    grep -q "csf-plan" "$PROJECT_ROOT/framework/commands/plan.md"
-    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/plan.md"
+    # Check delegation to micro-agents
+    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "synthesize-spec" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "planning agent has built-in file persistence instructions" {
-    # Verify csf-plan agent has file persistence capabilities
-    grep -q "File Input/Output Requirements" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "\.csf/current/plan\.md" "$PROJECT_ROOT/framework/agents/plan.md"
-    grep -q "Write tool" "$PROJECT_ROOT/framework/agents/plan.md"
+@test "micro-agents have file persistence instructions" {
+    # Verify micro-agents write to .csf/research/
+    grep -q "Output:" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "research/scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
     
-    # Verify agent has comprehensive planning guidance: at least 20 non-empty instruction lines after "## Output Format"
-    output_format_line=$(grep -n "^## Output Format" "$PROJECT_ROOT/framework/agents/plan.md" | cut -d: -f1)
-    instruction_lines=$(tail -n +"$((output_format_line + 1))" "$PROJECT_ROOT/framework/agents/plan.md" | grep -v '^\s*$' | grep -v '^#' | wc -l)
-    [ "$instruction_lines" -ge 20 ]
+    # Verify synthesize-spec reads from research
+    grep -q "Inputs:" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "research/\\*.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    
+    # Verify micro-agents are focused (small instruction sets)
+    line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/define-scope.md")
+    [ "$line_count" -le 25 ]
 }
