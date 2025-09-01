@@ -64,9 +64,17 @@ teardown() {
     [ -f "$PROJECT_ROOT/framework/agents/implement-minimal.md" ]
     grep -q "name: implement-minimal" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
     
-    # Phase 3: Documentation
-    [ -f "$PROJECT_ROOT/framework/agents/document.md" ]
-    grep -q "name: csf-document" "$PROJECT_ROOT/framework/agents/document.md"
+    # Phase 3: Documentation micro-agents
+    [ -f "$PROJECT_ROOT/framework/agents/analyze-artifacts.md" ]
+    grep -q "name: analyze-artifacts" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
+    [ -f "$PROJECT_ROOT/framework/agents/analyze-implementation.md" ]
+    grep -q "name: analyze-implementation" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
+    [ -f "$PROJECT_ROOT/framework/agents/create-technical-docs.md" ]
+    grep -q "name: create-technical-docs" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"
+    [ -f "$PROJECT_ROOT/framework/agents/create-user-docs.md" ]
+    grep -q "name: create-user-docs" "$PROJECT_ROOT/framework/agents/create-user-docs.md"
+    [ -f "$PROJECT_ROOT/framework/agents/integrate-docs.md" ]
+    grep -q "name: integrate-docs" "$PROJECT_ROOT/framework/agents/integrate-docs.md"
 }
 
 @test "all phases have corresponding commands" {
@@ -81,7 +89,11 @@ teardown() {
     
     # Phase 3: Documentation
     [ -f "$PROJECT_ROOT/framework/commands/document.md" ]
-    grep -q "csf-document" "$PROJECT_ROOT/framework/commands/document.md"
+    grep -q "analyze-artifacts" "$PROJECT_ROOT/framework/commands/document.md"
+    grep -q "analyze-implementation" "$PROJECT_ROOT/framework/commands/document.md"
+    grep -q "create-technical-docs" "$PROJECT_ROOT/framework/commands/document.md"
+    grep -q "create-user-docs" "$PROJECT_ROOT/framework/commands/document.md"
+    grep -q "integrate-docs" "$PROJECT_ROOT/framework/commands/document.md"
 }
 
 @test "spec command orchestrates micro-agents" {
@@ -152,9 +164,11 @@ teardown() {
 }
 
 @test "documentation phase includes specification and implementation" {
-    # Verify document agent reads from specification and implementation
-    grep -q -i "specification" "$PROJECT_ROOT/framework/agents/document.md"
-    grep -q -i "implementation" "$PROJECT_ROOT/framework/agents/document.md"
+    # Verify documentation micro-agents handle both specifications and implementation
+    grep -q -i "artifacts" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
+    grep -q -i "implementation" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
+    grep -q -i "technical" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"
+    grep -q -i "user" "$PROJECT_ROOT/framework/agents/create-user-docs.md"
 }
 
 @test "framework validation recognizes all micro-agents" {
