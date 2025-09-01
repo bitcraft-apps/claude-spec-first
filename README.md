@@ -14,7 +14,7 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Features
 
-- 6 specialized agents (4 micro-agents for spec phase + implement + document)
+- 7 specialized agents (4 spec micro-agents + 2 implement micro-agents + document)
 - 3 streamlined commands for clean workflow execution
 - Context clearing between phases for focused work
 - Smart installation with backup and merge capabilities
