@@ -14,7 +14,7 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Features
 
-- 7 specialized agents (4 spec micro-agents + 2 implement micro-agents + document)
+- 11 specialized micro-agents (4 spec + 2 implement + 5 document micro-agents)
 - 3 streamlined commands for clean workflow execution
 - Context clearing between phases for focused work
 - Smart installation with backup and merge capabilities
@@ -23,23 +23,25 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Command Reference
 
-The framework provides 5 streamlined workflow commands:
+The framework provides 3 streamlined workflow commands:
 
 **Workflow Commands:**
-- `/csf:spec` - Create specifications from business requirements
-- `/csf:plan` - Create technical implementation plan from specifications
-- `/csf:implement` - Implement code following specifications and plans
-- `/csf:document` - Generate documentation from spec and implementation
-- `/csf:workflow` - Execute complete spec → plan → implement → document cycle
+- `/csf:spec` - Create specifications through parallel micro-agents
+- `/csf:implement` - Implement code through sequential micro-agents  
+- `/csf:document` - Generate documentation through parallel micro-agents
 
-## Agent Namespacing
+## Micro-Agent Architecture
 
-All framework agents use the `csf-` prefix to avoid conflicts with other Claude Code tools:
+The framework uses specialized micro-agents for focused execution:
 
-- `csf-spec` - Requirements analysis and specification creation
-- `csf-plan` - Technical planning and implementation strategy creation
-- `csf-implement` - Code implementation specialist
-- `csf-document` - Documentation synthesis specialist
+**Specification Agents:**
+- `define-scope`, `create-criteria`, `identify-risks`, `synthesize-spec`
+
+**Implementation Agents:**  
+- `explore-patterns`, `implement-minimal`
+
+**Documentation Agents:**
+- `analyze-artifacts`, `analyze-implementation`, `create-technical-docs`, `create-user-docs`, `integrate-docs`
 
 This ensures the framework can coexist with other agent-based tools without naming conflicts.
 

@@ -133,7 +133,11 @@ teardown() {
     [ -f "$TEST_INSTALL_DIR/agents/csf/synthesize-spec.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/explore-patterns.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/implement-minimal.md" ]
-    [ -f "$TEST_INSTALL_DIR/agents/csf/document.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/analyze-artifacts.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/analyze-implementation.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/create-technical-docs.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/create-user-docs.md" ]
+    [ -f "$TEST_INSTALL_DIR/agents/csf/integrate-docs.md" ]
     
     test_info "✅ Fresh installation installs agents correctly"
 }
