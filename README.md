@@ -14,8 +14,8 @@ A streamlined specification-first development framework for Claude Code that tra
 
 ## Features
 
-- 4 specialized agents for focused development phases (namespaced as `csf-*`)
-- 5 streamlined commands for clean workflow execution
+- 6 specialized agents (4 micro-agents for spec phase + implement + document)
+- 3 streamlined commands for clean workflow execution
 - Context clearing between phases for focused work
 - Smart installation with backup and merge capabilities
 - Comprehensive documentation generation from artifacts
