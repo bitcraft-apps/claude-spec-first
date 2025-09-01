@@ -12,7 +12,9 @@ Input: Requirements from spec/arguments
 Output: `.csf/research/pattern-example.md`
 
 Rules:
-- Find the MOST similar existing implementation
+- Find the MOST similar existing implementation (same feature type preferred)
+- If no exact match, find analogous functionality (e.g., user auth → session management)
+- If no similar code exists, note standard project conventions
 - Note file structure, naming, imports
 - Identify test patterns if they exist
 - Output: "Here's how this codebase does X"

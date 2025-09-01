@@ -41,5 +41,7 @@ This command enforces:
 ## Error Recovery
 
 If exploration finds no patterns:
-- implement-minimal proceeds with simplest approach
-- Notes this in implementation summary
+1. implement-minimal creates basic file structure following language conventions
+2. Implements only the core requirement (no extras)
+3. Uses standard naming patterns for the technology
+4. Notes in summary: "No existing patterns found - used minimal approach"
