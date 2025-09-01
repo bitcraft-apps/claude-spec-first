@@ -256,7 +256,7 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "explore-patterns" "implement-minimal" "csf-document")
+REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "explore-patterns" "implement-minimal" "analyze-artifacts" "analyze-implementation" "create-technical-docs" "create-user-docs" "integrate-docs")
 REQUIRED_COMMANDS=("spec" "implement" "document")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob")
 

@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2025-09-01
+
+### Added
+- **Parallel Documentation Micro-Agents**: Transformed /csf:document from monolithic to parallel micro-agents (#30)
+  - analyze-artifacts: Read and parse development artifacts (20 lines)
+  - analyze-implementation: Analyze code structure and patterns (20 lines)  
+  - create-technical-docs: Generate developer documentation (35 lines)
+  - create-user-docs: Generate user-facing documentation (35 lines)
+  - integrate-docs: Combine and organize final documentation (15 lines)
+  - 3-batch orchestrated execution: Parallel analysis → Parallel generation → Sequential integration
+  - 20%+ performance improvement through parallel processing
+
+### Changed
+- **Documentation Philosophy**: Specialized micro-agents for focused output quality
+  - Parallel artifact and implementation analysis for speed
+  - Separate technical and user documentation generation for clarity
+  - Clean boundaries: analyzers read, generators write to .csf/research/, integrator moves to final locations
+  - Input resolution logic: check .csf/ artifacts, ask user if missing
+
+### Removed
+- **Monolithic csf-document agent** (156 lines) - replaced with 5 focused micro-agents (125 lines total)
+
+### Technical
+- Updated validation script with new micro-agent requirements
+- Updated installation tests for new agent structure
+- Updated README.md with current micro-agent architecture (11 total agents)
+
 ## [0.10.0] - 2025-09-01
 
 ### Added
