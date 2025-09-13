@@ -26,9 +26,21 @@ If requirements are vague (< 15 words or unclear), ask for clarification:
 
 If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
 
+## Directory Management
+
+Check for existing specifications:
+
+**First run**: Create standard `.csf/spec.md` and `.csf/research/`
+
+**Subsequent runs**: Prompt user with options:
+- "u" → Update existing (backup current, overwrite)
+- "n" → Create new timestamped directory
+
+Maintain backward compatibility with symlinks.
+
 ## Execution
 
-After clarification (if needed), run micro-agents:
+After directory setup and clarification (if needed), run micro-agents:
 
 **Batch 1 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
@@ -36,9 +48,10 @@ After clarification (if needed), run micro-agents:
 - Task: identify-risks with requirements: $ARGUMENTS
 
 **Batch 2:**
+- Task: manage-spec-directory to setup isolated directories
 - Task: synthesize-spec to combine all research
 
-Output: `.csf/spec.md`
+Output: Active spec in `.csf/spec.md` (symlink to current spec)
 
 ## Error Recovery
 
