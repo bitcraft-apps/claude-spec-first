@@ -26,19 +26,35 @@ If requirements are vague (< 15 words or unclear), ask for clarification:
 
 If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
 
+## Directory Management
+
+**Command-level logic** (Claude Code handles user interaction):
+
+```
+If .csf/spec.md exists:
+    Prompt: "Existing spec found. Update (u) or Create new (n)?"
+    If user chooses 'u': Write "update" to .csf/mode
+    If user chooses 'n': Write "new" to .csf/mode
+Else:
+    Write "first" to .csf/mode
+```
+
 ## Execution
 
-After clarification (if needed), run micro-agents:
+After directory setup and clarification (if needed), run micro-agents:
+
+**Pre-execution:**
+- Task: manage-spec-directory (reads mode from .csf/mode file)
 
 **Batch 1 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
-- Task: create-criteria with requirements: $ARGUMENTS  
+- Task: create-criteria with requirements: $ARGUMENTS
 - Task: identify-risks with requirements: $ARGUMENTS
 
 **Batch 2:**
 - Task: synthesize-spec to combine all research
 
-Output: `.csf/spec.md`
+Output: `.csf/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 

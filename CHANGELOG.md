@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2025-09-13
+
+### Added
+- **Spec Directory Isolation**: Prevents spec runs from overwriting each other (#36)
+  - User-controlled behavior: prompts "Update (u) or Create new (n)?" on subsequent runs
+  - Timestamped directories: `.csf/specs/YYYY-MM-DD-HHMMSS/` when creating new
+  - Safe backup system: only backs up when user chooses update
+  - Symlink compatibility: maintains `.csf/spec.md` and `.csf/research/` paths
+  - New micro-agent: `manage-spec-directory` (25 lines, user consent required)
+
+### Changed
+- **Enhanced /csf:spec Command**: Added user-controlled directory management
+  - Non-destructive: no operations without user consent
+  - Flexible workflow: supports both updating existing and creating new specs
+  - Backward compatible: existing tools work with symlinked paths
+
+### Technical
+- **User Agency**: All destructive operations require explicit user consent
+- **KISS Principle**: Simple single-character user prompt (u/n)
+- **Framework Compliance**: Follows YAGNI, SRP, and 25-line agent constraints
+- **Safe Operations**: Backup and timestamping only when requested
+
 ## [0.11.0] - 2025-09-01
 
 ### Added
