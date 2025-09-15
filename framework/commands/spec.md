@@ -28,27 +28,25 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 
 ## Directory Management
 
-Check for existing specifications:
+Autonomous directory setup:
 
-**First run**: Create standard `.csf/spec.md` and `.csf/research/`
-
-**Subsequent runs**: Prompt user with options:
-- "u" → Update existing (backup current, overwrite)
-- "n" → Create new timestamped directory
-
-Maintain backward compatibility with symlinks.
+**Always**: Backup existing spec to `.csf/spec-backup.md` if present
+**Always**: Clear and recreate `.csf/research/` for fresh micro-agent outputs
+**Always**: Create new `.csf/spec.md` after synthesis
 
 ## Execution
 
 After directory setup and clarification (if needed), run micro-agents:
 
-**Batch 1 (Parallel):**
+**Batch 1:**
+- Task: manage-spec-directory to setup isolated directories
+
+**Batch 2 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
-- Task: create-criteria with requirements: $ARGUMENTS  
+- Task: create-criteria with requirements: $ARGUMENTS
 - Task: identify-risks with requirements: $ARGUMENTS
 
-**Batch 2:**
-- Task: manage-spec-directory to setup isolated directories
+**Batch 3:**
 - Task: synthesize-spec to combine all research
 
 Output: Active spec in `.csf/spec.md` (symlink to current spec)

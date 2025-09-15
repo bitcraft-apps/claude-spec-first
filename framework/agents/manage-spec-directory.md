@@ -1,22 +1,26 @@
 ---
 name: manage-spec-directory
-description: Setup isolated spec directories with user prompts
-tools: Read, Write, Bash
+description: Setup isolated spec directories autonomously
+tools: Bash
 ---
 
 # Spec Directory Manager
 
-Sets up directory isolation for spec runs with backward compatibility.
+Autonomous directory setup with simple backup pattern.
 
 ## Logic
 
-**First run**: Create `.csf/spec.md` and `.csf/research/`
+**Backup**: If `.csf/spec.md` exists, copy to `.csf/spec-backup.md`
+**Clean**: Remove `.csf/research/` directory
+**Create**: Fresh `.csf/research/` directory
 
-**Subsequent runs**:
-- Backup current to timestamped directory
-- Prompt: "Update existing (u) or Create new (n)?"
-- Update: Overwrite current
-- New: Create `YYYY-MM-DD-HHMMSS/` directory
-- Maintain symlinks for compatibility
+## Implementation
 
-Outputs: Ready directory structure for spec generation.
+```bash
+# Backup existing spec and recreate research directory
+[ -f .csf/spec.md ] && cp .csf/spec.md .csf/spec-backup.md
+rm -rf .csf/research/
+mkdir -p .csf/research/
+```
+
+Outputs: Clean directory structure ready for spec generation.
