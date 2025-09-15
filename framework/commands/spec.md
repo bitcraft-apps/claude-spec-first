@@ -33,10 +33,10 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 ```
 If .csf/spec.md exists:
     Prompt: "Existing spec found. Update (u) or Create new (n)?"
-    If user chooses 'u': Set CSF_MODE=update
-    If user chooses 'n': Set CSF_MODE=new
+    If user chooses 'u': Write "update" to .csf/mode
+    If user chooses 'n': Write "new" to .csf/mode
 Else:
-    Set CSF_MODE=first
+    Write "first" to .csf/mode
 ```
 
 ## Execution
@@ -44,7 +44,7 @@ Else:
 After directory setup and clarification (if needed), run micro-agents:
 
 **Batch 1:**
-- Task: manage-spec-directory (uses CSF_MODE environment variable)
+- Task: manage-spec-directory (reads mode from .csf/mode file)
 
 **Batch 2 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
