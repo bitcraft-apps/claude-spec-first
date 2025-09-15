@@ -41,7 +41,7 @@ Claude Spec-First Framework - Minimalist development workflow following YAGNI, K
 
 ### Workflow Structure
 
-The framework provides 3 workflow commands and 11 specialized micro-agents:
+The framework provides 3 workflow commands and 12 specialized micro-agents:
 
 **Commands** (orchestrators):
 - `/csf:spec` - Define what to build and why
