@@ -55,6 +55,29 @@ Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP p
 └── [project files remain in natural locations]
 ```
 
+## Command Reference
+
+### `/csf:spec [REQUIREMENTS]`
+Create specifications through parallel analysis
+- **Purpose**: Define what to build and why
+- **Agents**: manage-spec-directory, define-scope, create-criteria, identify-risks, synthesize-spec
+- **Output**: `.csf/spec.md`
+- **Example**: `/csf:spec Add user authentication with login/logout`
+
+### `/csf:implement [SPECIFICATION_OR_PATH]`
+Implement through pattern learning
+- **Purpose**: Build the minimal working solution
+- **Agents**: explore-patterns, implement-minimal
+- **Output**: Implementation + `.csf/implementation-summary.md`
+- **Example**: `/csf:implement` or `/csf:implement ./specs/auth-spec.md`
+
+### `/csf:document [SPEC_PATH] [IMPLEMENTATION_PATH]`
+Document through comprehensive analysis
+- **Purpose**: Generate technical and user documentation
+- **Agents**: analyze-artifacts, analyze-implementation, create-technical-docs, create-user-docs, integrate-docs
+- **Output**: Documentation in `docs/` and `docs/user/`
+- **Example**: `/csf:document .csf/spec.md ./src/auth.js`
+
 ## Documentation
 
 See [CLAUDE.md](./CLAUDE.md) for complete framework rules and development guidelines.
