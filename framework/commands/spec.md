@@ -28,18 +28,23 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 
 ## Directory Management
 
-Autonomous directory setup:
+**Command-level logic** (Claude Code handles user interaction):
 
-**Always**: Backup existing spec to `.csf/spec-backup.md` if present
-**Always**: Clear and recreate `.csf/research/` for fresh micro-agent outputs
-**Always**: Create new `.csf/spec.md` after synthesis
+```
+If .csf/spec.md exists:
+    Prompt: "Existing spec found. Update (u) or Create new (n)?"
+    If user chooses 'u': Set CSF_MODE=update
+    If user chooses 'n': Set CSF_MODE=new
+Else:
+    Set CSF_MODE=first
+```
 
 ## Execution
 
 After directory setup and clarification (if needed), run micro-agents:
 
 **Batch 1:**
-- Task: manage-spec-directory to setup isolated directories
+- Task: manage-spec-directory (uses CSF_MODE environment variable)
 
 **Batch 2 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
@@ -49,7 +54,7 @@ After directory setup and clarification (if needed), run micro-agents:
 **Batch 3:**
 - Task: synthesize-spec to combine all research
 
-Output: Active spec in `.csf/spec.md` (symlink to current spec)
+Output: `.csf/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 

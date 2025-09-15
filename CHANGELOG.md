@@ -10,26 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.12.0] - 2025-09-13
 
 ### Added
-- **Directory Isolation for Spec Runs**: Multiple `/csf:spec` runs no longer overwrite each other (#36)
-  - Timestamped directory structure: `.csf/specs/YYYY-MM-DD-HHMMSS/`
-  - User prompt for "Update existing (u) or Create new (n)?" on subsequent runs
-  - Backward compatibility via symlinks (`.csf/spec.md` → active spec)
-  - Automatic backup before overwrite when updating existing spec
-  - New micro-agent: manage-spec-directory (25 lines, follows framework constraints)
+- **Spec Directory Isolation**: Prevents spec runs from overwriting each other (#36)
+  - User-controlled behavior: prompts "Update (u) or Create new (n)?" on subsequent runs
+  - Timestamped directories: `.csf/specs/YYYY-MM-DD-HHMMSS/` when creating new
+  - Safe backup system: only backs up when user chooses update
+  - Symlink compatibility: maintains `.csf/spec.md` and `.csf/research/` paths
+  - New micro-agent: `manage-spec-directory` (25 lines, user consent required)
 
 ### Changed
-- **Enhanced /csf:spec Command**: Updated to support directory isolation workflow
-  - Added Directory Management section with user interaction logic
-  - Modified execution flow to include `manage-spec-directory` micro-agent
-  - Updated synthesize-spec agent to work with active research directory (symlink-aware)
-  - Maintains all existing functionality while adding isolation capabilities
+- **Enhanced /csf:spec Command**: Added user-controlled directory management
+  - Non-destructive: no operations without user consent
+  - Flexible workflow: supports both updating existing and creating new specs
+  - Backward compatible: existing tools work with symlinked paths
 
 ### Technical
-- **YAGNI Compliance**: Implemented only specified features, no extras
-- **KISS Principle**: Simple user prompt with single character response (u/n)
-- **Framework Integration**: New agent follows 25-line micro-agent constraints
-- **Pattern Consistency**: Uses existing timestamp format and user interaction patterns
-- **Symlink Management**: Maintains `.csf/spec.md` and `.csf/research/` for tool compatibility
+- **User Agency**: All destructive operations require explicit user consent
+- **KISS Principle**: Simple single-character user prompt (u/n)
+- **Framework Compliance**: Follows YAGNI, SRP, and 25-line agent constraints
+- **Safe Operations**: Backup and timestamping only when requested
 
 ## [0.11.0] - 2025-09-01
 
