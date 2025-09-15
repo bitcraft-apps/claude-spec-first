@@ -43,15 +43,15 @@ Else:
 
 After directory setup and clarification (if needed), run micro-agents:
 
-**Batch 1:**
+**Pre-execution:**
 - Task: manage-spec-directory (reads mode from .csf/mode file)
 
-**Batch 2 (Parallel):**
+**Batch 1 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
 - Task: create-criteria with requirements: $ARGUMENTS
 - Task: identify-risks with requirements: $ARGUMENTS
 
-**Batch 3:**
+**Batch 2:**
 - Task: synthesize-spec to combine all research
 
 Output: `.csf/spec.md` (direct file or symlink to timestamped spec)
