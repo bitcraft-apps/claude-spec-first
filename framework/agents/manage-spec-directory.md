@@ -30,16 +30,19 @@ case $MODE in
         mv .csf/spec.md .csf/specs/$timestamp/
         mv .csf/research/ .csf/specs/$timestamp/
         if ! ln -sf specs/$timestamp/spec.md .csf/spec.md; then
+            rm -rf .csf/specs/$timestamp/
             echo "Error: Failed to create spec symlink"
             exit 1
         fi
         if ! ln -sf specs/$timestamp/research/ .csf/research; then
+            rm -rf .csf/specs/$timestamp/
             echo "Error: Failed to create research symlink"
             exit 1
         fi
         ;;
 esac
 mkdir -p .csf/research/
+rm -f .csf/mode
 ```
 
 Output: Directory structure ready for spec generation.
