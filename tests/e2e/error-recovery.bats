@@ -11,12 +11,11 @@ export PROJECT_ROOT
 bats_require_minimum_version 1.5.0
 
 # Inline helper functions - only what's actually used
-create_mock_project() {
-    local project_dir="${1:-$TEST_DIR/mock_project}"
-    mkdir -p "$project_dir"
-    # Create CLAUDE.md to mark this as a project root
-    echo "# Test Project" > "$project_dir/CLAUDE.md"
-    echo "$project_dir"
+create_mock_home() {
+    local home_dir="${1:-$TEST_DIR/mock_home}"
+    mkdir -p "$home_dir/.claude"
+    export HOME="$home_dir"
+    echo "$home_dir"
 }
 
 assert_success() {
@@ -75,13 +74,13 @@ teardown() {
 
 @test "recover from corrupted VERSION file" {
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Corrupt the VERSION file with invalid content
     echo "invalid.version.format" > .csf/VERSION
@@ -109,13 +108,13 @@ teardown() {
 
 @test "handle missing critical files gracefully" {
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Test missing VERSION file
     mv .csf/VERSION .csf/VERSION.backup
@@ -145,13 +144,13 @@ teardown() {
 
 @test "handle permission issues gracefully" {
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Remove execute permissions
     chmod -x utils/version.sh
@@ -173,13 +172,13 @@ teardown() {
     # This test simulates scenarios where writes might fail
 
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Make .csf directory read-only to simulate write permission issues
     chmod 555 .csf/
@@ -200,13 +199,13 @@ teardown() {
 
 @test "handle concurrent access scenarios" {
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Simulate concurrent version access by rapidly calling version utilities
     # This tests for race conditions and file locking issues

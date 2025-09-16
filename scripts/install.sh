@@ -15,22 +15,7 @@ NC='\033[0m' # No Color
 # Configuration
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
 FRAMEWORK_DIR="$SCRIPT_DIR/framework"
-# Find project root (directory containing CLAUDE.md)
-PROJECT_ROOT="$(pwd)"
-while [ "$PROJECT_ROOT" != "/" ]; do
-    if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-        break
-    fi
-    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
-done
-
-if [ ! -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-    echo -e "${RED}❌ Not in a Claude Spec-First Framework project directory${NC}"
-    echo "Please run this script from within a project containing CLAUDE.md"
-    exit 1
-fi
-
-CLAUDE_DIR="$PROJECT_ROOT/.claude"
+CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
 CSF_PREFIX="csf"
 
 # Arrays to track installations for rollback
@@ -174,15 +159,6 @@ mkdir -p "$CLAUDE_DIR/commands/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/agents/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/.csf"
 
-# Check for legacy global .claude directory and warn user
-if [ -d "$HOME/.claude/.csf" ]; then
-    echo -e "${YELLOW}⚠️  Legacy global .claude/.csf/ directory detected.${NC}"
-    echo -e "${YELLOW}   Manual migration recommended:${NC}"
-    echo "   1. Copy ~/.claude/.csf/ content to $CLAUDE_DIR/.csf/"
-    echo "   2. Remove old ~/.claude/.csf/ directory"
-    echo ""
-fi
-
 # Core installation function
 install_framework_files() {
     local operation="$1"
@@ -288,7 +264,7 @@ echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
 echo ""
 echo -e "${BLUE}🔍 To validate the installation:${NC}"
-echo "   cd $PROJECT_ROOT && ./.claude/.csf/validate-framework.sh"
+echo "   cd ~/.claude && ./.csf/validate-framework.sh"
 echo ""
 echo -e "${BLUE}🔧 Next Steps:${NC}"
 echo "1. Restart Claude Code to load the updated framework"

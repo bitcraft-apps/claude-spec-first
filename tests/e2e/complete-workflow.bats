@@ -8,6 +8,13 @@ PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
 export PROJECT_ROOT
 
 # Inline helper functions - only what's actually used
+create_mock_home() {
+    local home_dir="${1:-$TEST_DIR/mock_home}"
+    mkdir -p "$home_dir/.claude"
+    export HOME="$home_dir"
+    echo "$home_dir"
+}
+
 create_mock_project() {
     local project_dir="${1:-$TEST_DIR/mock_project}"
     mkdir -p "$project_dir"
@@ -86,27 +93,29 @@ teardown() {
 }
 
 @test "complete framework installation and validation workflow" {
-    # Create clean project environment
+    # Create clean environments
+    HOME_DIR="$TEST_DIR/home"
     PROJECT_DIR="$TEST_DIR/project"
+    create_mock_home "$HOME_DIR"
     create_mock_project "$PROJECT_DIR"
 
-    # Step 1: Install framework
-    cd "$PROJECT_DIR"
-    run "$PROJECT_ROOT/scripts/install.sh"
+    # Step 1: Install framework to global location
+    cd "$PROJECT_ROOT"
+    run env HOME="$HOME_DIR" ./scripts/install.sh
     assert_success
-    
-    # Step 2: Verify installation structure
-    assert_files_exist "$PROJECT_DIR/.claude" \
+
+    # Step 2: Verify framework installation in global location
+    assert_files_exist "$HOME_DIR/.claude" \
         ".csf/VERSION" \
         "utils/version.sh" \
         ".csf/validate-framework.sh"
 
-    assert_directory_structure "$PROJECT_DIR/.claude" \
+    assert_directory_structure "$HOME_DIR/.claude" \
         "commands/csf" \
         "agents/csf"
-    
-    # Step 3: Test installed version utilities
-    cd "$PROJECT_DIR/.claude"
+
+    # Step 3: Test installed version utilities from global location
+    cd "$HOME_DIR/.claude"
     
     run ./utils/version.sh get
     assert_success
@@ -143,13 +152,13 @@ teardown() {
 
 @test "version lifecycle management workflow" {
     # Setup installation
-    PROJECT_DIR="$TEST_DIR/project"
-    create_mock_project "$PROJECT_DIR"
+    HOME_DIR="$TEST_DIR/home"
+    create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_DIR"
-    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+    cd "$PROJECT_ROOT"
+    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
 
-    cd "$PROJECT_DIR/.claude"
+    cd "$HOME_DIR/.claude"
     
     # Get starting version
     STARTING_VERSION=$(./utils/version.sh get)

@@ -40,7 +40,7 @@ After input resolution, run sequential micro-agents:
 **Step 1: Learn**
 - Task: explore-patterns with requirements: $SPECIFICATION
 
-**Step 2: Implement**
+**Step 2: Implement**  
 - Task: implement-minimal with spec: $SPECIFICATION
 
 Output: Implementation + `$CSF_DIR/implementation-summary.md`
