@@ -22,47 +22,50 @@ teardown() {
 }
 
 @test "installation creates proper structure" {
-    # Create mock home directory
-    HOME_DIR="$TEST_DIR/home"
-    mkdir -p "$HOME_DIR"
-    
-    # Run installation with specific home directory
-    cd "$PROJECT_ROOT"
-    run env HOME="$HOME_DIR" ./scripts/install.sh
+    # Create mock project directory
+    PROJECT_DIR="$TEST_DIR/project"
+    mkdir -p "$PROJECT_DIR"
+    echo "# Test Project" > "$PROJECT_DIR/CLAUDE.md"
+
+    # Run installation from project directory
+    cd "$PROJECT_DIR"
+    run "$PROJECT_ROOT/scripts/install.sh"
     [ "$status" -eq 0 ]
-    
+
     # Verify installation files exist in correct locations
-    [ -f "$HOME_DIR/.claude/.csf/VERSION" ]
-    [ -x "$HOME_DIR/.claude/utils/version.sh" ]
-    [ -x "$HOME_DIR/.claude/.csf/validate-framework.sh" ]
-    [ -d "$HOME_DIR/.claude/commands/csf" ]
-    [ -d "$HOME_DIR/.claude/agents/csf" ]
+    [ -f "$PROJECT_DIR/.claude/.csf/VERSION" ]
+    [ -x "$PROJECT_DIR/.claude/utils/version.sh" ]
+    [ -x "$PROJECT_DIR/.claude/.csf/validate-framework.sh" ]
+    [ -d "$PROJECT_DIR/.claude/commands/csf" ]
+    [ -d "$PROJECT_DIR/.claude/agents/csf" ]
 }
 
 @test "installed version utilities work" {
-    # Create and install to mock home
-    HOME_DIR="$TEST_DIR/home"
-    mkdir -p "$HOME_DIR"
-    
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+    # Create and install to mock project
+    PROJECT_DIR="$TEST_DIR/project"
+    mkdir -p "$PROJECT_DIR"
+    echo "# Test Project" > "$PROJECT_DIR/CLAUDE.md"
+
+    cd "$PROJECT_DIR"
+    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+
     # Test installed utilities (VERSION file is in .csf subdirectory)
-    cd "$HOME_DIR/.claude"
+    cd "$PROJECT_DIR/.claude"
     run ./utils/version.sh get
     [ "$status" -eq 0 ]
     [[ "$output" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
 }
 
 @test "version operations work after installation" {
-    # Create and install to mock home
-    HOME_DIR="$TEST_DIR/home"
-    mkdir -p "$HOME_DIR"
-    
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
-    cd "$HOME_DIR/.claude"
+    # Create and install to mock project
+    PROJECT_DIR="$TEST_DIR/project"
+    mkdir -p "$PROJECT_DIR"
+    echo "# Test Project" > "$PROJECT_DIR/CLAUDE.md"
+
+    cd "$PROJECT_DIR"
+    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+
+    cd "$PROJECT_DIR/.claude"
     
     # Get current version
     CURRENT_VERSION=$(./utils/version.sh get)
@@ -86,14 +89,15 @@ teardown() {
 }
 
 @test "installed validation works" {
-    # Create and install to mock home
-    HOME_DIR="$TEST_DIR/home"
-    mkdir -p "$HOME_DIR"
-    
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
-    cd "$HOME_DIR/.claude"
+    # Create and install to mock project
+    PROJECT_DIR="$TEST_DIR/project"
+    mkdir -p "$PROJECT_DIR"
+    echo "# Test Project" > "$PROJECT_DIR/CLAUDE.md"
+
+    cd "$PROJECT_DIR"
+    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+
+    cd "$PROJECT_DIR/.claude"
     run ./.csf/validate-framework.sh
     [ "$status" -eq 0 ]
     [[ "$output" == *"Framework Version:"* ]]
@@ -101,14 +105,15 @@ teardown() {
 }
 
 @test "framework handles missing VERSION file gracefully" {
-    # Create and install to mock home
-    HOME_DIR="$TEST_DIR/home"
-    mkdir -p "$HOME_DIR"
-    
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
-    cd "$HOME_DIR/.claude"
+    # Create and install to mock project
+    PROJECT_DIR="$TEST_DIR/project"
+    mkdir -p "$PROJECT_DIR"
+    echo "# Test Project" > "$PROJECT_DIR/CLAUDE.md"
+
+    cd "$PROJECT_DIR"
+    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+
+    cd "$PROJECT_DIR/.claude"
     
     # Backup and remove VERSION file (it's in .csf subdirectory)
     mv .csf/VERSION .csf/VERSION.backup

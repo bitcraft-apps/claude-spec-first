@@ -32,10 +32,10 @@ teardown() {
 }
 
 @test "manage-spec-directory agent follows framework constraints" {
-    # Agent should be under 25 lines (excluding comments and metadata)
+    # Agent should be under 35 lines (allowing for project-local path detection)
     local agent_file="$PROJECT_ROOT/framework/agents/manage-spec-directory.md"
     local code_lines=$(sed -n '/```bash/,/```/p' "$agent_file" | grep -v '```' | grep -v '^#' | grep -v '^$' | wc -l)
-    [ "$code_lines" -le 25 ]
+    [ "$code_lines" -le 35 ]
 }
 
 @test "manage-spec-directory agent includes error recovery" {
@@ -61,8 +61,8 @@ teardown() {
     # Check that synthesize-spec agent mentions symlink awareness
     grep -q "active.*directory\|symlink-aware" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 
-    # Check output paths are documented correctly
-    grep -q "\.csf/spec\.md.*direct file or symlink" "$PROJECT_ROOT/framework/commands/spec.md"
+    # Check output paths are documented correctly (now uses $CSF_DIR variable)
+    grep -q "CSF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
 @test "framework validation recognizes manage-spec-directory agent" {
