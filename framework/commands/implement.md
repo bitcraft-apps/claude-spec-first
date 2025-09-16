@@ -15,8 +15,22 @@ Creates minimal implementation following existing patterns.
 
 ## Input Resolution
 
+**Path Resolution:**
+```bash
+# Find project root (directory containing CLAUDE.md)
+PROJECT_ROOT="$(pwd)"
+while [ "$PROJECT_ROOT" != "/" ]; do
+    if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
+        break
+    fi
+    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
+done
+CSF_DIR="$PROJECT_ROOT/.claude/.csf"
+mkdir -p "$CSF_DIR"
+```
+
 1. If path provided: Use specified file
-2. Else if `$CLAUDE_DIR/.csf/spec.md` exists: Use it
+2. Else if `$CSF_DIR/spec.md` exists: Use it
 3. Else: Ask user for specification location
 
 ## Execution
@@ -29,7 +43,7 @@ After input resolution, run sequential micro-agents:
 **Step 2: Implement**  
 - Task: implement-minimal with spec: $SPECIFICATION
 
-Output: Implementation + `$CLAUDE_DIR/.csf/implementation-summary.md`
+Output: Implementation + `$CSF_DIR/implementation-summary.md`
 
 ## Philosophy
 

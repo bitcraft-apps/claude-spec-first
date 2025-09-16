@@ -187,9 +187,12 @@ jobs:
       - name: Test installation on ${{ matrix.os }}
         run: |
           echo "Testing installation on ${{ matrix.os }}..."
-          export HOME="/tmp/test-home-${{ runner.os }}"
-          mkdir -p "$HOME/.claude"
-          ./scripts/install.sh
+          # Create test project directory with CLAUDE.md
+          TEST_PROJECT="/tmp/test-project-${{ runner.os }}"
+          mkdir -p "$TEST_PROJECT"
+          echo "# Test Project" > "$TEST_PROJECT/CLAUDE.md"
+          cd "$TEST_PROJECT"
+          ${{ github.workspace }}/scripts/install.sh
           echo "✅ Installation completed on ${{ matrix.os }}"
 
       - name: Validate platform compatibility
@@ -228,13 +231,16 @@ jobs:
       - name: Test production installation
         run: |
           echo "📦 Testing production installation process..."
-          export HOME="/tmp/release-test-home"
-          mkdir -p "$HOME/.claude"
+          # Create test project directory with CLAUDE.md
+          TEST_PROJECT="/tmp/release-test-project"
+          mkdir -p "$TEST_PROJECT"
+          echo "# Test Project" > "$TEST_PROJECT/CLAUDE.md"
+          cd "$TEST_PROJECT"
 
-          ./scripts/install.sh
+          ${{ github.workspace }}/scripts/install.sh
 
-          cd "$HOME/.claude"
-          ./validate-framework.sh
+          cd ".claude"
+          ./.csf/validate-framework.sh
 
           echo "✅ Production installation validated"
 

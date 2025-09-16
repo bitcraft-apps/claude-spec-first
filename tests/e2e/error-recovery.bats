@@ -76,10 +76,10 @@ teardown() {
     # Setup installation
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Corrupt the VERSION file with invalid content
@@ -107,13 +107,13 @@ teardown() {
 }
 
 @test "handle missing critical files gracefully" {
-    # Setup installation  
+    # Setup installation
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Test missing VERSION file
@@ -144,12 +144,12 @@ teardown() {
 
 @test "handle permission issues gracefully" {
     # Setup installation
-    HOME_DIR="$TEST_DIR/home"  
+    HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Remove execute permissions
@@ -170,14 +170,14 @@ teardown() {
 
 @test "handle disk space and write permission issues" {
     # This test simulates scenarios where writes might fail
-    
+
     # Setup installation
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Make .csf directory read-only to simulate write permission issues
@@ -201,10 +201,10 @@ teardown() {
     # Setup installation
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Simulate concurrent version access by rapidly calling version utilities

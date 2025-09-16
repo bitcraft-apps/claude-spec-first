@@ -15,6 +15,14 @@ create_mock_home() {
     echo "$home_dir"
 }
 
+create_mock_project() {
+    local project_dir="${1:-$TEST_DIR/mock_project}"
+    mkdir -p "$project_dir"
+    # Create CLAUDE.md to mark this as a project root
+    echo "# Test Project" > "$project_dir/CLAUDE.md"
+    echo "$project_dir"
+}
+
 assert_success() {
     [ "$status" -eq 0 ] || {
         echo "Expected success (exit code 0), got: $status" >&2
@@ -85,26 +93,28 @@ teardown() {
 }
 
 @test "complete framework installation and validation workflow" {
-    # Create clean environment
+    # Create clean environments
     HOME_DIR="$TEST_DIR/home"
+    PROJECT_DIR="$TEST_DIR/project"
     create_mock_home "$HOME_DIR"
-    
-    # Step 1: Install framework
+    create_mock_project "$PROJECT_DIR"
+
+    # Step 1: Install framework to global location
     cd "$PROJECT_ROOT"
     run env HOME="$HOME_DIR" ./scripts/install.sh
     assert_success
-    
-    # Step 2: Verify installation structure  
+
+    # Step 2: Verify framework installation in global location
     assert_files_exist "$HOME_DIR/.claude" \
         ".csf/VERSION" \
         "utils/version.sh" \
         ".csf/validate-framework.sh"
-    
+
     assert_directory_structure "$HOME_DIR/.claude" \
         "commands/csf" \
         "agents/csf"
-    
-    # Step 3: Test installed version utilities
+
+    # Step 3: Test installed version utilities from global location
     cd "$HOME_DIR/.claude"
     
     run ./utils/version.sh get
@@ -144,10 +154,10 @@ teardown() {
     # Setup installation
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
     
     # Get starting version

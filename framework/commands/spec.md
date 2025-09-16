@@ -28,15 +28,29 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 
 ## Directory Management
 
+**Path Resolution:**
+```bash
+# Find project root (directory containing CLAUDE.md)
+PROJECT_ROOT="$(pwd)"
+while [ "$PROJECT_ROOT" != "/" ]; do
+    if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
+        break
+    fi
+    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
+done
+CSF_DIR="$PROJECT_ROOT/.claude/.csf"
+mkdir -p "$CSF_DIR"
+```
+
 **Command-level logic** (Claude Code handles user interaction):
 
 ```
-If $CLAUDE_DIR/.csf/spec.md exists:
+If $CSF_DIR/spec.md exists:
     Prompt: "Existing spec found. Update (u) or Create new (n)?"
-    If user chooses 'u': Write "update" to $CLAUDE_DIR/.csf/mode
-    If user chooses 'n': Write "new" to $CLAUDE_DIR/.csf/mode
+    If user chooses 'u': Write "update" to $CSF_DIR/mode
+    If user chooses 'n': Write "new" to $CSF_DIR/mode
 Else:
-    Write "first" to $CLAUDE_DIR/.csf/mode
+    Write "first" to $CSF_DIR/mode
 ```
 
 ## Execution
@@ -44,7 +58,7 @@ Else:
 After directory setup and clarification (if needed), run micro-agents:
 
 **Pre-execution:**
-- Task: manage-spec-directory (reads mode from $CLAUDE_DIR/.csf/mode file)
+- Task: manage-spec-directory (reads mode from $CSF_DIR/mode file)
 
 **Batch 1 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
@@ -54,7 +68,7 @@ After directory setup and clarification (if needed), run micro-agents:
 **Batch 2:**
 - Task: synthesize-spec to combine all research
 
-Output: `$CLAUDE_DIR/.csf/spec.md` (direct file or symlink to timestamped spec)
+Output: `$CSF_DIR/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 

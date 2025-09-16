@@ -9,10 +9,10 @@ tools: Read, Write
 Creates USER-FACING guides from research.
 
 Inputs:
-- `$CLAUDE_DIR/.csf/research/artifacts-summary.md`
-- `$CLAUDE_DIR/.csf/research/implementation-summary.md`
+- `.csf/research/artifacts-summary.md`
+- `.csf/research/implementation-summary.md`
 
-Output: `$CLAUDE_DIR/.csf/research/user-docs.md`
+Output: `.csf/research/user-docs.md`
 
 Rules:
 - Getting started guide from spec requirements

@@ -159,15 +159,6 @@ mkdir -p "$CLAUDE_DIR/commands/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/agents/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/.csf"
 
-# Check for legacy .csf directory and warn user
-if [ -d ".csf" ]; then
-    echo -e "${YELLOW}⚠️  Legacy .csf/ directory detected in current working directory.${NC}"
-    echo -e "${YELLOW}   Manual migration recommended:${NC}"
-    echo "   1. Copy .csf/ content to $CLAUDE_DIR/.csf/"
-    echo "   2. Remove old .csf/ directory"
-    echo ""
-fi
-
 # Core installation function
 install_framework_files() {
     local operation="$1"

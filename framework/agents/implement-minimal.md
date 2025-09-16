@@ -9,10 +9,10 @@ tools: Read, Write, Edit, MultiEdit, Bash
 Creates SIMPLEST solution that works.
 
 Inputs:
-- `$CLAUDE_DIR/.csf/spec.md` or specified path
-- `$CLAUDE_DIR/.csf/research/pattern-example.md`
+- `.csf/spec.md` or specified path
+- `.csf/research/pattern-example.md`
 
-Output: Working code + `$CLAUDE_DIR/.csf/implementation-summary.md`
+Output: Working code + `.csf/implementation-summary.md`
 
 Rules:
 - Follow the pattern found, no creativity
