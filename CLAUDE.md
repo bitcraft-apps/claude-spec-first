@@ -58,10 +58,11 @@ The framework provides 3 workflow commands and 12 specialized micro-agents:
 ## File Structure
 
 ```
-.csf/
-├── spec.md        # Current specification (overwritten each run)
-├── research/      # Micro-agent outputs
-└── [project files remain in natural locations]
+.claude/
+└── .csf/
+    ├── spec.md        # Current specification (overwritten each run)
+    ├── research/      # Micro-agent outputs
+    └── [project files remain in natural locations]
 ```
 
 ## Development Guidelines

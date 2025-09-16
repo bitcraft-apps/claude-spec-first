@@ -16,7 +16,7 @@ Creates documentation with parallel analysis and generation.
 ## Input Resolution
 
 1. If paths provided: Use specified artifact/implementation locations
-2. Else if `.csf/spec.md` and `.csf/implementation-summary.md` exist: Use them
+2. Else if `$CLAUDE_DIR/.csf/spec.md` and `$CLAUDE_DIR/.csf/implementation-summary.md` exist: Use them
 3. Else: Ask user for artifact locations
 
 ## Execution
@@ -28,8 +28,8 @@ After input resolution, run micro-agents in 3 batches:
 - Task: analyze-implementation with requirements: $IMPLEMENTATION_PATHS
 
 **Batch 2 (Parallel):**  
-- Task: create-technical-docs (reads .csf/research/artifacts-summary.md, .csf/research/implementation-summary.md)
-- Task: create-user-docs (reads .csf/research/artifacts-summary.md, .csf/research/implementation-summary.md)
+- Task: create-technical-docs (reads $CLAUDE_DIR/.csf/research/artifacts-summary.md, $CLAUDE_DIR/.csf/research/implementation-summary.md)
+- Task: create-user-docs (reads $CLAUDE_DIR/.csf/research/artifacts-summary.md, $CLAUDE_DIR/.csf/research/implementation-summary.md)
 
 **Batch 3:**
 - Task: integrate-docs to combine and organize final documentation

@@ -9,8 +9,8 @@ tools: Read, Write, Edit
 Combines research into FINAL documentation files.
 
 Inputs:
-- `.csf/research/technical-docs.md`
-- `.csf/research/user-docs.md`
+- `$CLAUDE_DIR/.csf/research/technical-docs.md`
+- `$CLAUDE_DIR/.csf/research/user-docs.md`
 
 Rules:
 - Move technical docs to `docs/` or project doc location

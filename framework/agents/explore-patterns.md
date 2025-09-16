@@ -9,7 +9,7 @@ tools: Read, Grep, Glob
 Finds ONE good example to follow.
 
 Input: Requirements from spec/arguments
-Output: `.csf/research/pattern-example.md`
+Output: `$CLAUDE_DIR/.csf/research/pattern-example.md`
 
 Rules:
 - Find the MOST similar existing implementation (same feature type preferred)

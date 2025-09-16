@@ -19,7 +19,7 @@ CLAUDE_DIR="$HOME/.claude"
 CSF_PREFIX="csf"
 
 # Check if framework is installed
-if [ ! -d "$CLAUDE_DIR/commands/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/agents/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/.csf" ]; then
+if [ ! -d "$CLAUDE_DIR/commands/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/agents/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/.csf" ] && [ ! -d ".csf" ]; then
     echo -e "${YELLOW}⚠️  Framework doesn't appear to be installed.${NC}"
     echo -e "${BLUE}Nothing to uninstall.${NC}"
     exit 0
@@ -31,6 +31,9 @@ echo -e "${YELLOW}⚠️  This will remove:${NC}"
 echo "• All CSF commands from $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "• All CSF agents from $CLAUDE_DIR/agents/$CSF_PREFIX/"
 echo "• Framework metadata and backups from $CLAUDE_DIR/.csf/"
+if [ -d ".csf" ]; then
+    echo "• Legacy .csf/ directory in current working directory"
+fi
 echo ""
 
 # Confirmation prompt
@@ -60,6 +63,12 @@ fi
 if [ -d "$CLAUDE_DIR/.csf" ]; then
     rm -rf "$CLAUDE_DIR/.csf"
     echo "  ✅ Removed: .csf/ (metadata and backups)"
+fi
+
+# Remove legacy .csf directory if present
+if [ -d ".csf" ]; then
+    rm -rf ".csf"
+    echo "  ✅ Removed: legacy .csf/ directory"
 fi
 
 # Clean up empty parent directories

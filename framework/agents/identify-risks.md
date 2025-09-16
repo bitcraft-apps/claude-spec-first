@@ -9,7 +9,7 @@ tools: Write
 Identifies ESSENTIAL risks and blocks following MVP principle.
 
 Input: Requirements from arguments
-Output: `.csf/research/risks.md`
+Output: `$CLAUDE_DIR/.csf/research/risks.md`
 
 Rules:
 - Focus on blockers, not every possible risk
