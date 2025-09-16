@@ -8,11 +8,12 @@ PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
 export PROJECT_ROOT
 
 # Inline helper functions - only what's actually used
-create_mock_home() {
-    local home_dir="${1:-$TEST_DIR/mock_home}"
-    mkdir -p "$home_dir/.claude"
-    export HOME="$home_dir"
-    echo "$home_dir"
+create_mock_project() {
+    local project_dir="${1:-$TEST_DIR/mock_project}"
+    mkdir -p "$project_dir"
+    # Create CLAUDE.md to mark this as a project root
+    echo "# Test Project" > "$project_dir/CLAUDE.md"
+    echo "$project_dir"
 }
 
 assert_success() {
@@ -85,27 +86,27 @@ teardown() {
 }
 
 @test "complete framework installation and validation workflow" {
-    # Create clean environment
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
-    
+    # Create clean project environment
+    PROJECT_DIR="$TEST_DIR/project"
+    create_mock_project "$PROJECT_DIR"
+
     # Step 1: Install framework
-    cd "$PROJECT_ROOT"
-    run env HOME="$HOME_DIR" ./scripts/install.sh
+    cd "$PROJECT_DIR"
+    run "$PROJECT_ROOT/scripts/install.sh"
     assert_success
     
-    # Step 2: Verify installation structure  
-    assert_files_exist "$HOME_DIR/.claude" \
+    # Step 2: Verify installation structure
+    assert_files_exist "$PROJECT_DIR/.claude" \
         ".csf/VERSION" \
         "utils/version.sh" \
         ".csf/validate-framework.sh"
-    
-    assert_directory_structure "$HOME_DIR/.claude" \
+
+    assert_directory_structure "$PROJECT_DIR/.claude" \
         "commands/csf" \
         "agents/csf"
     
     # Step 3: Test installed version utilities
-    cd "$HOME_DIR/.claude"
+    cd "$PROJECT_DIR/.claude"
     
     run ./utils/version.sh get
     assert_success
@@ -142,13 +143,13 @@ teardown() {
 
 @test "version lifecycle management workflow" {
     # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
-    
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
-    cd "$HOME_DIR/.claude"
+    PROJECT_DIR="$TEST_DIR/project"
+    create_mock_project "$PROJECT_DIR"
+
+    cd "$PROJECT_DIR"
+    "$PROJECT_ROOT/scripts/install.sh" >/dev/null 2>&1
+
+    cd "$PROJECT_DIR/.claude"
     
     # Get starting version
     STARTING_VERSION=$(./utils/version.sh get)
