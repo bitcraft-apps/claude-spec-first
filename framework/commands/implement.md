@@ -16,7 +16,7 @@ Creates minimal implementation following existing patterns.
 ## Input Resolution
 
 1. If path provided: Use specified file
-2. Else if `.csf/spec.md` exists: Use it
+2. Else if `$CLAUDE_DIR/.csf/spec.md` exists: Use it
 3. Else: Ask user for specification location
 
 ## Execution
@@ -29,7 +29,7 @@ After input resolution, run sequential micro-agents:
 **Step 2: Implement**  
 - Task: implement-minimal with spec: $SPECIFICATION
 
-Output: Implementation + `.csf/implementation-summary.md`
+Output: Implementation + `$CLAUDE_DIR/.csf/implementation-summary.md`
 
 ## Philosophy
 

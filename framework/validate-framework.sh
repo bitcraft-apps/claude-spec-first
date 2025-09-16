@@ -181,6 +181,13 @@ echo ""
 echo "📁 Checking Directory Structure..."
 echo "=================================="
 
+# Check for legacy .csf directory and warn
+if [ -d ".csf" ]; then
+    print_warning "Legacy .csf/ directory detected. Migration recommended:"
+    print_info "  1. Copy .csf/ content to ${CLAUDE_DIR:-$HOME/.claude}/.csf/"
+    print_info "  2. Remove old .csf/ directory"
+fi
+
 # Initialize execution mode detection
 detect_execution_mode
 

@@ -49,10 +49,11 @@ Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP p
 ## File Structure
 
 ```
-.csf/
-├── spec.md        # Current specification (overwritten each run)
-├── research/      # Micro-agent outputs
-└── [project files remain in natural locations]
+.claude/
+└── .csf/
+    ├── spec.md        # Current specification (overwritten each run)
+    ├── research/      # Micro-agent outputs
+    └── [project files remain in natural locations]
 ```
 
 ## Command Reference
@@ -61,14 +62,14 @@ Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP p
 Create specifications through parallel analysis
 - **Purpose**: Define what to build and why
 - **Agents**: manage-spec-directory, define-scope, create-criteria, identify-risks, synthesize-spec
-- **Output**: `.csf/spec.md`
+- **Output**: `~/.claude/.csf/spec.md`
 - **Example**: `/csf:spec Add user authentication with login/logout`
 
 ### `/csf:implement [SPECIFICATION_OR_PATH]`
 Implement through pattern learning
 - **Purpose**: Build the minimal working solution
 - **Agents**: explore-patterns, implement-minimal
-- **Output**: Implementation + `.csf/implementation-summary.md`
+- **Output**: Implementation + `~/.claude/.csf/implementation-summary.md`
 - **Example**: `/csf:implement` or `/csf:implement ./specs/auth-spec.md`
 
 ### `/csf:document [SPEC_PATH] [IMPLEMENTATION_PATH]`
@@ -76,7 +77,23 @@ Document through comprehensive analysis
 - **Purpose**: Generate technical and user documentation
 - **Agents**: analyze-artifacts, analyze-implementation, create-technical-docs, create-user-docs, integrate-docs
 - **Output**: Documentation in `docs/` and `docs/user/`
-- **Example**: `/csf:document .csf/spec.md ./src/auth.js`
+- **Example**: `/csf:document ~/.claude/.csf/spec.md ./src/auth.js`
+
+## Migration from .csf/ to .claude/.csf/
+
+If you have existing `.csf/` directories from previous versions:
+
+```bash
+# 1. Copy content to new location
+cp -r .csf/* ~/.claude/.csf/
+
+# 2. Remove old directory
+rm -rf .csf/
+
+# 3. Framework will automatically use new location
+```
+
+The framework will detect legacy `.csf/` directories and provide migration guidance.
 
 ## Documentation
 

@@ -31,12 +31,12 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 **Command-level logic** (Claude Code handles user interaction):
 
 ```
-If .csf/spec.md exists:
+If $CLAUDE_DIR/.csf/spec.md exists:
     Prompt: "Existing spec found. Update (u) or Create new (n)?"
-    If user chooses 'u': Write "update" to .csf/mode
-    If user chooses 'n': Write "new" to .csf/mode
+    If user chooses 'u': Write "update" to $CLAUDE_DIR/.csf/mode
+    If user chooses 'n': Write "new" to $CLAUDE_DIR/.csf/mode
 Else:
-    Write "first" to .csf/mode
+    Write "first" to $CLAUDE_DIR/.csf/mode
 ```
 
 ## Execution
@@ -44,7 +44,7 @@ Else:
 After directory setup and clarification (if needed), run micro-agents:
 
 **Pre-execution:**
-- Task: manage-spec-directory (reads mode from .csf/mode file)
+- Task: manage-spec-directory (reads mode from $CLAUDE_DIR/.csf/mode file)
 
 **Batch 1 (Parallel):**
 - Task: define-scope with requirements: $ARGUMENTS
@@ -54,7 +54,7 @@ After directory setup and clarification (if needed), run micro-agents:
 **Batch 2:**
 - Task: synthesize-spec to combine all research
 
-Output: `.csf/spec.md` (direct file or symlink to timestamped spec)
+Output: `$CLAUDE_DIR/.csf/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 

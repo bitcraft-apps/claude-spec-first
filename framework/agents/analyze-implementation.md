@@ -9,7 +9,7 @@ tools: Read, Grep, Glob
 Finds ACTUAL implementation structure and patterns.
 
 Input: Implementation paths from arguments or artifact references
-Output: `.csf/research/implementation-summary.md`
+Output: `$CLAUDE_DIR/.csf/research/implementation-summary.md`
 
 Rules:
 - Find main implementation files and structure
