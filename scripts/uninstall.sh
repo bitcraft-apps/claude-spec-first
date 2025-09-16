@@ -15,11 +15,26 @@ NC='\033[0m' # No Color
 echo -e "${BLUE}🗑️  Uninstalling Claude Spec-First Framework (commands and agents only)...${NC}"
 echo "========================================================================="
 
-CLAUDE_DIR="$HOME/.claude"
+# Find project root (directory containing CLAUDE.md)
+PROJECT_ROOT="$(pwd)"
+while [ "$PROJECT_ROOT" != "/" ]; do
+    if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
+        break
+    fi
+    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
+done
+
+if [ ! -f "$PROJECT_ROOT/CLAUDE.md" ]; then
+    echo -e "${RED}❌ Not in a Claude Spec-First Framework project directory${NC}"
+    echo "Please run this script from within a project containing CLAUDE.md"
+    exit 1
+fi
+
+CLAUDE_DIR="$PROJECT_ROOT/.claude"
 CSF_PREFIX="csf"
 
 # Check if framework is installed
-if [ ! -d "$CLAUDE_DIR/commands/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/agents/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/.csf" ] && [ ! -d ".csf" ]; then
+if [ ! -d "$CLAUDE_DIR/commands/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/agents/$CSF_PREFIX" ] && [ ! -d "$CLAUDE_DIR/.csf" ]; then
     echo -e "${YELLOW}⚠️  Framework doesn't appear to be installed.${NC}"
     echo -e "${BLUE}Nothing to uninstall.${NC}"
     exit 0
@@ -31,9 +46,6 @@ echo -e "${YELLOW}⚠️  This will remove:${NC}"
 echo "• All CSF commands from $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "• All CSF agents from $CLAUDE_DIR/agents/$CSF_PREFIX/"
 echo "• Framework metadata and backups from $CLAUDE_DIR/.csf/"
-if [ -d ".csf" ]; then
-    echo "• Legacy .csf/ directory in current working directory"
-fi
 echo ""
 
 # Confirmation prompt
@@ -65,11 +77,7 @@ if [ -d "$CLAUDE_DIR/.csf" ]; then
     echo "  ✅ Removed: .csf/ (metadata and backups)"
 fi
 
-# Remove legacy .csf directory if present
-if [ -d ".csf" ]; then
-    rm -rf ".csf"
-    echo "  ✅ Removed: legacy .csf/ directory"
-fi
+# Note: Legacy directories in other locations should be cleaned manually
 
 # Clean up empty parent directories
 rmdir "$CLAUDE_DIR/commands" 2>/dev/null && echo "  ✅ Removed empty commands directory" || true

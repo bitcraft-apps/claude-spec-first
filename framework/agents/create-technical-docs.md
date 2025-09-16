@@ -9,10 +9,10 @@ tools: Read, Write
 Creates DEVELOPER documentation from research.
 
 Inputs: 
-- `$CLAUDE_DIR/.csf/research/artifacts-summary.md`
-- `$CLAUDE_DIR/.csf/research/implementation-summary.md`
+- `.csf/research/artifacts-summary.md`
+- `.csf/research/implementation-summary.md`
 
-Output: `$CLAUDE_DIR/.csf/research/technical-docs.md`
+Output: `.csf/research/technical-docs.md`
 
 Rules:
 - API reference from implementation analysis
