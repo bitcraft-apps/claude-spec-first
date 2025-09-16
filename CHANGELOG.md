@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2025-09-16
+
+### Changed
+- **Storage Migration**: Migrated CSF storage from `.csf/` to `.claude/.csf/` for better organization
+  - All framework files now use `$CLAUDE_DIR/.csf/` (defaults to `$HOME/.claude/.csf/`)
+  - Legacy `.csf/` directory detection with migration guidance
+  - Backward compatibility maintained through symlink structure
+  - Updated all agents, commands, and scripts to use new storage location
+
+### Technical
+- **Framework Compliance**: Optimized `manage-spec-directory` agent to meet 25-line constraint
+- **Installation Updates**: Updated install/uninstall scripts for new directory structure
+- **Validation Updates**: Framework validation script updated for new storage paths
+
 ## [0.12.0] - 2025-09-13
 
 ### Added
