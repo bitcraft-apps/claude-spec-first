@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2025-09-16
+
+### Fixed
+- **File Placement Architecture**: Corrected framework installation vs. output separation
+  - Framework installation: Global `~/.claude/` (where Claude Code expects it)
+  - Framework output: Project-local `./.claude/.csf/` (where work artifacts go)
+  - Project root detection: CLAUDE.md upward traversal for cross-platform compatibility
+  - Auto-create project `./.claude/.csf/` structure when missing
+  - Works from any subdirectory within project
+
+### Changed
+- **Path Resolution**: Updated all 11 agents + 3 commands + 2 scripts for project-local output
+  - All agents now output to project's `./.claude/.csf/research/` directory
+  - Commands detect project root via CLAUDE.md traversal
+  - Cross-platform compatible (Windows/macOS/Linux)
+  - Clear error messages for invalid project locations
+
+### Technical
+- **Architecture Correction**: Reverted installation scripts to global framework installation
+- **Test Updates**: Updated E2E and integration tests for corrected architecture
+- **CI Compatibility**: Fixed CI workflows for project-local structure expectations
+
 ## [0.13.0] - 2025-09-16
 
 ### Changed
