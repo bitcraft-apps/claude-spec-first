@@ -71,13 +71,13 @@ teardown() {
 }
 
 @test "micro-agents have file persistence instructions" {
-    # Verify micro-agents write to .csf/research/
+    # Verify micro-agents write to research directory using centralized paths
     grep -q "Output:" "$PROJECT_ROOT/framework/agents/define-scope.md"
-    grep -q "research/scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "get_research_dir.*scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
     
     # Verify synthesize-spec reads from research
     grep -q "Inputs:" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
-    grep -q "research/\\*.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "get_research_dir.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     
     # Verify micro-agents are focused (small instruction sets)
     line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/define-scope.md")
