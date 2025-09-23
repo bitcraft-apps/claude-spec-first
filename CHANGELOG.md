@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2025-09-23
+
+### Added
+- **Path Centralization**: Created centralized utility for CSF directory path management
+  - New `framework/utils/csf-paths.sh` utility with functions: `get_csf_dir()`, `get_research_dir()`, `get_specs_dir()`
+  - Eliminates hardcoded `.claude/.csf/` paths across the framework
+  - Makes path structure easily configurable for future changes
+
+### Changed
+- **Framework Maintainability**: Updated all commands and agents to use centralized path utility
+  - 3 commands (spec, implement, document) now source utility for path resolution
+  - 11 agents now use `$(get_*_dir)` patterns instead of hardcoded paths
+  - Reduced from 15+ hardcoded path references to 1 (in utility itself)
+  - Follows DRY principles and improves maintainability
+
 ## [0.14.0] - 2025-09-16
 
 ### Fixed

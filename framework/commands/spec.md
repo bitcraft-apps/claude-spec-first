@@ -30,15 +30,9 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 
 **Path Resolution:**
 ```bash
-# Find project root (directory containing CLAUDE.md)
-PROJECT_ROOT="$(pwd)"
-while [ "$PROJECT_ROOT" != "/" ]; do
-    if [ -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-        break
-    fi
-    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
-done
-CSF_DIR="$PROJECT_ROOT/.claude/.csf"
+# Use centralized path utility
+source "$(dirname "$0")/../utils/csf-paths.sh"
+CSF_DIR="$(get_csf_dir)"
 mkdir -p "$CSF_DIR"
 ```
 

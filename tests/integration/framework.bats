@@ -71,15 +71,33 @@ teardown() {
 }
 
 @test "micro-agents have file persistence instructions" {
-    # Verify micro-agents write to .csf/research/
+    # Verify micro-agents write to research directory using centralized paths
     grep -q "Output:" "$PROJECT_ROOT/framework/agents/define-scope.md"
-    grep -q "research/scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
-    
+    grep -q "get_research_dir.*scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
+
     # Verify synthesize-spec reads from research
     grep -q "Inputs:" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
-    grep -q "research/\\*.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
-    
+    grep -q "get_research_dir.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+
     # Verify micro-agents are focused (small instruction sets)
     line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/define-scope.md")
     [ "$line_count" -le 25 ]
+}
+
+@test "csf-paths utility functions resolve correctly" {
+    # Test that path utility actually works and returns expected paths
+    cd "$PROJECT_ROOT"
+    source "$PROJECT_ROOT/framework/utils/csf-paths.sh"
+
+    # Test get_csf_dir from project root
+    result="$(get_csf_dir)"
+    [ "$result" = "$PROJECT_ROOT/.claude/.csf" ]
+
+    # Test get_research_dir
+    result="$(get_research_dir)"
+    [ "$result" = "$PROJECT_ROOT/.claude/.csf/research" ]
+
+    # Test get_specs_dir
+    result="$(get_specs_dir)"
+    [ "$result" = "$PROJECT_ROOT/.claude/.csf/specs" ]
 }
