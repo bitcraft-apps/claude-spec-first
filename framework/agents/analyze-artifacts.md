@@ -1,6 +1,8 @@
 ---
 name: analyze-artifacts
-description: Read and parse development artifacts from .claude/.csf/ directory
+description: Read and parse development artifacts from CSF directory
+
+**Path Setup**: `source framework/utils/csf-paths.sh` before execution
 tools: Read
 ---
 

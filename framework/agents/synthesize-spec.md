@@ -8,8 +8,10 @@ tools: Read, Write
 
 Combines research into MINIMAL actionable specification.
 
-Inputs: `.csf/research/*.md` (active research directory)
-Output: `.csf/spec.md` (active spec file, may be symlink)
+Inputs: `$(get_research_dir)/*.md` (active research directory)
+Output: `$(get_csf_dir)/spec.md` (active spec file, may be symlink)
+
+**Path Setup**: `source framework/utils/csf-paths.sh` before execution
 
 Rules:
 - Keep specification under 50 lines if possible

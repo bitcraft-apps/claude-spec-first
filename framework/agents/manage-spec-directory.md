@@ -1,16 +1,18 @@
 ---
 name: manage-spec-directory
-description: Setup spec directories based on .claude/.csf/mode file
+description: Setup spec directories based on CSF mode file
 tools: Bash
 ---
 
 # Spec Directory Manager
 
-Autonomous directory management based on mode from .claude/.csf/mode file.
+Autonomous directory management based on mode from CSF mode file.
+
+**Path Setup**: `source framework/utils/csf-paths.sh` before execution
 
 ## Modes
 
-**first**: Create initial `<project>/.claude/.csf/research/` directory
+**first**: Create initial `$(get_research_dir)` directory
 **update**: Backup existing spec, clear research for fresh run
 **new**: Create timestamped directory with symlinks
 
@@ -25,7 +27,7 @@ while [ "$PROJECT_ROOT" != "/" ]; do
     fi
     PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
 done
-CSF_DIR="$PROJECT_ROOT/.claude/.csf"
+CSF_DIR="$(get_csf_dir)"
 mkdir -p "$CSF_DIR"
 [ -d ".csf" ] && echo -e "\033[1;33m⚠️  Legacy .csf/ found. Migrate to $CSF_DIR\033[0m"
 MODE=$(cat "$CSF_DIR/mode" 2>/dev/null || echo "first")
