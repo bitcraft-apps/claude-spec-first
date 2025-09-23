@@ -28,23 +28,19 @@ If unclear, prompt: "Your requirements seem brief. Could you provide more contex
 
 ## Directory Management
 
-**Path Resolution:**
-```bash
-# Use centralized path utility
-source "$(dirname "$0")/../utils/csf-paths.sh"
-CSF_DIR="$(get_csf_dir)"
-mkdir -p "$CSF_DIR"
-```
+**Directory Management:**
+
+Claude Code will use `.claude/.csf/` as the working directory.
 
 **Command-level logic** (Claude Code handles user interaction):
 
 ```
-If $CSF_DIR/spec.md exists:
+If .claude/.csf/spec.md exists:
     Prompt: "Existing spec found. Update (u) or Create new (n)?"
-    If user chooses 'u': Write "update" to $CSF_DIR/mode
-    If user chooses 'n': Write "new" to $CSF_DIR/mode
+    If user chooses 'u': Write "update" to .claude/.csf/mode
+    If user chooses 'n': Write "new" to .claude/.csf/mode
 Else:
-    Write "first" to $CSF_DIR/mode
+    Write "first" to .claude/.csf/mode
 ```
 
 ## Execution

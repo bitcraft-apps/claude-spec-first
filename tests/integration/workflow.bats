@@ -141,9 +141,9 @@ teardown() {
 }
 
 @test "synthesize-spec reads from research outputs" {
-    # Verify synthesize-spec agent reads from micro-agent outputs using centralized paths
-    grep -q "get_research_dir" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
-    grep -q "Inputs.*get_research_dir.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    # Verify synthesize-spec agent reads from micro-agent outputs using literal paths
+    grep -q "\.claude/\.csf/research" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "Inputs.*\.claude/\.csf/research.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
 
 @test "implementation follows sequential workflow" {

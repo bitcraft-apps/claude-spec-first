@@ -9,9 +9,7 @@ tools: Write
 Creates MINIMAL success conditions following KISS principle.
 
 Input: Requirements from arguments
-Output: `$(get_research_dir)/criteria.md`
-
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
+Output: `.claude/.csf/research/criteria.md`
 
 Rules:
 - Simplest testable conditions only

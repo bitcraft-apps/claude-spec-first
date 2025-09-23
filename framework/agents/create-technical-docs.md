@@ -9,12 +9,10 @@ tools: Read, Write
 Creates DEVELOPER documentation from research.
 
 Inputs:
-- `$(get_research_dir)/artifacts-summary.md`
-- `$(get_research_dir)/implementation-summary.md`
+- `.claude/.csf/research/artifacts-summary.md`
+- `.claude/.csf/research/implementation-summary.md`
 
-Output: `$(get_research_dir)/technical-docs.md`
-
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
+Output: `.claude/.csf/research/technical-docs.md`
 
 Rules:
 - API reference from implementation analysis

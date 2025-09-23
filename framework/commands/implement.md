@@ -15,16 +15,10 @@ Creates minimal implementation following existing patterns.
 
 ## Input Resolution
 
-**Path Resolution:**
-```bash
-# Use centralized path utility
-source "$(dirname "$0")/../utils/csf-paths.sh"
-CSF_DIR="$(get_csf_dir)"
-mkdir -p "$CSF_DIR"
-```
+**Input Resolution:**
 
 1. If path provided: Use specified file
-2. Else if `$CSF_DIR/spec.md` exists: Use it
+2. Else if `.claude/.csf/spec.md` exists: Use it
 3. Else: Ask user for specification location
 
 ## Execution
@@ -37,7 +31,7 @@ After input resolution, run sequential micro-agents:
 **Step 2: Implement**  
 - Task: implement-minimal with spec: $SPECIFICATION
 
-Output: Implementation + `$CSF_DIR/implementation-summary.md`
+Output: Implementation + `.claude/.csf/implementation-summary.md`
 
 ## Philosophy
 

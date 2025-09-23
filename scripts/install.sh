@@ -225,15 +225,7 @@ if [ -f "$FRAMEWORK_DIR/VERSION" ]; then
     echo "📋 VERSION file $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
 fi
 
-# Create/Update utils directory and copy version utilities
-mkdir -p "$CLAUDE_DIR/utils"
-if [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
-    target_file="$CLAUDE_DIR/utils/version.sh"
-    cp "$SCRIPT_DIR/scripts/version.sh" "$target_file"
-    chmod +x "$target_file"
-    INSTALLED+=("$target_file")
-    echo "🔧 Version utilities $(echo "$MODE" | tr '[:upper:]' '[:lower:]')d"
-fi
+
 
 # Copy/Update validation script
 if [ -f "$FRAMEWORK_DIR/validate-framework.sh" ]; then

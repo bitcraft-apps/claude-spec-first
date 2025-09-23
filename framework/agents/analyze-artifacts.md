@@ -1,8 +1,6 @@
 ---
 name: analyze-artifacts
 description: Read and parse development artifacts from CSF directory
-
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
 tools: Read
 ---
 
@@ -10,8 +8,8 @@ tools: Read
 
 Reads MINIMAL development artifacts for documentation.
 
-Input: Artifact paths from arguments or `.csf/` directory
-Output: `.csf/research/artifacts-summary.md`
+Input: Artifact paths from arguments or `.claude/.csf/` directory
+Output: `.claude/.csf/research/artifacts-summary.md`
 
 Rules:
 - Read only what exists (spec.md, implementation-summary.md)

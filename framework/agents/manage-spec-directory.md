@@ -8,11 +8,9 @@ tools: Bash
 
 Autonomous directory management based on mode from CSF mode file.
 
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
-
 ## Modes
 
-**first**: Create initial `$(get_research_dir)` directory
+**first**: Create initial `.claude/.csf/research/` directory
 **update**: Backup existing spec, clear research for fresh run
 **new**: Create timestamped directory with symlinks
 
@@ -27,7 +25,7 @@ while [ "$PROJECT_ROOT" != "/" ]; do
     fi
     PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
 done
-CSF_DIR="$(get_csf_dir)"
+CSF_DIR="$PROJECT_ROOT/.claude/.csf"
 mkdir -p "$CSF_DIR"
 [ -d ".csf" ] && echo -e "\033[1;33m⚠️  Legacy .csf/ found. Migrate to $CSF_DIR\033[0m"
 MODE=$(cat "$CSF_DIR/mode" 2>/dev/null || echo "first")

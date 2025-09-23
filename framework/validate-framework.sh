@@ -9,34 +9,22 @@ set -e  # Exit on any error
 echo "🔍 Validating Specification-First Development Framework..."
 echo "=================================================="
 
-# Try to load and display framework version
-# Search for version.sh in several likely locations using robust path resolution
-VERSION_SH=""
+# Read framework version directly from VERSION file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CURRENT_DIR="$(pwd)"
 
-# Check multiple potential locations for version utilities with absolute paths where possible
-if [ -f "$SCRIPT_DIR/../scripts/version.sh" ]; then
-    VERSION_SH="$SCRIPT_DIR/../scripts/version.sh"
-elif [ -f "$SCRIPT_DIR/scripts/version.sh" ]; then
-    VERSION_SH="$SCRIPT_DIR/scripts/version.sh"
-elif [ -f "${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh" ]; then
-    VERSION_SH="${CLAUDE_DIR:-$HOME/.claude}/utils/version.sh"
-elif [ -f "$HOME/.claude/utils/version.sh" ]; then
-    VERSION_SH="$HOME/.claude/utils/version.sh"
-elif [ -f "./scripts/version.sh" ]; then
-    VERSION_SH="./scripts/version.sh"
-elif [ -f "$(dirname "$CURRENT_DIR")/utils/version.sh" ]; then
-    VERSION_SH="$(dirname "$CURRENT_DIR")/utils/version.sh"
-fi
-
-if [ -n "$VERSION_SH" ]; then
-    . "$VERSION_SH"
-    FRAMEWORK_VERSION=$(get_framework_version 2>/dev/null || echo "unknown")
-    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
+# Look for VERSION file in the same directory (installed mode) or framework directory (repo mode)
+if [ -f "$SCRIPT_DIR/VERSION" ]; then
+    FRAMEWORK_VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+elif [ -f "$SCRIPT_DIR/../framework/VERSION" ]; then
+    FRAMEWORK_VERSION=$(cat "$SCRIPT_DIR/../framework/VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
 else
     FRAMEWORK_VERSION="unknown"
-    echo -e "${YELLOW}Framework Version: $FRAMEWORK_VERSION (version utilities not found)${NC}"
+fi
+
+if [ "$FRAMEWORK_VERSION" != "unknown" ] && [ -n "$FRAMEWORK_VERSION" ]; then
+    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
+else
+    echo -e "${YELLOW}Framework Version: unknown (VERSION file not found)${NC}"
 fi
 echo ""
 
