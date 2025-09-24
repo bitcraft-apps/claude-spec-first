@@ -71,33 +71,42 @@ teardown() {
 }
 
 @test "micro-agents have file persistence instructions" {
-    # Verify micro-agents write to research directory using centralized paths
+    # Verify micro-agents write to research directory using literal paths
     grep -q "Output:" "$PROJECT_ROOT/framework/agents/define-scope.md"
-    grep -q "get_research_dir.*scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "\.claude/\.csf/research.*scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
 
     # Verify synthesize-spec reads from research
     grep -q "Inputs:" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
-    grep -q "get_research_dir.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "\.claude/\.csf/research.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 
     # Verify micro-agents are focused (small instruction sets)
     line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/define-scope.md")
     [ "$line_count" -le 25 ]
 }
 
-@test "csf-paths utility functions resolve correctly" {
-    # Test that path utility actually works and returns expected paths
-    cd "$PROJECT_ROOT"
-    source "$PROJECT_ROOT/framework/utils/csf-paths.sh"
+@test "agents specify correct file output locations" {
+    # Verify all agents use literal .claude/.csf/research/ paths (not function calls)
 
-    # Test get_csf_dir from project root
-    result="$(get_csf_dir)"
-    [ "$result" = "$PROJECT_ROOT/.claude/.csf" ]
+    # Test core research agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/scope\.md\`" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "Output: \`\.claude/\.csf/research/criteria\.md\`" "$PROJECT_ROOT/framework/agents/create-criteria.md"
+    grep -q "Output: \`\.claude/\.csf/research/risks\.md\`" "$PROJECT_ROOT/framework/agents/identify-risks.md"
 
-    # Test get_research_dir
-    result="$(get_research_dir)"
-    [ "$result" = "$PROJECT_ROOT/.claude/.csf/research" ]
+    # Test analysis agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/implementation-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
+    grep -q "Output: \`\.claude/\.csf/research/artifacts-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
+    grep -q "Output: \`\.claude/\.csf/research/pattern-example\.md\`" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
 
-    # Test get_specs_dir
-    result="$(get_specs_dir)"
-    [ "$result" = "$PROJECT_ROOT/.claude/.csf/specs" ]
+    # Test documentation agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/technical-docs\.md\`" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"
+    grep -q "Output: \`\.claude/\.csf/research/user-docs\.md\`" "$PROJECT_ROOT/framework/agents/create-user-docs.md"
+
+    # Test synthesis agents use .claude/.csf/ directly
+    grep -q "Output: \`\.claude/\.csf/spec\.md\`" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "Output: Working code + \`\.claude/\.csf/implementation-summary\.md\`" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
+
+    # Verify NO agents use function calls like $(get_research_dir)
+    ! grep -r "\$(get_research_dir)" "$PROJECT_ROOT/framework/agents/"
+    ! grep -r "\$(get_csf_dir)" "$PROJECT_ROOT/framework/agents/"
 }
+

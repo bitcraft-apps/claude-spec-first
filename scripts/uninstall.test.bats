@@ -384,24 +384,28 @@ teardown() {
     done
 }
 
-@test "preserves utils directory and other framework files" {
+@test "preserves parent directories and cleans up properly" {
     # Install framework first
     env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
-    
-    # Verify utils exists
-    [ -d "$TEST_CLAUDE_DIR/utils" ]
-    [ -f "$TEST_CLAUDE_DIR/utils/version.sh" ]
-    
+
+    # Verify framework is installed
+    [ -d "$TEST_CLAUDE_DIR/.csf" ]
+    [ -f "$TEST_CLAUDE_DIR/.csf/VERSION" ]
+
     # Set HOME for uninstall script
     export HOME="${TEST_CLAUDE_DIR%/*}"
-    
+
     # Run uninstall
     run "$PROJECT_ROOT/scripts/uninstall.sh" <<< "y"
     assert_success
-    
-    # Utils directory should still exist (not removed by uninstall)
-    [ -d "$TEST_CLAUDE_DIR/utils" ]
-    [ -f "$TEST_CLAUDE_DIR/utils/version.sh" ]
-    
-    test_info "✅ Preserves utils directory and other framework files"
+
+    # Framework directories should be removed
+    [ ! -d "$TEST_CLAUDE_DIR/commands/csf" ]
+    [ ! -d "$TEST_CLAUDE_DIR/agents/csf" ]
+    [ ! -d "$TEST_CLAUDE_DIR/.csf" ]
+
+    # But parent directory should still exist
+    [ -d "$TEST_CLAUDE_DIR" ]
+
+    test_info "✅ Preserves parent directories and cleans up properly"
 }

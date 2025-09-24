@@ -15,16 +15,10 @@ Creates documentation with parallel analysis and generation.
 
 ## Input Resolution
 
-**Path Resolution:**
-```bash
-# Use centralized path utility
-source "$(dirname "$0")/../utils/csf-paths.sh"
-CSF_DIR="$(get_csf_dir)"
-mkdir -p "$CSF_DIR"
-```
+**Input Resolution:**
 
 1. If paths provided: Use specified artifact/implementation locations
-2. Else if `$CSF_DIR/spec.md` and `$CSF_DIR/implementation-summary.md` exist: Use them
+2. Else if `.claude/.csf/spec.md` and `.claude/.csf/implementation-summary.md` exist: Use them
 3. Else: Ask user for artifact locations
 
 ## Execution

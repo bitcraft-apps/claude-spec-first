@@ -9,9 +9,7 @@ tools: Write
 Defines the NARROWEST viable solution following YAGNI principle.
 
 Input: Requirements from arguments
-Output: `$(get_research_dir)/scope.md`
-
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
+Output: `.claude/.csf/research/scope.md`
 
 Rules:
 - MVP only - exclude everything not immediately needed

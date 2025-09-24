@@ -42,6 +42,15 @@ assert_version_format() {
     fi
 }
 
+assert_output_contains() {
+    local expected="$1"
+    if [[ "$output" != *"$expected"* ]]; then
+        echo "Expected output to contain: $expected" >&2
+        echo "Actual output: $output" >&2
+        return 1
+    fi
+}
+
 test_info() {
     echo "INFO: $*" >&2
 }
@@ -84,25 +93,21 @@ teardown() {
     
     # Corrupt the VERSION file with invalid content
     echo "invalid.version.format" > .csf/VERSION
-    
-    # Version utilities should handle this gracefully, but still return the content
-    run ./utils/version.sh get
-    # Note: The get command returns the content even if it's invalid
-    assert_success
-    [[ "$output" == "invalid.version.format" ]]
-    test_info "✅ Returns corrupted VERSION file content"
-    
-    # Framework validation should report the issue
+
+    # Framework validation should detect corrupted VERSION but still show it
     run ./.csf/validate-framework.sh
     assert_failure
+    assert_output_contains "Framework Version: invalid.version.format"
+    assert_output_contains "Framework validation FAILED"
     test_info "✅ Framework validation detects corrupted VERSION"
     
     # Recovery: Fix the VERSION file
     echo "1.0.0" > .csf/VERSION
-    
-    run ./utils/version.sh get
+
+    run ./.csf/validate-framework.sh
     assert_success
-    assert_version_format "$output"
+    assert_output_contains "Framework Version: 1.0.0"
+    assert_output_contains "Framework validation PASSED"
     test_info "✅ Recovery successful after fixing VERSION file"
 }
 
@@ -118,28 +123,21 @@ teardown() {
     
     # Test missing VERSION file
     mv .csf/VERSION .csf/VERSION.backup
-    
-    run ./utils/version.sh get
-    assert_failure
-    test_info "✅ Handles missing VERSION file"
-    
+
     run ./.csf/validate-framework.sh
-    assert_failure  
+    assert_failure
+    assert_output_contains "Framework Version: unknown (VERSION file not found)"
+    assert_output_contains "❌ VERSION file exists"
     test_info "✅ Validation detects missing VERSION file"
-    
+
     # Restore VERSION file
     mv .csf/VERSION.backup .csf/VERSION
-    
-    # Test missing version utilities
-    mv utils/version.sh utils/version.sh.backup
-    
-    run -127 ./utils/version.sh get 2>/dev/null
-    # Expect exit code 127 (command not found)
-    [ "$status" -eq 127 ]
-    test_info "✅ Handles missing version utilities gracefully"
-    
-    # Restore utilities
-    mv utils/version.sh.backup utils/version.sh
+
+    # Test validation still works
+    run ./.csf/validate-framework.sh
+    assert_success
+    assert_output_contains "Framework Version:"
+    test_info "✅ Handles missing VERSION file gracefully"
 }
 
 @test "handle permission issues gracefully" {
@@ -152,18 +150,18 @@ teardown() {
 
     cd "$HOME_DIR/.claude"
     
-    # Remove execute permissions
-    chmod -x utils/version.sh
-    
-    run -126 ./utils/version.sh get 2>/dev/null
+    # Remove execute permissions from validation script
+    chmod -x .csf/validate-framework.sh
+
+    run -126 ./.csf/validate-framework.sh 2>/dev/null
     # Expect exit code 126 (permission denied)
     [ "$status" -eq 126 ]
     test_info "✅ Handles missing execute permissions"
-    
+
     # Restore permissions
-    chmod +x utils/version.sh
-    
-    run ./utils/version.sh get
+    chmod +x .csf/validate-framework.sh
+
+    run ./.csf/validate-framework.sh
     assert_success
     test_info "✅ Recovers after fixing permissions"
 }
@@ -182,17 +180,18 @@ teardown() {
     
     # Make .csf directory read-only to simulate write permission issues
     chmod 555 .csf/
-    
-    # Attempt to set version (should fail gracefully due to backup creation failure)
-    run ./utils/version.sh set "2.0.0"
-    assert_failure
-    test_info "✅ Handles write permission errors gracefully"
-    
+
+    # Validation should still work even with read-only directory
+    run ./.csf/validate-framework.sh
+    assert_success
+    assert_output_contains "Framework Version:"
+    test_info "✅ Handles write permission issues gracefully"
+
     # Restore permissions
     chmod 755 .csf/
-    
-    # Verify recovery  
-    run ./utils/version.sh set "2.0.0"
+
+    # Verify validation still works after restoring permissions
+    run ./.csf/validate-framework.sh
     assert_success
     test_info "✅ Recovers after fixing permissions"
 }
@@ -207,17 +206,16 @@ teardown() {
 
     cd "$HOME_DIR/.claude"
     
-    # Simulate concurrent version access by rapidly calling version utilities
+    # Simulate concurrent validation access
     # This tests for race conditions and file locking issues
-    
+
     local pids=()
-    local results=()
-    
-    # Start multiple background processes
+
+    # Start multiple background processes running validation
     for i in {1..5}; do
         (
             sleep 0.1
-            ./utils/version.sh get > "$TEST_DIR/result_$i.txt" 2>&1
+            ./.csf/validate-framework.sh > "$TEST_DIR/result_$i.txt" 2>&1
             echo $? > "$TEST_DIR/status_$i.txt"
         ) &
         pids+=($!)

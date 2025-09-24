@@ -9,9 +9,7 @@ tools: Read, Grep, Glob
 Finds ONE good example to follow.
 
 Input: Requirements from spec/arguments
-Output: `$(get_research_dir)/pattern-example.md`
-
-**Path Setup**: `source framework/utils/csf-paths.sh` before execution
+Output: `.claude/.csf/research/pattern-example.md`
 
 Rules:
 - Find the MOST similar existing implementation (same feature type preferred)
