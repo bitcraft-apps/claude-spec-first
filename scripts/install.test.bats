@@ -91,8 +91,7 @@ teardown() {
     assert_directory_structure "$TEST_INSTALL_DIR" \
         "commands/csf" \
         "agents/csf" \
-        ".csf" \
-        "utils"
+        ".csf"
     
     # Verify installation marker
     [ -f "$TEST_INSTALL_DIR/.csf/.installed" ]
@@ -159,21 +158,6 @@ teardown() {
     test_info "✅ Fresh installation copies VERSION file correctly"
 }
 
-@test "fresh installation copies version utilities" {
-    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
-    assert_success
-    
-    [ -f "$TEST_INSTALL_DIR/utils/version.sh" ]
-    [ -x "$TEST_INSTALL_DIR/utils/version.sh" ]
-    
-    # Test that version utilities work (need to be in installed directory for proper framework detection)
-    cd "$TEST_INSTALL_DIR"
-    run ./utils/version.sh get
-    assert_success
-    assert_version_format "$output"
-    
-    test_info "✅ Fresh installation copies version utilities correctly"
-}
 
 @test "fresh installation copies validation script" {
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
