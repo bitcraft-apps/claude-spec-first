@@ -33,56 +33,45 @@ teardown() {
     
     # Verify installation files exist in correct locations
     [ -f "$HOME_DIR/.claude/.csf/VERSION" ]
-    [ -x "$HOME_DIR/.claude/utils/version.sh" ]
     [ -x "$HOME_DIR/.claude/.csf/validate-framework.sh" ]
     [ -d "$HOME_DIR/.claude/commands/csf" ]
     [ -d "$HOME_DIR/.claude/agents/csf" ]
 }
 
-@test "installed version utilities work" {
+@test "installed validation utilities work" {
     # Create and install to mock home
     HOME_DIR="$TEST_DIR/home"
     mkdir -p "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
-    # Test installed utilities (VERSION file is in .csf subdirectory)
+
+    # Test installed validation script shows version
     cd "$HOME_DIR/.claude"
-    run ./utils/version.sh get
+    run ./.csf/validate-framework.sh
     [ "$status" -eq 0 ]
-    [[ "$output" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+    [[ "$output" == *"Framework Version:"* ]]
+    [[ "$output" == *"Framework validation PASSED"* ]]
 }
 
-@test "version operations work after installation" {
+@test "framework validation is resilient after installation" {
     # Create and install to mock home
     HOME_DIR="$TEST_DIR/home"
     mkdir -p "$HOME_DIR"
-    
+
     cd "$PROJECT_ROOT"
     env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
-    
+
     cd "$HOME_DIR/.claude"
-    
-    # Get current version
-    CURRENT_VERSION=$(./utils/version.sh get)
-    
-    # Test increment
-    run ./utils/version.sh increment patch
+
+    # Test validation works multiple times (resilience test)
+    for i in {1..3}; do
+        run ./.csf/validate-framework.sh
+        [ "$status" -eq 0 ]
+        [[ "$output" == *"Framework Version:"* ]]
+        [[ "$output" == *"Framework validation PASSED"* ]]
+    done
     [ "$status" -eq 0 ]
-    [[ "$output" == *"SUCCESS"* ]]
-    
-    # Verify version changed
-    NEW_VERSION=$(./utils/version.sh get)
-    [ "$NEW_VERSION" != "$CURRENT_VERSION" ]
-    
-    # Reset version
-    run ./utils/version.sh set "$CURRENT_VERSION"
-    [ "$status" -eq 0 ]
-    
-    # Verify reset
-    RESET_VERSION=$(./utils/version.sh get)
-    [ "$RESET_VERSION" = "$CURRENT_VERSION" ]
 }
 
 @test "installed validation works" {
@@ -116,10 +105,7 @@ teardown() {
     # Test that framework still works (should show warning but not crash)
     run ./.csf/validate-framework.sh
     [ "$status" -ne 0 ] # Should fail validation without VERSION
-    
-    # Test that version utilities handle missing file
-    run ./utils/version.sh get
-    [ "$status" -ne 0 ] # Should fail gracefully
+    [[ "$output" == *"Framework Version: unknown"* ]]
     
     # Restore VERSION file
     mv .csf/VERSION.backup .csf/VERSION
