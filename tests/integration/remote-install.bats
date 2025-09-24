@@ -11,13 +11,20 @@ setup() {
     # Create clean test environment
     TEST_DIR="$(mktemp -d)"
     export TEST_DIR
+    # Save original PATH for restoration
+    ORIGINAL_PATH="$PATH"
+    export ORIGINAL_PATH
     cd "$TEST_DIR"
 }
 
 teardown() {
+    # Restore original PATH to avoid affecting BATS cleanup
+    if [ -n "$ORIGINAL_PATH" ]; then
+        export PATH="$ORIGINAL_PATH"
+    fi
     # Cleanup test environment
     if [ -d "$TEST_DIR" ]; then
-        rm -rf "$TEST_DIR"
+        rm -rf "$TEST_DIR" 2>/dev/null || true
     fi
 }
 
