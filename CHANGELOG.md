@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.1] - 2025-09-24
+
+### Fixed
+- **CSF Directory Paths**: Fixed agents creating files in wrong locations (GitHub issue #43)
+  - Replaced bash function calls with literal paths in agent Output declarations
+  - Claude Code interprets agent markdown as text, not executable bash
+  - All agents now use `.claude/.csf/research/` paths directly
+  - Removed unnecessary `csf-paths.sh` utility from user installations
+  - Updated validation script to read VERSION file directly
+  - Simplified framework following KISS principle (removed 300+ lines of utility code)
+
+### Removed
+- **Development Utilities**: Removed version.sh installation for end users
+  - End users don't need version management functions
+  - Validation script still shows framework version for troubleshooting
+  - Development utilities remain available for framework developers
+
 ## [0.15.0] - 2025-09-23
 
 ### Added
