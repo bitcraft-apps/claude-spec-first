@@ -84,3 +84,29 @@ teardown() {
     [ "$line_count" -le 25 ]
 }
 
+@test "agents specify correct file output locations" {
+    # Verify all agents use literal .claude/.csf/research/ paths (not function calls)
+
+    # Test core research agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/scope\.md\`" "$PROJECT_ROOT/framework/agents/define-scope.md"
+    grep -q "Output: \`\.claude/\.csf/research/criteria\.md\`" "$PROJECT_ROOT/framework/agents/create-criteria.md"
+    grep -q "Output: \`\.claude/\.csf/research/risks\.md\`" "$PROJECT_ROOT/framework/agents/identify-risks.md"
+
+    # Test analysis agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/implementation-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
+    grep -q "Output: \`\.claude/\.csf/research/artifacts-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
+    grep -q "Output: \`\.claude/\.csf/research/pattern-example\.md\`" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
+
+    # Test documentation agents output to .claude/.csf/research/
+    grep -q "Output: \`\.claude/\.csf/research/technical-docs\.md\`" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"
+    grep -q "Output: \`\.claude/\.csf/research/user-docs\.md\`" "$PROJECT_ROOT/framework/agents/create-user-docs.md"
+
+    # Test synthesis agents use .claude/.csf/ directly
+    grep -q "Output: \`\.claude/\.csf/spec\.md\`" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
+    grep -q "Output: Working code + \`\.claude/\.csf/implementation-summary\.md\`" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
+
+    # Verify NO agents use function calls like $(get_research_dir)
+    ! grep -r "\$(get_research_dir)" "$PROJECT_ROOT/framework/agents/"
+    ! grep -r "\$(get_csf_dir)" "$PROJECT_ROOT/framework/agents/"
+}
+
