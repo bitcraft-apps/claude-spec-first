@@ -29,14 +29,14 @@ teardown() {
 
     # Create a PATH that has essential commands but excludes git
     mkdir -p "$TEST_DIR/bin"
-    # Link essential commands
-    ln -s /bin/bash "$TEST_DIR/bin/bash"
-    ln -s /bin/sh "$TEST_DIR/bin/sh"
-    ln -s /bin/rm "$TEST_DIR/bin/rm"
-    ln -s /bin/mkdir "$TEST_DIR/bin/mkdir"
-    ln -s /bin/chmod "$TEST_DIR/bin/chmod"
-    ln -s /bin/echo "$TEST_DIR/bin/echo"
-    ln -s /usr/bin/mktemp "$TEST_DIR/bin/mktemp"
+    # Link essential commands using dynamic paths
+    ln -s "$(command -v bash)" "$TEST_DIR/bin/bash"
+    ln -s "$(command -v sh)" "$TEST_DIR/bin/sh"
+    ln -s "$(command -v rm)" "$TEST_DIR/bin/rm"
+    ln -s "$(command -v mkdir)" "$TEST_DIR/bin/mkdir"
+    ln -s "$(command -v chmod)" "$TEST_DIR/bin/chmod"
+    ln -s "$(command -v echo)" "$TEST_DIR/bin/echo"
+    ln -s "$(command -v mktemp)" "$TEST_DIR/bin/mktemp"
     # Note: deliberately NOT linking git
     export PATH="$TEST_DIR/bin"
 
