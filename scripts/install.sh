@@ -159,11 +159,44 @@ mkdir -p "$CLAUDE_DIR/commands/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/agents/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/.csf"
 
+# Clean stale files (files in target that don't exist in source)
+clean_stale_files() {
+    local source_dir="$1"
+    local target_dir="$2"
+    local artifact_type="$3"
+
+    if [ ! -d "$target_dir" ] || [ ! -d "$source_dir" ]; then
+        return 0
+    fi
+
+    local stale_count=0
+    for target_file in "$target_dir"/*.md; do
+        [ -f "$target_file" ] || continue
+        local filename="$(basename "$target_file")"
+        if [ ! -f "$source_dir/$filename" ]; then
+            rm -f "$target_file"
+            echo "🗑️  Removed stale $artifact_type: $filename"
+            stale_count=$((stale_count + 1))
+        fi
+    done
+
+    if [ "$stale_count" -gt 0 ]; then
+        echo "✅ Removed $stale_count stale $artifact_type(s)"
+    fi
+}
+
 # Core installation function
 install_framework_files() {
     local operation="$1"
     echo -e "${BLUE}📦 ${operation} commands and agents with CSF prefix...${NC}"
-    
+
+    # Clean stale files before installing (only on update)
+    if [ "$MODE" = "update" ]; then
+        echo -e "${BLUE}🧹 Cleaning stale files...${NC}"
+        clean_stale_files "$FRAMEWORK_DIR/commands" "$CLAUDE_DIR/commands/$CSF_PREFIX" "command"
+        clean_stale_files "$FRAMEWORK_DIR/agents" "$CLAUDE_DIR/agents/$CSF_PREFIX" "agent"
+    fi
+
     # Install commands with CSF prefix
     if [ -d "$FRAMEWORK_DIR/commands" ]; then
         local cmd_count=0
