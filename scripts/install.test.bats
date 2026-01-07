@@ -237,6 +237,66 @@ teardown() {
     test_info "✅ Update mode preserves existing files"
 }
 
+@test "update mode removes stale agent files" {
+    # First install
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Create a stale agent file (doesn't exist in framework source)
+    echo "stale agent" > "$TEST_INSTALL_DIR/agents/csf/obsolete-agent.md"
+    [ -f "$TEST_INSTALL_DIR/agents/csf/obsolete-agent.md" ]
+
+    # Update should clean stale files
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Stale file should be removed
+    [ ! -f "$TEST_INSTALL_DIR/agents/csf/obsolete-agent.md" ]
+    assert_output_contains "Removed stale agent"
+
+    test_info "✅ Update mode removes stale agent files"
+}
+
+@test "update mode removes stale command files" {
+    # First install
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Create a stale command file
+    echo "stale command" > "$TEST_INSTALL_DIR/commands/csf/obsolete-command.md"
+    [ -f "$TEST_INSTALL_DIR/commands/csf/obsolete-command.md" ]
+
+    # Update should clean stale files
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Stale file should be removed
+    [ ! -f "$TEST_INSTALL_DIR/commands/csf/obsolete-command.md" ]
+    assert_output_contains "Removed stale command"
+
+    test_info "✅ Update mode removes stale command files"
+}
+
+@test "update mode preserves non-.md files in csf directories" {
+    # First install
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Create non-.md files that should NOT be removed
+    echo "custom script" > "$TEST_INSTALL_DIR/agents/csf/custom-script.sh"
+    echo "custom data" > "$TEST_INSTALL_DIR/commands/csf/notes.txt"
+
+    # Update
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Non-.md files should still exist
+    [ -f "$TEST_INSTALL_DIR/agents/csf/custom-script.sh" ]
+    [ -f "$TEST_INSTALL_DIR/commands/csf/notes.txt" ]
+
+    test_info "✅ Update mode preserves non-.md files in csf directories"
+}
+
 @test "update mode shows update summary" {
     # First install
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
