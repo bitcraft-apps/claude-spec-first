@@ -49,10 +49,10 @@ rollback() {
     exit 1
 }
 
-# Backup restore function for updates  
+# Backup restore function for updates
 restore_backup() {
     echo -e "${RED}❌ Update failed. Restoring backup...${NC}"
-    
+
     # Restore from backup if available
     if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
         if [ -d "$BACKUP_DIR/commands-csf" ]; then
@@ -61,13 +61,22 @@ restore_backup() {
             echo "🔄 Restored commands from backup"
         fi
         if [ -d "$BACKUP_DIR/agents-csf" ]; then
-            rm -rf "$CLAUDE_DIR/agents/$CSF_PREFIX" 
+            rm -rf "$CLAUDE_DIR/agents/$CSF_PREFIX"
             cp -r "$BACKUP_DIR/agents-csf" "$CLAUDE_DIR/agents/$CSF_PREFIX"
             echo "🔄 Restored agents from backup"
         fi
+        if [ -d "$BACKUP_DIR/hooks-csf" ]; then
+            rm -rf "$CLAUDE_DIR/hooks/$CSF_PREFIX"
+            cp -r "$BACKUP_DIR/hooks-csf" "$CLAUDE_DIR/hooks/$CSF_PREFIX"
+            echo "🔄 Restored hooks from backup"
+        fi
+        if [ -f "$BACKUP_DIR/settings.json" ]; then
+            cp "$BACKUP_DIR/settings.json" "$CLAUDE_DIR/settings.json"
+            echo "🔄 Restored settings.json from backup"
+        fi
         echo -e "${GREEN}✅ Backup restored successfully${NC}"
     fi
-    
+
     exit 1
 }
 
@@ -136,6 +145,14 @@ if [ "$MODE" = "update" ]; then
         cp -r "$CLAUDE_DIR/agents/$CSF_PREFIX" "$BACKUP_DIR/agents-csf"
         echo "📦 Backed up agents"
     fi
+    if [ -d "$CLAUDE_DIR/hooks/$CSF_PREFIX" ]; then
+        cp -r "$CLAUDE_DIR/hooks/$CSF_PREFIX" "$BACKUP_DIR/hooks-csf"
+        echo "📦 Backed up hooks"
+    fi
+    if [ -f "$CLAUDE_DIR/settings.json" ]; then
+        cp "$CLAUDE_DIR/settings.json" "$BACKUP_DIR/settings.json"
+        echo "📦 Backed up settings.json"
+    fi
     
     echo -e "${GREEN}✅ Backup created: $BACKUP_DIR${NC}"
     
@@ -157,6 +174,7 @@ fi
 mkdir -p "$CLAUDE_DIR"
 mkdir -p "$CLAUDE_DIR/commands/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/agents/$CSF_PREFIX"
+mkdir -p "$CLAUDE_DIR/hooks/$CSF_PREFIX"
 mkdir -p "$CLAUDE_DIR/.csf"
 
 # Clean stale files (files in target that don't exist in source)
@@ -164,13 +182,14 @@ clean_stale_files() {
     local source_dir="$1"
     local target_dir="$2"
     local artifact_type="$3"
+    local extension="${4:-md}"
 
     if [ ! -d "$target_dir" ] || [ ! -d "$source_dir" ]; then
         return 0
     fi
 
     local stale_count=0
-    for target_file in "$target_dir"/*.md; do
+    for target_file in "$target_dir"/*."$extension"; do
         [ -f "$target_file" ] || continue
         local filename="$(basename "$target_file")"
         if [ ! -f "$source_dir/$filename" ]; then
@@ -188,13 +207,14 @@ clean_stale_files() {
 # Core installation function
 install_framework_files() {
     local operation="$1"
-    echo -e "${BLUE}📦 ${operation} commands and agents with CSF prefix...${NC}"
+    echo -e "${BLUE}📦 ${operation} commands, agents, and hooks with CSF prefix...${NC}"
 
     # Clean stale files before installing (only on update)
     if [ "$MODE" = "update" ]; then
         echo -e "${BLUE}🧹 Cleaning stale files...${NC}"
         clean_stale_files "$FRAMEWORK_DIR/commands" "$CLAUDE_DIR/commands/$CSF_PREFIX" "command"
         clean_stale_files "$FRAMEWORK_DIR/agents" "$CLAUDE_DIR/agents/$CSF_PREFIX" "agent"
+        clean_stale_files "$FRAMEWORK_DIR/hooks" "$CLAUDE_DIR/hooks/$CSF_PREFIX" "hook" "sh"
     fi
 
     # Install commands with CSF prefix
@@ -224,7 +244,7 @@ install_framework_files() {
             if [ -f "$agent_file" ]; then
                 agent_name="$(basename "$agent_file")"
                 target_file="$CLAUDE_DIR/agents/$CSF_PREFIX/$agent_name"
-                
+
                 if ! cp "$agent_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy agent $agent_name${NC}"
                     exit 1
@@ -236,7 +256,88 @@ install_framework_files() {
         done
         echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
-    
+
+    # Install hooks with CSF prefix
+    if [ -d "$FRAMEWORK_DIR/hooks" ]; then
+        local hook_count=0
+        for hook_file in "$FRAMEWORK_DIR/hooks"/*.sh; do
+            if [ -f "$hook_file" ]; then
+                hook_name="$(basename "$hook_file")"
+                target_file="$CLAUDE_DIR/hooks/$CSF_PREFIX/$hook_name"
+
+                if ! cp "$hook_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy hook $hook_name${NC}"
+                    exit 1
+                fi
+                chmod +x "$target_file"
+                INSTALLED+=("$target_file")
+                echo "📄 ${operation}: $CSF_PREFIX/$hook_name"
+                hook_count=$((hook_count + 1))
+            fi
+        done
+        echo "✅ $hook_count hooks $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
+    fi
+
+}
+
+# Merge CSF hooks into settings.json
+merge_settings_json() {
+    local settings_file="$CLAUDE_DIR/settings.json"
+    local hooks_dir="$CLAUDE_DIR/hooks/$CSF_PREFIX"
+
+    # Check if jq is available
+    if ! command -v jq &> /dev/null; then
+        echo -e "${YELLOW}⚠️  jq not found - skipping settings.json merge${NC}"
+        echo -e "${YELLOW}   Install jq and re-run to enable stop hooks${NC}"
+        return 0
+    fi
+
+    # Build our hooks configuration
+    local csf_hooks
+    csf_hooks=$(cat <<EOF
+{
+  "hooks": [
+    {"type": "command", "command": "$hooks_dir/validate-spec.sh"},
+    {"type": "command", "command": "$hooks_dir/validate-implementation.sh"}
+  ]
+}
+EOF
+)
+
+    local temp_file
+    temp_file=$(mktemp)
+
+    if [ -f "$settings_file" ]; then
+        # Validate existing JSON
+        if ! jq empty "$settings_file" 2>/dev/null; then
+            echo -e "${YELLOW}⚠️  Invalid settings.json - creating backup and new file${NC}"
+            cp "$settings_file" "$settings_file.bak"
+            echo '{}' > "$settings_file"
+        fi
+
+        # Merge: remove existing CSF hooks, add new ones
+        jq --argjson csf_hooks "$csf_hooks" '
+            # Ensure hooks.Stop exists as array
+            .hooks.Stop = (.hooks.Stop // [])
+            # Remove existing CSF hooks (containing /hooks/csf/)
+            | .hooks.Stop = [.hooks.Stop[] | select(.hooks | all(.command | contains("/hooks/csf/") | not))]
+            # Add our CSF hooks
+            | .hooks.Stop += [$csf_hooks]
+        ' "$settings_file" > "$temp_file"
+    else
+        # Create new settings.json
+        jq -n --argjson csf_hooks "$csf_hooks" '{hooks: {Stop: [$csf_hooks]}}' > "$temp_file"
+    fi
+
+    # Validate result and move into place
+    if jq empty "$temp_file" 2>/dev/null; then
+        mv "$temp_file" "$settings_file"
+        echo "⚙️  Stop hooks configured in settings.json"
+    else
+        echo -e "${YELLOW}⚠️  Failed to merge settings.json${NC}"
+        rm -f "$temp_file"
+        return 1
+    fi
 }
 
 # Install/Update framework files
@@ -245,6 +346,9 @@ if [ "$MODE" = "install" ]; then
 else
     install_framework_files "Updating"
 fi
+
+# Merge settings.json with CSF hooks
+merge_settings_json
 
 # Disable error trap after successful file operations
 trap - ERR
@@ -278,7 +382,7 @@ elif [ "$MODE" = "update" ]; then
     echo -e "${GREEN}🎉 Update completed successfully!${NC}"
     echo ""
     echo -e "${BLUE}📋 Update Summary:${NC}"
-    echo "• Commands and agents updated to latest version"
+    echo "• Commands, agents, and hooks updated to latest version"
     if [ -n "$BACKUP_DIR" ]; then
         echo "• Previous configuration backed up to: $BACKUP_DIR"
     fi
@@ -287,6 +391,7 @@ fi
 
 echo "📁 Commands installed to: $CLAUDE_DIR/commands/$CSF_PREFIX/"
 echo "📁 Agents installed to: $CLAUDE_DIR/agents/$CSF_PREFIX/"
+echo "📁 Hooks installed to: $CLAUDE_DIR/hooks/$CSF_PREFIX/"
 echo ""
 echo -e "${BLUE}🔍 To validate the installation:${NC}"
 echo "   cd ~/.claude && ./.csf/validate-framework.sh"
