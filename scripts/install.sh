@@ -45,18 +45,31 @@ fi
 
 FRAMEWORK_DIR="$SCRIPT_DIR/framework"
 
+# Read new version early
+NEW_VERSION="unknown"
+if [ -f "$FRAMEWORK_DIR/VERSION" ]; then
+    NEW_VERSION="$(cat "$FRAMEWORK_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')" || NEW_VERSION="unknown"
+    [ -z "$NEW_VERSION" ] && NEW_VERSION="unknown"
+fi
+
 # Arrays to track installations for rollback
 INSTALLED=()
 BACKED_UP=()
 
 # Auto-detect operation mode
+OLD_VERSION="unknown"
 if [ -d "$CLAUDE_DIR/.csf" ] && [ -f "$CLAUDE_DIR/.csf/.installed" ]; then
     MODE="update"
+    # Capture old version BEFORE any copy operations overwrite it
+    if [ -f "$CLAUDE_DIR/.csf/VERSION" ]; then
+        OLD_VERSION="$(cat "$CLAUDE_DIR/.csf/VERSION" 2>/dev/null | tr -d '[:space:]')" || OLD_VERSION="unknown"
+        [ -z "$OLD_VERSION" ] && OLD_VERSION="unknown"
+    fi
     echo -e "${BLUE}🔄 Existing installation detected, updating Claude Spec-First Framework...${NC}"
     echo "===================================================================="
 else
-    MODE="install" 
-    echo -e "${BLUE}🚀 Installing Claude Spec-First Framework (fresh installation)...${NC}"
+    MODE="install"
+    echo -e "${BLUE}🚀 Installing Claude Spec-First Framework v${NEW_VERSION} (fresh installation)...${NC}"
     echo "======================================================================="
 fi
 
@@ -427,12 +440,12 @@ fi
 # Success messages
 echo ""
 if [ "$MODE" = "install" ]; then
-    echo -e "${GREEN}✅ Claude Spec-First Framework installation completed successfully!${NC}"
+    echo -e "${GREEN}✅ Claude Spec-First Framework v${NEW_VERSION} installed successfully!${NC}"
 elif [ "$MODE" = "update" ]; then
-    echo -e "${GREEN}🎉 Update completed successfully!${NC}"
+    echo -e "${GREEN}🎉 Update completed successfully! (v${OLD_VERSION} → v${NEW_VERSION})${NC}"
     echo ""
     echo -e "${BLUE}📋 Update Summary:${NC}"
-    echo "• Commands, agents, and hooks updated to latest version"
+    echo "• Commands, agents, and hooks updated from v${OLD_VERSION} to v${NEW_VERSION}"
     if [ -n "$BACKUP_DIR" ]; then
         echo "• Previous configuration backed up to: $BACKUP_DIR"
     fi
@@ -450,8 +463,8 @@ echo -e "${BLUE}🔧 Next Steps:${NC}"
 echo "1. Restart Claude Code to load the updated framework"
 if [ "$MODE" = "update" ]; then
     echo ""
-    echo -e "${GREEN}✨ Framework updated successfully!${NC}"
+    echo -e "${GREEN}✨ Framework v${NEW_VERSION} updated successfully!${NC}"
 else
     echo ""
-    echo -e "${GREEN}🚀 Ready to use the Claude Spec-First Framework!${NC}"
+    echo -e "${GREEN}🚀 Ready to use the Claude Spec-First Framework v${NEW_VERSION}!${NC}"
 fi
