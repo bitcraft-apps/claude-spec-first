@@ -308,7 +308,7 @@ teardown() {
     
     # Check for update-specific messages
     assert_output_contains "📋 Update Summary:"
-    assert_output_contains "Commands and agents updated to latest version"
+    assert_output_contains "Commands, agents, and hooks updated to latest version"
     assert_output_contains "Previous configuration backed up to:"
     assert_output_contains "✨ Framework updated successfully!"
     
