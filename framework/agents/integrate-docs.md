@@ -12,6 +12,7 @@ Inputs:
 - `.claude/.csf/research/technical-docs.md`
 - `.claude/.csf/research/user-docs.md`
 - `.claude/.csf/research/docs-inventory.md` (existing doc manifest)
+- `.claude/.csf/research/doc-context.md` (shared terminology, if present)
 
 Rules:
 - Read docs-inventory.md first — match new content topics against existing files
@@ -23,3 +24,8 @@ Rules:
 - Edit/MultiEdit existing files; Write only for new files
 - Add metadata headers for traceability
 - Clean up research files after integration
+
+Shared context:
+- If doc-context.md exists, use its terminology decisions for consistency
+- Align terms between technical and user docs (e.g., same name for same concept)
+- Clean up doc-context.md with other research files after integration
