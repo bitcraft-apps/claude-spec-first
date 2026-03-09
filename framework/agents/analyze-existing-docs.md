@@ -11,7 +11,7 @@ Scans project for EXISTING documentation files and produces a manifest.
 Output: `.claude/.csf/research/docs-inventory.md`
 
 Rules:
-- Glob `docs/**/*.md`, `*.md` in project root, `.claude/.csf/research/*.md`
+- Glob `docs/**/*.md`, `*.md` in project root
 - Limit scan depth to 3 levels — skip deeply nested paths
 - For each file: extract filepath and first 3 headings as topic indicators
 - Output format: `filepath | primary topic` (one line per file)

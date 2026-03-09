@@ -23,7 +23,7 @@ Creates documentation with parallel analysis and generation.
 
 ## Execution
 
-After input resolution, run micro-agents in 4 batches:
+After input resolution, run micro-agents in 3 batches:
 
 **Batch 1 (Parallel):**
 - Task: analyze-artifacts with requirements: $ARTIFACT_PATHS
@@ -31,14 +31,11 @@ After input resolution, run micro-agents in 4 batches:
 - Task: analyze-existing-docs (scans project for existing documentation inventory)
 
 **Batch 2 (Parallel):**
-- Task: create-technical-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md, $CSF_DIR/research/docs-inventory.md)
-- Task: create-user-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md, $CSF_DIR/research/docs-inventory.md)
+- Task: create-technical-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
+- Task: create-user-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
 
 **Batch 3:**
 - Task: integrate-docs (reads docs-inventory.md to update existing files or create new ones)
-
-**Batch 4:**
-- Cleanup: Remove $CSF_DIR/research/docs-inventory.md
 
 Output: Documentation in `docs/` and `docs/user/` + terminal summary
 
