@@ -39,8 +39,8 @@ cd claude-spec-first
 
 ## Features
 
-- 12 specialized micro-agents (25 lines max each)
-- 3 workflow commands (50 lines max each)
+- 13 specialized agents (50 lines max each)
+- 3 workflow commands (75 lines max each)
 - Challenge assumptions and unclear requirements
 - Smart implementation: CLI tools for immediate needs, code for reusable solutions
 - Granular task execution with progress visibility
@@ -53,7 +53,7 @@ cd claude-spec-first
 - `/csf:implement` - Build it (code OR direct execution)
 - `/csf:document` - Document what was built
 
-## Micro-Agent Architecture
+## Agent Architecture
 
 **Specification Agents:**
 - `manage-spec-directory`, `define-scope`, `create-criteria`, `identify-risks`, `synthesize-spec`
@@ -70,7 +70,7 @@ cd claude-spec-first
 .claude/
 └── .csf/
     ├── spec.md        # Current specification (overwritten each run)
-    ├── research/      # Micro-agent outputs
+    ├── research/      # Agent outputs
     └── [project files remain in natural locations]
 ```
 

@@ -23,7 +23,7 @@ Creates minimal implementation following existing patterns.
 
 ## Execution
 
-After input resolution, run sequential micro-agents:
+After input resolution, run sequential agents:
 
 **Step 1: Learn**
 - Task: explore-patterns with requirements: $SPECIFICATION

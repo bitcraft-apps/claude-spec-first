@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-03-09
+
+### Changed
+- **2-tier size constraints**: Collapsed 3-tier system (micro-agents 25 / doc agents 50 / commands 50) into 2 tiers: agents (50 lines max) and commands (75 lines max). All 13 agents already comply.
+- **Terminology**: Replaced "micro-agent" and "doc agent" with "agent" in CLAUDE.md and README.md.
+- **manage-spec-directory**: Trimmed from 52 to 50 lines (removed blank lines only, no behavior changes).
+
 ## [0.20.0] - 2026-03-09
 
 ### Changed
