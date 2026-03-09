@@ -8,7 +8,7 @@ tools: Read, Write
 
 Creates USER-FACING guides from research.
 
-Inputs: `.claude/.csf/research/artifacts-summary.md`, `.claude/.csf/research/implementation-summary.md`
+Inputs: `.claude/.csf/research/artifacts-summary.md`, `.claude/.csf/research/implementation-summary.md`, `.claude/.csf/research/docs-inventory.md`
 Output: `.claude/.csf/research/user-docs.md`
 
 Required sections (use these exact h2 headings in this order):
@@ -18,6 +18,7 @@ Required sections (use these exact h2 headings in this order):
 - ## Troubleshooting (common errors and fixes)
 
 Rules:
+- Check docs-inventory.md — note which existing files cover this topic for downstream integration
 - Follow the required sections above; do not skip or reorder them
 - One output file only; no duplicate coverage across sections
 - Non-technical language; focus on WHAT, not implementation details
