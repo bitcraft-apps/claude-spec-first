@@ -31,9 +31,8 @@ if [ -d "$PROJECT_ROOT/.git" ]; then
     GITIGNORE="$PROJECT_ROOT/.gitignore"
     if [ ! -f "$GITIGNORE" ]; then
         echo -e "\033[1;33m⚠️  No .gitignore found — add .claude/.csf/ manually\033[0m"
-    elif grep -qF ".claude/.csf/" "$GITIGNORE"; then
-        echo "ℹ️  .gitignore already contains .claude/.csf/"
-    else
+    elif ! grep -qF ".claude/.csf/" "$GITIGNORE"; then
+        [ -n "$(tail -c1 "$GITIGNORE")" ] && echo >> "$GITIGNORE"
         echo ".claude/.csf/" >> "$GITIGNORE"
         echo "✅ Added .claude/.csf/ to .gitignore"
     fi

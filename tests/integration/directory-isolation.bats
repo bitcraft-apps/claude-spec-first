@@ -77,8 +77,8 @@ teardown() {
     # Check it warns when no .gitignore exists
     grep -q 'No .gitignore found' "$agent_file"
 
-    # Check it skips if already present
-    grep -q 'already contains' "$agent_file"
+    # Check it skips if already present (negated grep guard)
+    grep -q '! grep -qF .*.claude/.csf/' "$agent_file"
 }
 
 @test "framework validation recognizes manage-spec-directory agent" {
