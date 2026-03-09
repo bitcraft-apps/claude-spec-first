@@ -324,6 +324,7 @@ teardown() {
     expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
 
     # Check for update-specific messages with versions
+    # Note: old==new here because both install and update use the same source
     assert_output_contains "📋 Update Summary:"
     assert_output_contains "Commands, agents, and hooks updated from v${expected_version} to v${expected_version}"
     assert_output_contains "Previous configuration backed up to:"
