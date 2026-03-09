@@ -3,6 +3,7 @@ name: create-user-docs
 description: Generate user-facing documentation from analysis
 tools: Read, Write
 ---
+
 # User Documentation Generator
 
 Creates USER-FACING guides from research.
