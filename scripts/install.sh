@@ -206,7 +206,7 @@ if [ "$MODE" = "update" ]; then
     if [ -d "$BACKUP_BASE_DIR" ]; then
         BACKUP_COUNT=$(find "$BACKUP_BASE_DIR" -maxdepth 1 -type d -name "20*" 2>/dev/null | wc -l)
         if [ "$BACKUP_COUNT" -gt 5 ]; then
-            find "$BACKUP_BASE_DIR" -maxdepth 1 -type d -name "20*" 2>/dev/null | sort | head -n -5 | while read -r old_backup; do
+            find "$BACKUP_BASE_DIR" -maxdepth 1 -type d -name "20*" 2>/dev/null | sort | head -n $(( BACKUP_COUNT - 5 )) | while read -r old_backup; do
                 rm -rf "$old_backup"
                 echo "  🗑️ Removed old backup: $(basename "$old_backup")"
             done
