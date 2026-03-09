@@ -17,3 +17,4 @@ UNCHECKED=$(echo "$CRITERIA" | grep -c "\[ \]" || echo "0")
 if [ "$UNCHECKED" -gt 0 ]; then
   echo "{\"decision\":\"block\",\"reason\":\"$UNCHECKED acceptance criteria unchecked in spec\"}"
 fi
+exit 0

@@ -17,3 +17,4 @@ if [ ! -s "$LATEST" ]; then
   FILENAME=$(basename "$LATEST")
   echo "{\"decision\":\"block\",\"reason\":\"Subagent output empty: $FILENAME\"}"
 fi
+exit 0
