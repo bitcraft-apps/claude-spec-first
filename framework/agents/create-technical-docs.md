@@ -32,7 +32,7 @@ Rules:
 - Omit a section only if the codebase genuinely has nothing for it
 
 Shared context convention:
-- If `.csf/research/doc-context.md` exists, read it for terminology decisions
+- If `.claude/.csf/research/doc-context.md` exists, read it for terminology decisions
 - After writing output, append your terminology choices and topics covered to doc-context.md
 - Format: `## Technical Docs` followed by bullet list of terms and topics
 - This is optional coordination — do not fail if the file is missing or unreadable

@@ -31,7 +31,7 @@ Rules:
 - Omit a section only if genuinely not applicable
 
 Shared context convention:
-- If `.csf/research/doc-context.md` exists, read it for terminology decisions
+- If `.claude/.csf/research/doc-context.md` exists, read it for terminology decisions
 - After writing output, append your terminology choices and topics covered to doc-context.md
 - Format: `## User Docs` followed by bullet list of terms and topics
 - This is optional coordination — do not fail if the file is missing or unreadable
