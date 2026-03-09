@@ -39,7 +39,7 @@ cd claude-spec-first
 
 ## Features
 
-- 13 specialized agents (50 lines max each)
+- 12 specialized agents (50 lines max each)
 - 3 workflow commands (75 lines max each)
 - Challenge assumptions and unclear requirements
 - Smart implementation: CLI tools for immediate needs, code for reusable solutions
