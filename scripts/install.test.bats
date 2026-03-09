@@ -54,6 +54,15 @@ assert_output_contains() {
     }
 }
 
+refute_output_contains() {
+    local unexpected="$1"
+    [[ "$output" != *"$unexpected"* ]] || {
+        echo "Expected output NOT to contain: $unexpected" >&2
+        echo "Actual output: $output" >&2
+        return 1
+    }
+}
+
 test_info() {
     echo "INFO: $*" >&2
 }
@@ -202,7 +211,7 @@ teardown() {
     
     # Should show update messages
     assert_output_contains "🔄 Existing installation detected, updating Claude Spec-First Framework"
-    assert_output_contains "🎉 Update completed successfully!"
+    assert_output_contains "reinstalled successfully"
 
     # Should include version in update message
     local expected_version
@@ -324,11 +333,12 @@ teardown() {
     expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
 
     # Check for update-specific messages with versions
-    # Note: old==new here because both install and update use the same source
+    # Note: old==new here because both install and update use the same source,
+    # so the same-version "reinstalled" path is taken
     assert_output_contains "📋 Update Summary:"
-    assert_output_contains "Commands, agents, and hooks updated from v${expected_version} to v${expected_version}"
+    assert_output_contains "Commands, agents, and hooks refreshed at v${expected_version}"
     assert_output_contains "Previous configuration backed up to:"
-    assert_output_contains "✨ Framework v${expected_version} updated successfully!"
+    assert_output_contains "Framework v${expected_version} reinstalled successfully!"
     
     test_info "✅ Update mode shows update summary"
 }
@@ -470,4 +480,41 @@ teardown() {
     [ -f "$CUSTOM_DIR/.csf/.installed" ]
     
     test_info "✅ Installs to custom CLAUDE_DIR location"
+}
+
+@test "same-version update shows reinstalled message without arrow" {
+    # First install
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Second run (same version) should show reinstalled message
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    assert_output_contains "reinstalled successfully"
+    assert_output_contains "refreshed at"
+    refute_output_contains "→"
+
+    test_info "✅ Same-version update shows reinstalled message"
+}
+
+@test "different-version update shows arrow transition" {
+    # First install
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    # Modify the installed VERSION to simulate an older version
+    echo "0.0.1" > "$TEST_INSTALL_DIR/.csf/VERSION"
+
+    # Second run should show transition arrow
+    run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
+    assert_success
+
+    local expected_version
+    expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
+
+    assert_output_contains "v0.0.1 → v${expected_version}"
+    assert_output_contains "updated from v0.0.1 to v${expected_version}"
+
+    test_info "✅ Different-version update shows arrow transition"
 }
