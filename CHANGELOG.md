@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-03-09
+
+### Fixed
+- **Install Script Repo URL**: Corrected GitHub org from `bitcraft-labs` to `bitcraft-apps` — pipe install (`curl | bash`) was completely broken
+- **Temp Directory Leak**: Moved cleanup trap before download block so temp dirs are cleaned up even on early exit failures
+- **Install Test**: Updated "missing framework directory" test for download fallback behavior; added teardown safety net to prevent cascading test failures
+
 ## [0.16.0] - 2026-03-09
 
 ### Added
