@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-03-09
+
+### Added
+- **Gitignore protection**: Auto-append `.claude/.csf/` to target repo `.gitignore` when creating spec directory. Warns if no `.gitignore` found. Skips non-git directories.
+
 ## [0.21.0] - 2026-03-09
 
 ### Changed
