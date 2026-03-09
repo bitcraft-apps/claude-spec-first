@@ -1,7 +1,7 @@
 ---
 name: analyze-implementation
 description: Analyze actual implementation files and code structure
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, LSP
 ---
 
 # Implementation Analyzer
