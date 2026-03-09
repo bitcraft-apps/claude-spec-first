@@ -1,6 +1,40 @@
 # User Guide: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-09 | Source: PR #88 (CSF v1.0 Native) | Framework version: 0.23.0 -->
+<!-- Generated: 2026-03-09 | Source: PR #109 (Route lightweight agents to Haiku) | Framework version: 0.23.0 -->
+
+## What It Does
+
+Claude Spec-First (CSF) is a development workflow framework built on top of Claude Code. It provides three commands -- `/csf:spec`, `/csf:implement`, and `/csf:document` -- that break work into small, focused steps carried out by 12 specialized agents. The framework handles specification, implementation, and documentation through a structured pipeline so you can focus on describing what you want built.
+
+## What Changed with Model Routing
+
+Seven of the framework's twelve agents now run on Haiku, a faster and more cost-effective model. The remaining five agents continue to run on whatever model you are already using (typically Sonnet or Opus).
+
+**What this means in practice:**
+
+- Research and analysis steps run faster and use fewer resources. These are the agents that scan your codebase, read files, define scope, list risks, and set up directories.
+- Synthesis and implementation steps keep full quality. The agents that write your final specs, generate code, and produce documentation still run on your current model.
+- You do not need to do anything. Model routing is automatic. There are no flags to set, no configuration to change, and no commands to learn.
+
+**Which agents run on Haiku:**
+
+- `define-scope` -- defines MVP boundaries from your requirements
+- `create-criteria` -- generates acceptance criteria
+- `identify-risks` -- finds risks and blockers
+- `analyze-artifacts` -- reads CSF development artifacts
+- `analyze-implementation` -- analyzes codebase structure and patterns
+- `analyze-existing-docs` -- scans your project for existing documentation
+- `manage-spec-directory` -- sets up and manages working directories
+
+**Which agents stay on your current model:**
+
+- `synthesize-spec` -- combines research into your final specification
+- `implement-minimal` -- writes the simplest working code
+- `create-technical-docs` -- generates developer documentation
+- `create-user-docs` -- generates user-facing documentation
+- `integrate-docs` -- combines and organizes final documentation
+
+The design follows a two-tier approach: Haiku agents gather and structure data, then full-capability agents synthesize that data into polished deliverables. Output quality should be comparable to before because the creative, judgment-heavy work still happens on the stronger model.
 
 ## What Changed in v0.23.0
 
@@ -28,7 +62,7 @@ There is nothing special to do. If you are already using the framework, these ch
 1. Run `/csf:implement` on any task. Step 1 should produce a `.claude/.csf/research/pattern-example.md` file, just as before.
 2. Run `/csf:document`. The `analyze-implementation` agent will use LSP tools if your editor or environment provides them.
 
-No configuration flags, environment variables, or migration steps are required.
+No configuration flags, environment variables, or migration steps are required. Model routing for Haiku agents is automatic and requires no user action.
 
 ## Common Tasks
 
@@ -65,6 +99,14 @@ Going forward, new artifacts are ignored automatically.
 
 ## Troubleshooting
 
+### Research quality seems lower than expected
+
+If you notice that research outputs (scope definitions, risk lists, acceptance criteria) seem less detailed than before, this may be related to Haiku handling those steps. A few things to check:
+
+- Look at the final output, not the intermediate files. The synthesis agents (which still run on the full model) refine and improve research inputs. A less verbose intermediate file does not necessarily mean a worse final result.
+- Compare the end-to-end output (your spec, code, or documentation) against what you got before the change. If the final deliverable quality is comparable, the routing is working as designed.
+- If you consistently see quality problems in final deliverables, report the issue on the project repository. The model routing configuration is a single line per agent file and can be adjusted.
+
 ### Pattern discovery produces different output than before
 
 The Explore subagent may structure its findings slightly differently from the old `explore-patterns` agent. The output file (`.claude/.csf/research/pattern-example.md`) still serves the same purpose and feeds into the same downstream agent (`implement-minimal`). If the output looks different but the implementation step succeeds, everything is working correctly.
@@ -82,7 +124,9 @@ If you have custom scripts or tooling that references the `explore-patterns` age
 | Term | Meaning |
 |------|---------|
 | Explore subagent | Claude Code's built-in subagent for codebase exploration, replacing the custom `explore-patterns` agent |
+| Haiku | A faster, lighter-weight model used for research and analysis agents that gather data rather than produce final output |
 | LSP | Language Server Protocol; used for semantic code navigation (go-to-definition, find-references, hover) |
+| Model routing | The framework's automatic assignment of agents to different models based on task complexity -- research agents run on Haiku, synthesis agents run on the caller's model |
 | Pattern discovery | Step 1 of `/csf:implement`, where the framework learns codebase patterns before generating code |
 | Installed mode | Framework running from `~/.claude/` (as opposed to a cloned repo) |
 | Repository mode | Framework running from a local git clone with `./framework/VERSION` present |
