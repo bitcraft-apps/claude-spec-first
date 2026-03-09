@@ -442,10 +442,21 @@ echo ""
 if [ "$MODE" = "install" ]; then
     echo -e "${GREEN}✅ Claude Spec-First Framework v${NEW_VERSION} installed successfully!${NC}"
 elif [ "$MODE" = "update" ]; then
-    echo -e "${GREEN}🎉 Update completed successfully! (v${OLD_VERSION} → v${NEW_VERSION})${NC}"
-    echo ""
-    echo -e "${BLUE}📋 Update Summary:${NC}"
-    echo "• Commands, agents, and hooks updated from v${OLD_VERSION} to v${NEW_VERSION}"
+    # Normalize versions for comparison (strip v-prefix)
+    old_normalized="${OLD_VERSION#v}"
+    new_normalized="${NEW_VERSION#v}"
+
+    if [ -n "$old_normalized" ] && [ "$old_normalized" != "unknown" ] && [ "$old_normalized" = "$new_normalized" ]; then
+        echo -e "${GREEN}🎉 Framework v${NEW_VERSION} reinstalled successfully!${NC}"
+        echo ""
+        echo -e "${BLUE}📋 Update Summary:${NC}"
+        echo "• Commands, agents, and hooks refreshed at v${NEW_VERSION}"
+    else
+        echo -e "${GREEN}🎉 Update completed successfully! (v${OLD_VERSION} → v${NEW_VERSION})${NC}"
+        echo ""
+        echo -e "${BLUE}📋 Update Summary:${NC}"
+        echo "• Commands, agents, and hooks updated from v${OLD_VERSION} to v${NEW_VERSION}"
+    fi
     if [ -n "$BACKUP_DIR" ]; then
         echo "• Previous configuration backed up to: $BACKUP_DIR"
     fi
