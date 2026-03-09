@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-03-09
+
+### Added
+- **Doc inventory agent**: New `analyze-existing-docs` micro-agent scans existing documentation and produces a manifest (`filepath | primary topic`), enabling doc agents to update existing files instead of creating duplicates on repeated runs.
+
+### Changed
+- **Document command**: Added inventory scan to Batch 1 (parallel), piped manifest to generation and integration agents. Now runs 4 batches instead of 3.
+- **Doc generation agents**: `create-technical-docs`, `create-user-docs`, and `integrate-docs` now check existing doc inventory before writing, supporting update-or-create behavior.
+
 ## [0.18.0] - 2026-03-09
 
 ### Changed
