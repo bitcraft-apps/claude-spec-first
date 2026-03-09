@@ -7,15 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-- **Same-version update message**: Show "reinstalled" message instead of misleading arrow notation when `csf update` runs against the same version (#86).
-
 ## [0.23.0] - 2026-03-09
 
 ### Changed
 - **Replace explore-patterns agent with built-in Explore**: Removed custom `explore-patterns` agent in favor of Claude Code's built-in Explore subagent for pattern discovery in `/csf:implement` (#54).
 - **Add LSP to analyze-implementation agent**: Enable semantic code navigation (goToDefinition, findReferences, hover) when a language server is available (#53).
 - **Add `.claude/.csf/` to `.gitignore`**: Prevent CSF output from being tracked when stored under `.claude/`.
+
+### Fixed
+- **Same-version update message**: Show "reinstalled" message instead of misleading arrow notation when `csf update` runs against the same version (#86).
 
 ## [0.22.2] - 2026-03-09
 
