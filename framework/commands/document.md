@@ -50,7 +50,7 @@ For each generated doc, verify:
    - `user-docs.md`: `## What It Does`, `## Getting Started`, `## Common Tasks`, `## Troubleshooting`
 3. No placeholder patterns: `TODO`, `TBD`, `PLACEHOLDER`, `[INSERT` (case-insensitive)
 
-Block on: empty file, missing required sections, placeholder-only content. Warn on: sparse output (under 10 lines per section). Write gate results to `$CSF_DIR/research/gate-generation.md`.
+Block on: empty file, placeholder-only content. Warn on: missing required sections (agent contracts allow omission when genuinely not applicable), sparse output (under 10 lines per section). Write gate results to `$CSF_DIR/research/gate-generation.md`.
 
 **Batch 3:**
 - Task: integrate-docs (reads docs-inventory.md to update existing files or create new ones)
@@ -58,7 +58,7 @@ Block on: empty file, missing required sections, placeholder-only content. Warn 
 **Gate 3 — Post-Integration:**
 Verify final output files exist and are non-empty in `docs/` and/or `docs/user/`. Block if no output files were created or all are empty. Write gate results to `$CSF_DIR/research/gate-integration.md`.
 
-Output: Documentation in `docs/` and `docs/user/` + terminal summary
+Output: Documentation in `docs/` and `docs/user/` + terminal summary (include any gate warnings)
 
 ## Gate Failure Behavior
 On any gate failure: halt immediately, do not proceed to the next batch. Report which gate failed and the specific reason(s). Preserve all failed output for inspection — do not delete or overwrite it.
