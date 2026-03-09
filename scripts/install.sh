@@ -13,10 +13,37 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )"
-FRAMEWORK_DIR="$SCRIPT_DIR/framework"
+REPO_URL="https://github.com/bitcraft-apps/claude-spec-first"
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
 CSF_PREFIX="csf"
+CSF_TEMP_DIR=""
+
+# Cleanup temp directory
+cleanup_temp() {
+    if [ -n "$CSF_TEMP_DIR" ] && [ -d "$CSF_TEMP_DIR" ]; then
+        rm -rf "$CSF_TEMP_DIR"
+    fi
+}
+
+# Resolve SCRIPT_DIR - handle pipe execution (curl | bash, bash <(...))
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." 2>/dev/null && pwd )"
+
+if [ ! -d "$SCRIPT_DIR/framework" ]; then
+    echo -e "${BLUE}📡 Remote execution detected, downloading framework...${NC}"
+    CSF_TEMP_DIR="$(mktemp -d)"
+    trap 'cleanup_temp' EXIT
+    if ! curl -sL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$CSF_TEMP_DIR" 2>/dev/null; then
+        echo -e "${RED}❌ Failed to download or extract framework. Check your network connection.${NC}"
+        exit 1
+    fi
+    SCRIPT_DIR="$CSF_TEMP_DIR/claude-spec-first-main"
+    if [ ! -d "$SCRIPT_DIR/framework" ]; then
+        echo -e "${RED}❌ Downloaded archive does not contain expected framework directory.${NC}"
+        exit 1
+    fi
+fi
+
+FRAMEWORK_DIR="$SCRIPT_DIR/framework"
 
 # Arrays to track installations for rollback
 INSTALLED=()
@@ -36,7 +63,7 @@ fi
 # Rollback function for fresh installs
 rollback() {
     echo -e "${RED}❌ Installation failed. Rolling back changes...${NC}"
-    
+
     # Remove installed files
     for item in "${INSTALLED[@]}"; do
         if [ -e "$item" ]; then
@@ -44,7 +71,8 @@ rollback() {
             rm -rf "$item"
         fi
     done
-    
+
+    cleanup_temp
     echo -e "${RED}❌ Installation rolled back successfully${NC}"
     exit 1
 }
@@ -77,14 +105,17 @@ restore_backup() {
         echo -e "${GREEN}✅ Backup restored successfully${NC}"
     fi
 
+    cleanup_temp
     exit 1
 }
 
 # Set appropriate error trap based on mode
 if [ "$MODE" = "install" ]; then
-    trap rollback ERR
+    trap 'rollback' ERR
+    trap 'cleanup_temp' EXIT
 elif [ "$MODE" = "update" ]; then
-    trap restore_backup ERR
+    trap 'restore_backup' ERR
+    trap 'cleanup_temp' EXIT
 fi
 
 # Validate framework directory exists

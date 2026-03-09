@@ -72,6 +72,10 @@ setup() {
 }
 
 teardown() {
+    # Restore framework directory if it was moved during testing
+    if [ -d "$PROJECT_ROOT/framework.backup" ] && [ ! -d "$PROJECT_ROOT/framework" ]; then
+        mv "$PROJECT_ROOT/framework.backup" "$PROJECT_ROOT/framework"
+    fi
     # Cleanup test directory
     if [ -d "$TEST_DIR" ]; then
         rm -rf "$TEST_DIR"
@@ -315,19 +319,19 @@ teardown() {
     test_info "✅ Update mode shows update summary"
 }
 
-@test "handles missing framework directory gracefully" {
+@test "handles missing framework directory by downloading" {
     # Move framework directory temporarily
     mv "$PROJECT_ROOT/framework" "$PROJECT_ROOT/framework.backup"
-    
+
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
-    assert_failure
-    
-    assert_output_contains "❌ Framework directory not found"
-    
-    # Restore framework directory
+    assert_success
+
+    assert_output_contains "Remote execution detected"
+
+    # Restore framework directory (also done in teardown as safety net)
     mv "$PROJECT_ROOT/framework.backup" "$PROJECT_ROOT/framework"
-    
-    test_info "✅ Handles missing framework directory gracefully"
+
+    test_info "✅ Handles missing framework directory by downloading"
 }
 
 @test "rollback works on install failure" {
