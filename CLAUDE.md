@@ -25,6 +25,7 @@ Claude Spec-First Framework - Minimalist development workflow following YAGNI, K
 
 ### Size Constraints
 - Micro-agents: 25 lines max
+- Doc agents (create-technical-docs, create-user-docs, integrate-docs): 50 lines max
 - Commands: 50 lines max
 - Self-documenting through clear naming
 - Technology agnostic
