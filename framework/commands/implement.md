@@ -17,7 +17,7 @@ Creates minimal implementation following existing patterns.
 
 **Input Resolution:**
 
-1. If path provided: Use specified file
+1. If $ARGUMENTS provided: Use as specification path or inline requirements
 2. Else if `.claude/.csf/spec.md` exists: Use it
 3. Else: Ask user for specification location
 

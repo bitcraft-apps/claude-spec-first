@@ -17,7 +17,7 @@ Creates documentation with parallel analysis and generation.
 
 **Input Resolution:**
 
-1. If paths provided: Use specified artifact/implementation locations
+1. If $ARGUMENTS provided: Use as artifact/implementation paths
 2. Else if `.claude/.csf/spec.md` and `.claude/.csf/implementation-summary.md` exist: Use them
 3. Else: Ask user for artifact locations
 
