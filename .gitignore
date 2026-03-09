@@ -56,3 +56,4 @@ tests/test-results/
 
 # Claude Specification Files
 .csf/
+.claude/.csf/
