@@ -26,6 +26,17 @@ done
 CSF_DIR="$PROJECT_ROOT/.claude/.csf"
 mkdir -p "$CSF_DIR"
 [ -d ".csf" ] && echo -e "\033[1;33m⚠️  Legacy .csf/ found. Migrate to $CSF_DIR\033[0m"
+# Ensure .claude/.csf/ is gitignored in target repo
+if [ -d "$PROJECT_ROOT/.git" ]; then
+    GITIGNORE="$PROJECT_ROOT/.gitignore"
+    if [ ! -f "$GITIGNORE" ]; then
+        echo -e "\033[1;33m⚠️  No .gitignore found — add .claude/.csf/ manually\033[0m"
+    elif ! grep -qF ".claude/.csf/" "$GITIGNORE"; then
+        [ -n "$(tail -c1 "$GITIGNORE")" ] && echo >> "$GITIGNORE"
+        echo ".claude/.csf/" >> "$GITIGNORE"
+        echo "✅ Added .claude/.csf/ to .gitignore"
+    fi
+fi
 MODE=$(cat "$CSF_DIR/mode" 2>/dev/null || echo "first")
 case $MODE in
     "update")
