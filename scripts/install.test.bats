@@ -143,7 +143,6 @@ teardown() {
     [ -f "$TEST_INSTALL_DIR/agents/csf/create-criteria.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/identify-risks.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/synthesize-spec.md" ]
-    [ -f "$TEST_INSTALL_DIR/agents/csf/explore-patterns.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/implement-minimal.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/analyze-artifacts.md" ]
     [ -f "$TEST_INSTALL_DIR/agents/csf/analyze-implementation.md" ]

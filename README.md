@@ -59,7 +59,7 @@ cd claude-spec-first
 - `manage-spec-directory`, `define-scope`, `create-criteria`, `identify-risks`, `synthesize-spec`
 
 **Implementation Agents:**
-- `explore-patterns`, `implement-minimal`
+- `implement-minimal`
 
 **Documentation Agents:**
 - `analyze-artifacts`, `analyze-implementation`, `create-technical-docs`, `create-user-docs`, `integrate-docs`
@@ -86,7 +86,7 @@ Create specifications through parallel analysis
 ### `/csf:implement [SPECIFICATION_OR_PATH]`
 Implement through pattern learning
 - **Purpose**: Build the minimal working solution
-- **Agents**: explore-patterns, implement-minimal
+- **Agents**: implement-minimal (pattern discovery via built-in Explore)
 - **Output**: Implementation + `~/.claude/.csf/implementation-summary.md`
 - **Example**: `/csf:implement` or `/csf:implement ./specs/auth-spec.md`
 
