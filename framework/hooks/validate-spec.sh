@@ -18,3 +18,4 @@ if [ -n "$MISSING" ]; then
   MISSING="${MISSING%,}"
   echo "{\"decision\":\"block\",\"reason\":\"Spec missing sections:$MISSING\"}"
 fi
+exit 0

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-03-09
+
+### Added
+- **SubagentStop Hooks**: New `validate-subagent.sh` hook validates micro-agent research output is non-empty
+  - Fires on SubagentStop events with `"*"` matcher
+  - Follows existing hook patterns: stdin JSON, `stop_hook_active` guard, fail-open
+- **Installer Support**: `install.sh` now configures both Stop and SubagentStop hooks in settings.json
+
+### Fixed
+- **Hook Exit Codes**: All hook scripts now explicitly `exit 0` on the happy path
+  - Prevents implicit non-zero exit from last failed test condition
+
 ## [0.15.1] - 2025-09-24
 
 ### Fixed

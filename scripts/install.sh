@@ -292,13 +292,25 @@ merge_settings_json() {
         return 0
     fi
 
-    # Build our hooks configuration
-    local csf_hooks
-    csf_hooks=$(cat <<EOF
+    # Build Stop hooks configuration
+    local csf_stop_hooks
+    csf_stop_hooks=$(cat <<EOF
 {
   "hooks": [
     {"type": "command", "command": "$hooks_dir/validate-spec.sh"},
     {"type": "command", "command": "$hooks_dir/validate-implementation.sh"}
+  ]
+}
+EOF
+)
+
+    # Build SubagentStop hooks configuration
+    local csf_subagent_hooks
+    csf_subagent_hooks=$(cat <<EOF
+{
+  "matcher": "*",
+  "hooks": [
+    {"type": "command", "command": "$hooks_dir/validate-subagent.sh"}
   ]
 }
 EOF
@@ -316,23 +328,30 @@ EOF
         fi
 
         # Merge: remove existing CSF hooks, add new ones
-        jq --argjson csf_hooks "$csf_hooks" '
+        jq --argjson csf_stop "$csf_stop_hooks" --argjson csf_subagent "$csf_subagent_hooks" '
             # Ensure hooks.Stop exists as array
             .hooks.Stop = (.hooks.Stop // [])
-            # Remove existing CSF hooks (containing /hooks/csf/)
+            # Remove existing CSF Stop hooks (containing /hooks/csf/)
             | .hooks.Stop = [.hooks.Stop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
-            # Add our CSF hooks
-            | .hooks.Stop += [$csf_hooks]
+            # Add our CSF Stop hooks
+            | .hooks.Stop += [$csf_stop]
+            # Ensure hooks.SubagentStop exists as array
+            | .hooks.SubagentStop = (.hooks.SubagentStop // [])
+            # Remove existing CSF SubagentStop hooks
+            | .hooks.SubagentStop = [.hooks.SubagentStop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
+            # Add our CSF SubagentStop hooks
+            | .hooks.SubagentStop += [$csf_subagent]
         ' "$settings_file" > "$temp_file"
     else
         # Create new settings.json
-        jq -n --argjson csf_hooks "$csf_hooks" '{hooks: {Stop: [$csf_hooks]}}' > "$temp_file"
+        jq -n --argjson csf_stop "$csf_stop_hooks" --argjson csf_subagent "$csf_subagent_hooks" \
+            '{hooks: {Stop: [$csf_stop], SubagentStop: [$csf_subagent]}}' > "$temp_file"
     fi
 
     # Validate result and move into place
     if jq empty "$temp_file" 2>/dev/null; then
         mv "$temp_file" "$settings_file"
-        echo "⚙️  Stop hooks configured in settings.json"
+        echo "⚙️  Stop and SubagentStop hooks configured in settings.json"
     else
         echo -e "${YELLOW}⚠️  Failed to merge settings.json${NC}"
         rm -f "$temp_file"
