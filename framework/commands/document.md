@@ -28,13 +28,14 @@ After input resolution, run micro-agents in 3 batches:
 **Batch 1 (Parallel):**
 - Task: analyze-artifacts with requirements: $ARTIFACT_PATHS
 - Task: analyze-implementation with requirements: $IMPLEMENTATION_PATHS
+- Task: analyze-existing-docs (scans project for existing documentation inventory)
 
 **Batch 2 (Parallel):**
 - Task: create-technical-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
 - Task: create-user-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
 
 **Batch 3:**
-- Task: integrate-docs to combine and organize final documentation
+- Task: integrate-docs (reads docs-inventory.md to update existing files or create new ones)
 
 Output: Documentation in `docs/` and `docs/user/` + terminal summary
 

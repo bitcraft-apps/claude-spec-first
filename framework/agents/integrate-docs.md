@@ -11,9 +11,12 @@ Synthesizes research into COHERENT documentation with no duplication.
 Inputs:
 - `.claude/.csf/research/technical-docs.md`
 - `.claude/.csf/research/user-docs.md`
+- `.claude/.csf/research/docs-inventory.md` (existing doc manifest)
 
 Rules:
-- Glob for existing docs before writing — preserve manually curated content
+- Read docs-inventory.md first — match new content topics against existing files
+- If a topic matches an existing file: Edit/update that file, do not create a duplicate
+- If no match or uncertain: create a new file (prefer creating over overwriting wrong file)
 - Read both inputs and existing project docs before any edits
 - Merge overlapping content — consolidate, never duplicate across files
 - Add cross-reference links between technical and user docs where topics overlap
