@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-03-09
+
+### Fixed
+- **Quality gate 2**: Downgraded missing required sections from block to warn, aligning with agent contracts that allow section omission when genuinely not applicable.
+- **Terminal summary**: Gate warnings now included in output summary.
+- **Trailing newline**: Fixed missing newline at end of `document.md`.
+
 ## [0.19.0] - 2026-03-09
 
 ### Added
