@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-03-09
+
+### Changed
+- **Doc agent structure contracts**: Added required-sections templates to `create-technical-docs` and `create-user-docs` agents. Technical docs require: Overview, API Reference, Setup, Usage Examples, Extension Points. User docs require: What It Does, Getting Started, Common Tasks, Troubleshooting. Ensures consistent document structure across runs.
+
 ## [0.17.0] - 2026-03-09
 
 ### Changed
