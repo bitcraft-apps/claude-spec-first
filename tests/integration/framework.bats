@@ -95,7 +95,6 @@ teardown() {
     # Test analysis agents output to .claude/.csf/research/
     grep -q "Output: \`\.claude/\.csf/research/implementation-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
     grep -q "Output: \`\.claude/\.csf/research/artifacts-summary\.md\`" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
-    grep -q "Output: \`\.claude/\.csf/research/pattern-example\.md\`" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
 
     # Test documentation agents output to .claude/.csf/research/
     grep -q "Output: \`\.claude/\.csf/research/technical-docs\.md\`" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"

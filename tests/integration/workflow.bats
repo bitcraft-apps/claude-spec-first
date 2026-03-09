@@ -59,8 +59,6 @@ teardown() {
     grep -q "name: synthesize-spec" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     
     # Phase 2: Implementation agents
-    [ -f "$PROJECT_ROOT/framework/agents/explore-patterns.md" ]
-    grep -q "name: explore-patterns" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
     [ -f "$PROJECT_ROOT/framework/agents/implement-minimal.md" ]
     grep -q "name: implement-minimal" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
     
@@ -84,7 +82,7 @@ teardown() {
     
     # Phase 2: Implementation
     [ -f "$PROJECT_ROOT/framework/commands/implement.md" ]
-    grep -q "explore-patterns" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "Explore" "$PROJECT_ROOT/framework/commands/implement.md"
     grep -q "implement-minimal" "$PROJECT_ROOT/framework/commands/implement.md"
     
     # Phase 3: Documentation
@@ -113,9 +111,6 @@ teardown() {
 }
 
 @test "implementation agents have appropriate tools" {
-    # Verify explore-patterns has research tools
-    grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
-    
     # Verify implement-minimal has implementation tools
     grep -q "tools: Read, Write, Edit, MultiEdit, Bash" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
     
