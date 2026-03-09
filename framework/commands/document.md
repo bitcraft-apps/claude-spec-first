@@ -1,5 +1,5 @@
 ---
-description: Generate comprehensive documentation through parallel micro-agents
+description: Generate comprehensive documentation through parallel agents
 ---
 
 # Document Command
@@ -23,7 +23,7 @@ Creates documentation with parallel analysis and generation.
 
 ## Execution
 
-After input resolution, run micro-agents in 3 batches:
+After input resolution, run agents in 3 batches:
 
 **Batch 1 (Parallel):**
 - Task: analyze-artifacts with requirements: $ARTIFACT_PATHS
@@ -65,4 +65,4 @@ On any gate failure: halt immediately, do not proceed to the next batch. Report 
 
 ## Performance
 - 20%+ speed improvement through parallel generation
-- Specialized micro-agents for focused output quality
+- Specialized agents for focused output quality

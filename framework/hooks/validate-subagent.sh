@@ -1,5 +1,5 @@
 #!/bin/bash
-# CSF SubagentStop validation hook - validates micro-agent output exists and is non-empty
+# CSF SubagentStop validation hook - validates agent output exists and is non-empty
 
 INPUT=$(cat)
 [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0

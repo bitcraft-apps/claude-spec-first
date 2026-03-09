@@ -45,7 +45,7 @@ Else:
 
 ## Execution
 
-After directory setup and clarification (if needed), run micro-agents:
+After directory setup and clarification (if needed), run agents:
 
 **Pre-execution:**
 - Task: manage-spec-directory (reads mode from $CSF_DIR/mode file)
@@ -62,7 +62,7 @@ Output: `$CSF_DIR/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 
-If any micro-agent fails:
+If any agent fails:
 1. Claude Code shows the specific error
 2. Fix the issue (usually unclear requirements)
 3. Re-run /csf:spec with clearer input

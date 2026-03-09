@@ -43,8 +43,8 @@ teardown() {
     [[ "$output" == *"Framework validation PASSED"* ]]
 }
 
-@test "micro-agents exist and are properly configured" {
-    # Check all 4 micro-agents exist
+@test "agents exist and are properly configured" {
+    # Check all 4 spec agents exist
     [ -f "$PROJECT_ROOT/framework/agents/define-scope.md" ]
     [ -f "$PROJECT_ROOT/framework/agents/create-criteria.md" ]
     [ -f "$PROJECT_ROOT/framework/agents/identify-risks.md" ]
@@ -56,13 +56,13 @@ teardown() {
     grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/define-scope.md"
 }
 
-@test "spec command delegates to micro-agents properly" {
+@test "spec command delegates to agents properly" {
     [ -f "$PROJECT_ROOT/framework/commands/spec.md" ]
     
     # Check YAML frontmatter  
     grep -q "description:" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Check delegation to micro-agents
+    # Check delegation to agents
     grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
@@ -70,8 +70,8 @@ teardown() {
     grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "micro-agents have file persistence instructions" {
-    # Verify micro-agents write to research directory using literal paths
+@test "agents have file persistence instructions" {
+    # Verify agents write to research directory using literal paths
     grep -q "Output:" "$PROJECT_ROOT/framework/agents/define-scope.md"
     grep -q "\.claude/\.csf/research.*scope.md" "$PROJECT_ROOT/framework/agents/define-scope.md"
 
@@ -79,9 +79,9 @@ teardown() {
     grep -q "Inputs:" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     grep -q "\.claude/\.csf/research.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 
-    # Verify micro-agents are focused (small instruction sets)
+    # Verify agents are focused (small instruction sets)
     line_count=$(wc -l < "$PROJECT_ROOT/framework/agents/define-scope.md")
-    [ "$line_count" -le 25 ]
+    [ "$line_count" -le 50 ]
 }
 
 @test "agents specify correct file output locations" {

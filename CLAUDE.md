@@ -24,9 +24,8 @@ Claude Spec-First Framework - Minimalist development workflow following YAGNI, K
 ## Framework Rules
 
 ### Size Constraints
-- Micro-agents: 25 lines max
-- Doc agents (create-technical-docs, create-user-docs, integrate-docs): 50 lines max
-- Commands: 50 lines max
+- Agents: 50 lines max
+- Commands: 75 lines max
 - Self-documenting through clear naming
 - Technology agnostic
 
@@ -42,7 +41,7 @@ Claude Spec-First Framework - Minimalist development workflow following YAGNI, K
 
 ### Workflow Structure
 
-The framework provides 3 workflow commands and 12 specialized micro-agents:
+The framework provides 3 workflow commands and 13 specialized agents:
 
 **Commands** (orchestrators):
 - `/csf:spec` - Define what to build and why
@@ -51,7 +50,7 @@ The framework provides 3 workflow commands and 12 specialized micro-agents:
 
 **Note**: Plan merged into spec. Separate planning often overlaps with specification.
 
-**Micro-agents** (executors):
+**Agents** (executors):
 - Single responsibility
 - Parallel execution where valuable
 - No assumptions - ask when unclear
@@ -62,7 +61,7 @@ The framework provides 3 workflow commands and 12 specialized micro-agents:
 .claude/
 └── .csf/
     ├── spec.md        # Current specification (overwritten each run)
-    ├── research/      # Micro-agent outputs
+    ├── research/      # Agent outputs
     └── [project files remain in natural locations]
 ```
 

@@ -45,7 +45,7 @@ teardown() {
 }
 
 @test "all phases have corresponding agents" {
-    # Phase 1: Specification micro-agents
+    # Phase 1: Specification agents
     [ -f "$PROJECT_ROOT/framework/agents/define-scope.md" ]
     grep -q "name: define-scope" "$PROJECT_ROOT/framework/agents/define-scope.md"
     
@@ -58,13 +58,13 @@ teardown() {
     [ -f "$PROJECT_ROOT/framework/agents/synthesize-spec.md" ]
     grep -q "name: synthesize-spec" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     
-    # Phase 2: Implementation micro-agents
+    # Phase 2: Implementation agents
     [ -f "$PROJECT_ROOT/framework/agents/explore-patterns.md" ]
     grep -q "name: explore-patterns" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
     [ -f "$PROJECT_ROOT/framework/agents/implement-minimal.md" ]
     grep -q "name: implement-minimal" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
     
-    # Phase 3: Documentation micro-agents
+    # Phase 3: Documentation agents
     [ -f "$PROJECT_ROOT/framework/agents/analyze-artifacts.md" ]
     grep -q "name: analyze-artifacts" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
     [ -f "$PROJECT_ROOT/framework/agents/analyze-implementation.md" ]
@@ -96,23 +96,23 @@ teardown() {
     grep -q "integrate-docs" "$PROJECT_ROOT/framework/commands/document.md"
 }
 
-@test "spec command orchestrates micro-agents" {
-    # Check that spec command references micro-agents
+@test "spec command orchestrates agents" {
+    # Check that spec command references agents
     grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "synthesize-spec" "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "micro-agents are properly configured for safe research" {
-    # Verify micro-agents have minimal tool sets
+@test "agents are properly configured for safe research" {
+    # Verify agents have minimal tool sets
     grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/define-scope.md"
     grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/create-criteria.md"
     grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/identify-risks.md"
     grep -q "tools: Read, Write" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
 
-@test "implementation micro-agents have appropriate tools" {
+@test "implementation agents have appropriate tools" {
     # Verify explore-patterns has research tools
     grep -q "tools: Read, Grep, Glob" "$PROJECT_ROOT/framework/agents/explore-patterns.md"
     
@@ -123,25 +123,25 @@ teardown() {
     grep -q -i "spec" "$PROJECT_ROOT/framework/agents/implement-minimal.md"
 }
 
-@test "specification micro-agents execute in parallel" {
+@test "specification agents execute in parallel" {
     # Verify spec command uses parallel execution
     grep -q "Batch 1.*Parallel" "$PROJECT_ROOT/framework/commands/spec.md"
     
-    # Verify micro-agents are listed
+    # Verify agents are listed
     grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
     grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
 }
 
-@test "micro-agents follow minimalist principles" {
-    # Verify micro-agents enforce MVP principles
+@test "agents follow minimalist principles" {
+    # Verify agents enforce MVP principles
     grep -q "MVP" "$PROJECT_ROOT/framework/agents/define-scope.md"
     grep -q "YAGNI" "$PROJECT_ROOT/framework/agents/define-scope.md"
     grep -q "KISS" "$PROJECT_ROOT/framework/agents/create-criteria.md"
 }
 
 @test "synthesize-spec reads from research outputs" {
-    # Verify synthesize-spec agent reads from micro-agent outputs using literal paths
+    # Verify synthesize-spec agent reads from agent outputs using literal paths
     grep -q "\.claude/\.csf/research" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
     grep -q "Inputs.*\.claude/\.csf/research.*\.md" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
@@ -164,19 +164,19 @@ teardown() {
 }
 
 @test "documentation phase includes specification and implementation" {
-    # Verify documentation micro-agents handle both specifications and implementation
+    # Verify documentation agents handle both specifications and implementation
     grep -q -i "artifacts" "$PROJECT_ROOT/framework/agents/analyze-artifacts.md"
     grep -q -i "implementation" "$PROJECT_ROOT/framework/agents/analyze-implementation.md"
     grep -q -i "technical" "$PROJECT_ROOT/framework/agents/create-technical-docs.md"
     grep -q -i "user" "$PROJECT_ROOT/framework/agents/create-user-docs.md"
 }
 
-@test "framework validation recognizes all micro-agents" {
+@test "framework validation recognizes all agents" {
     cd "$PROJECT_ROOT"
     run ./framework/validate-framework.sh
     [ "$status" -eq 0 ]
     
-    # Verify micro-agents are validated
+    # Verify agents are validated
     [[ "$output" == *"define-scope"* ]]
     [[ "$output" == *"create-criteria"* ]]
     [[ "$output" == *"identify-risks"* ]]

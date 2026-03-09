@@ -9,13 +9,11 @@ tools: Bash
 Autonomous directory management based on mode from CSF mode file.
 
 ## Modes
-
 **first**: Create initial `.claude/.csf/research/` directory
 **update**: Backup existing spec, clear research for fresh run
 **new**: Create timestamped directory with symlinks
 
 ## Implementation
-
 ```bash
 # Find project root (directory containing CLAUDE.md)
 PROJECT_ROOT="$(pwd)"
