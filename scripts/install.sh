@@ -13,10 +13,17 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_URL="https://github.com/bitcraft-labs/claude-spec-first"
+REPO_URL="https://github.com/bitcraft-apps/claude-spec-first"
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
 CSF_PREFIX="csf"
 CSF_TEMP_DIR=""
+
+# Cleanup temp directory
+cleanup_temp() {
+    if [ -n "$CSF_TEMP_DIR" ] && [ -d "$CSF_TEMP_DIR" ]; then
+        rm -rf "$CSF_TEMP_DIR"
+    fi
+}
 
 # Resolve SCRIPT_DIR - handle pipe execution (curl | bash, bash <(...))
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." 2>/dev/null && pwd )"
@@ -24,8 +31,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." 2>/dev/null && pwd )"
 if [ ! -d "$SCRIPT_DIR/framework" ]; then
     echo -e "${BLUE}📡 Remote execution detected, downloading framework...${NC}"
     CSF_TEMP_DIR="$(mktemp -d)"
+    trap 'cleanup_temp' EXIT
     if ! curl -sL "$REPO_URL/archive/refs/heads/main.tar.gz" | tar xz -C "$CSF_TEMP_DIR" 2>/dev/null; then
-        echo -e "${RED}❌ Failed to download framework. Check your network connection.${NC}"
+        echo -e "${RED}❌ Failed to download or extract framework. Check your network connection.${NC}"
         exit 1
     fi
     SCRIPT_DIR="$CSF_TEMP_DIR/claude-spec-first-main"
@@ -51,13 +59,6 @@ else
     echo -e "${BLUE}🚀 Installing Claude Spec-First Framework (fresh installation)...${NC}"
     echo "======================================================================="
 fi
-
-# Cleanup temp directory
-cleanup_temp() {
-    if [ -n "$CSF_TEMP_DIR" ] && [ -d "$CSF_TEMP_DIR" ]; then
-        rm -rf "$CSF_TEMP_DIR"
-    fi
-}
 
 # Rollback function for fresh installs
 rollback() {
