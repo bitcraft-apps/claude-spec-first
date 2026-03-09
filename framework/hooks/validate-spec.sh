@@ -17,6 +17,4 @@ grep -qi "risk" "$SPEC_FILE" || MISSING="$MISSING risks,"
 if [ -n "$MISSING" ]; then
   MISSING="${MISSING%,}"
   echo "{\"decision\":\"block\",\"reason\":\"Spec missing sections:$MISSING\"}"
-else
-  echo "{\"decision\":\"approve\",\"reason\":\"Spec structure valid\"}"
 fi

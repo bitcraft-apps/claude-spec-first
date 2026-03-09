@@ -320,7 +320,7 @@ EOF
             # Ensure hooks.Stop exists as array
             .hooks.Stop = (.hooks.Stop // [])
             # Remove existing CSF hooks (containing /hooks/csf/)
-            | .hooks.Stop = [.hooks.Stop[] | select(.hooks | all(.command | contains("/hooks/csf/") | not))]
+            | .hooks.Stop = [.hooks.Stop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
             # Add our CSF hooks
             | .hooks.Stop += [$csf_hooks]
         ' "$settings_file" > "$temp_file"
