@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Same-version update message**: Show "reinstalled" message instead of misleading arrow notation when `csf update` runs against the same version (#86).
+
+## [0.22.2] - 2026-03-09
+
+### Fixed
+- **Legacy .csf/ warning false positive**: Suppress incorrect "Legacy .csf/ directory detected" warning in installed mode by reordering `detect_execution_mode()` before the legacy directory check and gating on `EXECUTION_MODE != "installed"` (#71).
+
 ## [0.22.1] - 2026-03-09
 
 ### Fixed
