@@ -1,7 +1,7 @@
 ---
 name: integrate-docs
 description: Combine and organize final documentation
-tools: Read, Write, Edit, Glob
+tools: Read, Write, Edit, MultiEdit, Glob
 ---
 
 # Documentation Integrator
