@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-03-09
+
+### Changed
+- **Doc agent line limit**: Raised from 25 to 50 for `create-technical-docs`, `create-user-docs`, and `integrate-docs` to support richer documentation output.
+- **Dedup checks**: Doc agents now read `docs-inventory.md` before writing to avoid duplicating existing content.
+- **Shared context**: Added `doc-context.md` convention for terminology consistency across parallel doc agents.
+- **CLAUDE.md**: Differentiated size constraints for doc agents (50 lines) vs micro-agents (25 lines).
+
 ## [0.19.1] - 2026-03-09
 
 ### Fixed
