@@ -177,12 +177,16 @@ teardown() {
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
     assert_success
     
-    # Check for key messages
-    assert_output_contains "🚀 Installing Claude Spec-First Framework (fresh installation)"
-    assert_output_contains "✅ Claude Spec-First Framework installation completed successfully!"
+    # Read expected version
+    local expected_version
+    expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
+
+    # Check for key messages with version numbers
+    assert_output_contains "🚀 Installing Claude Spec-First Framework v${expected_version} (fresh installation)"
+    assert_output_contains "✅ Claude Spec-First Framework v${expected_version} installed successfully!"
     assert_output_contains "📁 Commands installed to:"
     assert_output_contains "📁 Agents installed to:"
-    assert_output_contains "🚀 Ready to use the Claude Spec-First Framework!"
+    assert_output_contains "🚀 Ready to use the Claude Spec-First Framework v${expected_version}!"
     
     test_info "✅ Fresh installation shows correct output messages"
 }
@@ -199,6 +203,11 @@ teardown() {
     # Should show update messages
     assert_output_contains "🔄 Existing installation detected, updating Claude Spec-First Framework"
     assert_output_contains "🎉 Update completed successfully!"
+
+    # Should include version in update message
+    local expected_version
+    expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
+    assert_output_contains "v${expected_version}"
     
     test_info "✅ Update mode detects existing installation"
 }
@@ -310,11 +319,15 @@ teardown() {
     run env CLAUDE_DIR="$TEST_INSTALL_DIR" "$PROJECT_ROOT/scripts/install.sh"
     assert_success
     
-    # Check for update-specific messages
+    # Read expected version
+    local expected_version
+    expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
+
+    # Check for update-specific messages with versions
     assert_output_contains "📋 Update Summary:"
-    assert_output_contains "Commands, agents, and hooks updated to latest version"
+    assert_output_contains "Commands, agents, and hooks updated from v${expected_version} to v${expected_version}"
     assert_output_contains "Previous configuration backed up to:"
-    assert_output_contains "✨ Framework updated successfully!"
+    assert_output_contains "✨ Framework v${expected_version} updated successfully!"
     
     test_info "✅ Update mode shows update summary"
 }
