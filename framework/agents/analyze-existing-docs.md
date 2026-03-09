@@ -2,6 +2,7 @@
 name: analyze-existing-docs
 description: Scan existing documentation and produce inventory manifest
 tools: Read, Glob
+model: haiku
 ---
 
 # Documentation Inventory Scanner

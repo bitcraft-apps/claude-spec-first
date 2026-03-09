@@ -2,6 +2,7 @@
 name: analyze-implementation
 description: Analyze actual implementation files and code structure
 tools: Read, Grep, Glob, LSP
+model: haiku
 ---
 
 # Implementation Analyzer

@@ -2,6 +2,7 @@
 name: manage-spec-directory
 description: Setup spec directories based on CSF mode file
 tools: Bash
+model: haiku
 ---
 
 # Spec Directory Manager

@@ -2,6 +2,7 @@
 name: define-scope
 description: Define boundaries and MVP scope
 tools: Write
+model: haiku
 ---
 
 # Scope Definition
