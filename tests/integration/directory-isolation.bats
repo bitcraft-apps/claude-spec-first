@@ -32,10 +32,10 @@ teardown() {
 }
 
 @test "manage-spec-directory agent follows framework constraints" {
-    # Agent should be under 35 lines (allowing for project-local path detection)
+    # Agent should be under 40 lines (allowing for project-local path detection + gitignore logic)
     local agent_file="$PROJECT_ROOT/framework/agents/manage-spec-directory.md"
     local code_lines=$(sed -n '/```bash/,/```/p' "$agent_file" | grep -v '```' | grep -v '^#' | grep -v '^$' | wc -l)
-    [ "$code_lines" -le 35 ]
+    [ "$code_lines" -le 40 ]
 }
 
 @test "manage-spec-directory agent includes error recovery" {
@@ -63,6 +63,22 @@ teardown() {
 
     # Check output paths are documented correctly (now uses $CSF_DIR variable)
     grep -q "CSF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/framework/commands/spec.md"
+}
+
+@test "manage-spec-directory agent includes gitignore protection" {
+    local agent_file="$PROJECT_ROOT/framework/agents/manage-spec-directory.md"
+
+    # Check it guards on .git existence
+    grep -q '\.git"' "$agent_file"
+
+    # Check it appends exact pattern .claude/.csf/
+    grep -qF '.claude/.csf/' "$agent_file"
+
+    # Check it warns when no .gitignore exists
+    grep -q 'No .gitignore found' "$agent_file"
+
+    # Check it skips if already present
+    grep -q 'already contains' "$agent_file"
 }
 
 @test "framework validation recognizes manage-spec-directory agent" {
