@@ -333,11 +333,12 @@ teardown() {
     expected_version=$(cat "$PROJECT_ROOT/framework/VERSION" | tr -d '[:space:]')
 
     # Check for update-specific messages with versions
-    # Note: old==new here because both install and update use the same source
+    # Note: old==new here because both install and update use the same source,
+    # so the same-version "reinstalled" path is taken
     assert_output_contains "📋 Update Summary:"
-    assert_output_contains "Commands, agents, and hooks updated from v${expected_version} to v${expected_version}"
+    assert_output_contains "Commands, agents, and hooks refreshed at v${expected_version}"
     assert_output_contains "Previous configuration backed up to:"
-    assert_output_contains "✨ Framework v${expected_version} updated successfully!"
+    assert_output_contains "Framework v${expected_version} reinstalled successfully!"
     
     test_info "✅ Update mode shows update summary"
 }
