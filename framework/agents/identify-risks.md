@@ -1,6 +1,6 @@
 ---
 name: identify-risks
-description: Find edge cases and risks
+description: Identify blockers, risks, and edge cases. Use when assessing what could go wrong before implementation.
 tools: Write
 model: haiku
 ---

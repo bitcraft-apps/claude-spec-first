@@ -1,6 +1,6 @@
 ---
 name: create-user-docs
-description: Generate user-facing documentation from analysis
+description: Generate minimal user-facing documentation. Use when a change affects user-visible behavior or workflows.
 tools: Read, Write
 ---
 
