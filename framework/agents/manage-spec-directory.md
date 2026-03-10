@@ -1,6 +1,6 @@
 ---
 name: manage-spec-directory
-description: Setup spec directories based on CSF mode file
+description: Create and manage spec output directories. Use when initializing or resetting the CSF workspace.
 tools: Bash
 model: haiku
 ---

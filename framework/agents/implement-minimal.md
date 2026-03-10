@@ -1,6 +1,6 @@
 ---
 name: implement-minimal
-description: Write simplest working code
+description: Write the simplest working implementation. Use when executing code changes from a finalized spec.
 tools: Read, Write, Edit, MultiEdit, Bash
 ---
 

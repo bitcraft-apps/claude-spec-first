@@ -1,6 +1,6 @@
 ---
 name: create-criteria
-description: Generate acceptance criteria
+description: Generate testable acceptance criteria. Use when defining pass/fail conditions for a spec.
 tools: Write
 model: haiku
 ---

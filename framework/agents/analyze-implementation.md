@@ -1,6 +1,6 @@
 ---
 name: analyze-implementation
-description: Analyze actual implementation files and code structure
+description: Analyze code structure and implementation patterns. Use when documentation needs to reflect actual code changes.
 tools: Read, Grep, Glob, LSP
 model: haiku
 ---

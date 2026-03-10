@@ -1,6 +1,6 @@
 ---
 name: synthesize-spec
-description: Combine research into final specification
+description: Combine research into a minimal actionable spec. Use when scope, criteria, and risks are ready to merge.
 tools: Read, Write
 ---
 

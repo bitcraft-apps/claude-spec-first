@@ -1,6 +1,6 @@
 ---
 name: create-technical-docs
-description: Generate developer documentation from analysis
+description: Generate minimal developer documentation. Use when a change needs technical reference or API docs.
 tools: Read, Write
 ---
 

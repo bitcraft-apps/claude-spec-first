@@ -1,6 +1,6 @@
 ---
 name: analyze-artifacts
-description: Read and parse development artifacts from CSF directory
+description: Read and parse CSF artifacts (spec, criteria, risks). Use when documentation needs context from the spec phase.
 tools: Read
 model: haiku
 ---
