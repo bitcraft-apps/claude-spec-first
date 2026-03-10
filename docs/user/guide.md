@@ -1,6 +1,6 @@
 # User Guide: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-09 | Source: PR #88 (CSF v1.0 Native) | Framework version: 0.23.0 -->
+<!-- Generated: 2026-03-10 | Framework version: 0.24.0 -->
 
 ## What Changed in v0.23.0
 
@@ -28,7 +28,7 @@ There is nothing special to do. If you are already using the framework, these ch
 1. Run `/csf:implement` on any task. Step 1 should produce a `.claude/.csf/research/pattern-example.md` file, just as before.
 2. Run `/csf:document`. The `analyze-implementation` agent will use LSP tools if your editor or environment provides them.
 
-No configuration flags, environment variables, or migration steps are required.
+No configuration flags, environment variables, or migration steps are required. Research agents now run on Haiku automatically for faster, cheaper execution -- synthesis and implementation agents still use your current model.
 
 ## Common Tasks
 

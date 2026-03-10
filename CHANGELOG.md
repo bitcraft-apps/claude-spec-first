@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-03-10
+
+### Changed
+- **Route 7 research agents to Haiku**: Add `model: haiku` to lightweight research/analysis agents (define-scope, create-criteria, identify-risks, analyze-artifacts, analyze-implementation, analyze-existing-docs, manage-spec-directory) for faster, cheaper execution. Synthesis and implementation agents remain on the caller's model (#90).
+- **Add model field validation**: Validate `model:` frontmatter values in `validate-framework.sh` against allowed list.
+- **Add analyze-existing-docs to REQUIRED_AGENTS**: Include in validation so its frontmatter is checked.
+
 ## [0.23.0] - 2026-03-09
 
 ### Changed

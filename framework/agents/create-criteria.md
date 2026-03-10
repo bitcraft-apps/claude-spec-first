@@ -2,6 +2,7 @@
 name: create-criteria
 description: Generate acceptance criteria
 tools: Write
+model: haiku
 ---
 
 # Acceptance Criteria

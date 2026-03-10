@@ -1,6 +1,6 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-09 | Source: PR #88 (CSF v1.0 Native) | Framework version: 0.23.0 -->
+<!-- Generated: 2026-03-10 | Framework version: 0.24.0 -->
 
 ## Overview
 
@@ -11,11 +11,10 @@ As of v0.23.0, the framework delegates pattern discovery to Claude Code's built-
 Architecture:
 
 ```
-3 commands  -->  12 agents
-                   |
-                   v
-   .claude/.csf/research/   (gitignored runtime output)
+3 commands  -->  12 agents  -->  .claude/.csf/research/   (gitignored runtime output)
 ```
+
+Seven research/analysis agents include `model: haiku` in their frontmatter for faster, cheaper execution. The remaining five synthesis/implementation agents inherit the caller's model.
 
 ## API Reference
 
@@ -25,13 +24,13 @@ Architecture:
 
 Creates specifications through parallel analysis.
 
-| Agent | Responsibility |
-|-------|---------------|
-| manage-spec-directory | Ensure `.claude/.csf/` exists |
-| define-scope | Define what to build |
-| create-criteria | Define acceptance criteria |
-| identify-risks | Identify risks and unknowns |
-| synthesize-spec | Merge agent outputs into `spec.md` |
+| Agent | Model | Responsibility |
+|-------|-------|---------------|
+| manage-spec-directory | Haiku | Ensure `.claude/.csf/` exists |
+| define-scope | Haiku | Define what to build |
+| create-criteria | Haiku | Define acceptance criteria |
+| identify-risks | Haiku | Identify risks and unknowns |
+| synthesize-spec | Default | Merge agent outputs into `spec.md` |
 
 Output: `.claude/.csf/spec.md`
 
@@ -42,7 +41,7 @@ Orchestrates implementation in two sequential steps:
 | Step | Mechanism | Output |
 |------|-----------|--------|
 | 1: Learn | `Agent` tool with `subagent_type="Explore"`, medium thoroughness | `.claude/.csf/research/pattern-example.md` |
-| 2: Implement | Delegates to `implement-minimal` agent | Working code + `.claude/.csf/implementation-summary.md` |
+| 2: Implement | Delegates to `implement-minimal` agent (default model) | Working code + `.claude/.csf/implementation-summary.md` |
 
 Input resolution order:
 1. `$ARGUMENTS` if provided (path or inline spec)
@@ -55,17 +54,20 @@ Error recovery: when exploration finds no patterns, `implement-minimal` creates 
 
 Generates documentation through comprehensive analysis.
 
-| Agent | Responsibility |
-|-------|---------------|
-| analyze-artifacts | Examine spec and implementation artifacts |
-| analyze-implementation | Analyze code structure (supports LSP) |
-| create-technical-docs | Generate technical documentation |
-| create-user-docs | Generate user-facing documentation |
-| integrate-docs | Merge and deduplicate documentation |
+| Agent | Model | Responsibility |
+|-------|-------|---------------|
+| analyze-artifacts | Haiku | Examine spec and implementation artifacts |
+| analyze-implementation | Haiku | Analyze code structure (supports LSP) |
+| analyze-existing-docs | Haiku | Scan project for existing documentation |
+| create-technical-docs | Default | Generate technical documentation |
+| create-user-docs | Default | Generate user-facing documentation |
+| integrate-docs | Default | Merge and deduplicate documentation |
 
 Output: Documentation in `docs/` and `docs/user/`
 
 ### Agents
+
+Frontmatter fields: `name` (required), `description` (required), `tools` (required), `model` (optional — only valid value is `haiku`). When `model` is omitted, the agent inherits the caller's model.
 
 #### analyze-implementation
 
@@ -73,6 +75,7 @@ Output: Documentation in `docs/` and `docs/user/`
 name: analyze-implementation
 description: Analyze actual implementation files and code structure
 tools: Read, Grep, Glob, LSP
+model: haiku
 ```
 
 - Input: implementation paths from arguments or artifact references
@@ -103,7 +106,7 @@ REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-s
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 ```
 
-The `REQUIRED_AGENTS` array has 10 entries. Two agents (`challenge-assumptions` and `research-context`) exist in the agents directory but are not in the required list. The deleted `explore-patterns` has been removed from all validation paths.
+The `REQUIRED_AGENTS` array has 11 entries. Two agents (`challenge-assumptions` and `research-context`) exist in the agents directory but are not in the required list. The deleted `explore-patterns` has been removed from all validation paths.
 
 ## Integration Contracts
 
@@ -123,6 +126,7 @@ To change the output path or format, update both files.
 
 - Claude Code CLI with subagent support (the `Agent` tool must support `subagent_type="Explore"`)
 - For LSP benefits in `analyze-implementation`: a language server configured for the target project's language(s). This is optional; the agent works without it.
+- Haiku model access for research agents (optional — they fall back to the caller's model).
 
 ### Configuration: .gitignore
 
@@ -137,7 +141,7 @@ The first covers the legacy layout (`.csf/` at project root). The second covers 
 
 ### Version
 
-The framework version is `0.23.0`, stored in `framework/VERSION`.
+The framework version is `0.24.0`, stored in `framework/VERSION`.
 
 ## Extension Points
 
@@ -149,6 +153,7 @@ The framework version is `0.23.0`, stored in `framework/VERSION`.
    name: your-agent-name
    description: What it does
    tools: Read, Grep, Glob
+   model: haiku              # optional — add for research/analysis agents
    ---
    ```
 2. Add the agent name to `REQUIRED_AGENTS` in `framework/validate-framework.sh` if it should be validated.

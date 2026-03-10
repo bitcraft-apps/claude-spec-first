@@ -2,6 +2,7 @@
 name: analyze-artifacts
 description: Read and parse development artifacts from CSF directory
 tools: Read
+model: haiku
 ---
 
 # Artifact Analyzer
