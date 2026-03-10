@@ -10,7 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.25.0] - 2026-03-10
 
 ### Added
-- `maxTurns` limits on all 13 agent invocations to prevent runaway execution (#110)
+- `maxTurns` limits on all 13 agent invocations to prevent runaway execution
+
+### Changed
+- Rewrite doc agents with exclusion language — mandatory sections replaced with "include only if warranted"
+- AGENTS.md is now the single source of truth; CLAUDE.md references it via `@AGENTS.md`
+- Trim all project docs 63% (945→351 lines) — cut speculative content, redundancy, verbose changelog
+- Validation checks AGENTS.md instead of CLAUDE.md for project rules
+
+(#110)
 
 ## [0.24.0] - 2026-03-10
 
