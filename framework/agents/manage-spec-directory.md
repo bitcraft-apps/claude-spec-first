@@ -24,6 +24,7 @@ while [ "$PROJECT_ROOT" != "/" ]; do
 done
 CSF_DIR="$PROJECT_ROOT/.claude/.csf"
 mkdir -p "$CSF_DIR"
+[ -d "$PROJECT_ROOT/.git" ] && [ -f "$PROJECT_ROOT/.gitignore" ] && ! grep -qF '.claude/.csf/' "$PROJECT_ROOT/.gitignore" && echo '.claude/.csf/' >> "$PROJECT_ROOT/.gitignore"
 MODE=$(cat "$CSF_DIR/mode" 2>/dev/null || echo "first")
 case $MODE in
     "update")
