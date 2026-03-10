@@ -406,45 +406,48 @@ for command in "${REQUIRED_COMMANDS[@]}"; do
     fi
 done
 
-# CLAUDE.md validation only applies to repository mode
+# AGENTS.md / CLAUDE.md validation only applies to repository mode
 if [ "$EXECUTION_MODE" = "repository" ]; then
     echo ""
-    echo "📖 Validating CLAUDE.md..."
+    echo "📖 Validating AGENTS.md..."
     echo "=========================="
 
-    # In repository mode, CLAUDE.md is at the root level (relative to current working directory)
+    AGENTS_MD_PATH="./AGENTS.md"
     CLAUDE_MD_PATH="./CLAUDE.md"
 
-    # Direct file check (bypassing build_safe_path for this legitimate case)
-    if [ -f "$CLAUDE_MD_PATH" ]; then
-        print_status "CLAUDE.md exists at repository root" 0
+    if [ -f "$AGENTS_MD_PATH" ]; then
+        print_status "AGENTS.md exists at repository root" 0
 
-        # Check CLAUDE.md content
-        if grep -q "Claude Spec-First Framework" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md contains spec-first framework" 0
+        if grep -q "Claude Spec-First Framework" "$AGENTS_MD_PATH"; then
+            print_status "AGENTS.md contains spec-first framework" 0
         else
-            print_status "CLAUDE.md contains spec-first framework" 1
+            print_status "AGENTS.md contains spec-first framework" 1
         fi
 
-        if grep -q "## Core Philosophy" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has core philosophy section" 0
+        if grep -q "## Core Philosophy" "$AGENTS_MD_PATH"; then
+            print_status "AGENTS.md has core philosophy section" 0
         else
-            print_status "CLAUDE.md has core philosophy section" 1
+            print_status "AGENTS.md has core philosophy section" 1
         fi
 
-        if grep -q "## Engineering Principles" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has engineering principles section" 0
+        if grep -q "## Principles" "$AGENTS_MD_PATH"; then
+            print_status "AGENTS.md has principles section" 0
         else
-            print_status "CLAUDE.md has engineering principles section" 1
-        fi
-
-        if grep -q "## Framework Rules" "$CLAUDE_MD_PATH"; then
-            print_status "CLAUDE.md has framework rules section" 0
-        else
-            print_status "CLAUDE.md has framework rules section" 1
+            print_status "AGENTS.md has principles section" 1
         fi
     else
-        print_status "CLAUDE.md exists at repository root" 1
+        print_status "AGENTS.md exists at repository root" 1
+    fi
+
+    # CLAUDE.md should reference AGENTS.md
+    if [ -f "$CLAUDE_MD_PATH" ]; then
+        if grep -q "@AGENTS.md" "$CLAUDE_MD_PATH"; then
+            print_status "CLAUDE.md references @AGENTS.md" 0
+        else
+            print_status "CLAUDE.md references @AGENTS.md" 1
+        fi
+    else
+        print_warning "CLAUDE.md not found (optional — AGENTS.md is the source of truth)"
     fi
 fi
 
@@ -514,49 +517,10 @@ if [ "$EXECUTION_MODE" = "repository" ]; then
     ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
     ACTUAL_COMMAND_COUNT=$(echo "${#REQUIRED_COMMANDS[@]}")
 
-    # Check CLAUDE.md for consistent agent count references
-    if [ -f "./CLAUDE.md" ]; then
-        # Check for "4 specialized sub-agents" reference
-        if grep -q "$ACTUAL_AGENT_COUNT specialized sub-agents" "./CLAUDE.md"; then
-            print_status "CLAUDE.md agent count is consistent" 0
-        else
-            if grep -q "[0-9] specialized sub-agents" "./CLAUDE.md"; then
-                print_status "CLAUDE.md agent count is consistent" 1
-                INCORRECT_COUNT=$(grep -o "[0-9] specialized sub-agents" "./CLAUDE.md" | head -1)
-                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_AGENT_COUNT specialized sub-agents'"
-            else
-                print_warning "CLAUDE.md agent count reference not found"
-            fi
-        fi
+    # AGENTS.md is the source of truth — no agent/command counts to validate there
+    # (counts are derived from REQUIRED_AGENTS/REQUIRED_COMMANDS arrays above)
 
-        # Check for workflow command count references
-        if grep -q "$ACTUAL_COMMAND_COUNT workflow commands" "./CLAUDE.md"; then
-            print_status "CLAUDE.md command count is consistent" 0
-        else
-            if grep -q "[0-9] workflow commands" "./CLAUDE.md"; then
-                print_status "CLAUDE.md command count is consistent" 1
-                INCORRECT_COUNT=$(grep -o "[0-9] workflow commands" "./CLAUDE.md" | head -1)
-                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT workflow commands'"
-            else
-                print_warning "CLAUDE.md command count reference not found"
-            fi
-        fi
-    fi
-
-    # Check README.md for command count consistency
-    if [ -f "./README.md" ]; then
-        if grep -q "$ACTUAL_COMMAND_COUNT streamlined commands" "./README.md"; then
-            print_status "README.md command count is consistent" 0
-        else
-            if grep -q "[0-9] streamlined commands" "./README.md"; then
-                print_status "README.md command count is consistent" 1
-                INCORRECT_COUNT=$(grep -o "[0-9] streamlined commands" "./README.md" | head -1)
-                print_info "Found: '$INCORRECT_COUNT', Expected: '$ACTUAL_COMMAND_COUNT streamlined commands'"
-            else
-                print_warning "README.md command count reference not found"
-            fi
-        fi
-    fi
+    # README references framework/commands/ for details — no counts to validate
 fi
 
 # Check workflow completeness (using centralized command list)

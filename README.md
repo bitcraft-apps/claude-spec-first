@@ -26,7 +26,6 @@ cd claude-spec-first
 ### Validate Installation
 
 ```bash
-# Validate installation
 ~/.claude/.csf/validate-framework.sh
 ```
 
@@ -43,26 +42,15 @@ cd claude-spec-first
 - 3 workflow commands (75 lines max each)
 - Challenge assumptions and unclear requirements
 - Smart implementation: CLI tools for immediate needs, code for reusable solutions
-- Granular task execution with progress visibility
 - Technology agnostic and self-documenting
 
-## Workflow Commands
+## Command Reference
 
-**3-Phase Workflow:**
-- `/csf:spec` - Define what to build and why (includes planning)
-- `/csf:implement` - Build it (code OR direct execution)
-- `/csf:document` - Document what was built
+- `/csf:spec [REQUIREMENTS]` — Define what to build and why
+- `/csf:implement [SPEC_OR_PATH]` — Build the minimal working solution
+- `/csf:document [PATHS]` — Generate docs proportional to the change
 
-## Agent Architecture
-
-**Specification Agents:**
-- `manage-spec-directory`, `define-scope`, `create-criteria`, `identify-risks`, `synthesize-spec`
-
-**Implementation Agents:**
-- `implement-minimal`
-
-**Documentation Agents:**
-- `analyze-artifacts`, `analyze-implementation`, `create-technical-docs`, `create-user-docs`, `integrate-docs`
+See `framework/commands/` for orchestration details.
 
 ## File Structure
 
@@ -74,45 +62,8 @@ cd claude-spec-first
     └── [project files remain in natural locations]
 ```
 
-## Command Reference
-
-### `/csf:spec [REQUIREMENTS]`
-Create specifications through parallel analysis
-- **Purpose**: Define what to build and why
-- **Agents**: manage-spec-directory, define-scope, create-criteria, identify-risks, synthesize-spec
-- **Output**: `~/.claude/.csf/spec.md`
-- **Example**: `/csf:spec Add user authentication with login/logout`
-
-### `/csf:implement [SPECIFICATION_OR_PATH]`
-Implement through pattern learning
-- **Purpose**: Build the minimal working solution
-- **Agents**: implement-minimal (pattern discovery via built-in Explore)
-- **Output**: Implementation + `~/.claude/.csf/implementation-summary.md`
-- **Example**: `/csf:implement` or `/csf:implement ./specs/auth-spec.md`
-
-### `/csf:document [SPEC_PATH] [IMPLEMENTATION_PATH]`
-Document through comprehensive analysis
-- **Purpose**: Generate technical and user documentation
-- **Agents**: analyze-artifacts, analyze-implementation, create-technical-docs, create-user-docs, integrate-docs
-- **Output**: Documentation in `docs/` and `docs/user/`
-- **Example**: `/csf:document ~/.claude/.csf/spec.md ./src/auth.js`
-
-## Migration from .csf/ to .claude/.csf/
-
-If you have existing `.csf/` directories from previous versions:
-
-```bash
-# 1. Copy content to new location
-cp -r .csf/* ~/.claude/.csf/
-
-# 2. Remove old directory
-rm -rf .csf/
-
-# 3. Framework will automatically use new location
-```
-
-The framework will detect legacy `.csf/` directories and provide migration guidance.
-
 ## Documentation
 
-See [CLAUDE.md](./CLAUDE.md) for complete framework rules and development guidelines.
+- [User Guide](docs/user/guide.md) — how to use the framework
+- [Technical Reference](docs/technical-reference.md) — contracts and setup
+- [CLAUDE.md](./CLAUDE.md) — framework rules and development guidelines

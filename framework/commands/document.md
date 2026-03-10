@@ -1,10 +1,10 @@
 ---
-description: Generate comprehensive documentation through parallel agents
+description: Generate minimal documentation through parallel agents
 ---
 
 # Document Command
 
-Creates documentation with parallel analysis and generation.
+Creates minimal, proportional documentation. Match doc weight to change weight.
 
 ## Usage
 ```
@@ -26,9 +26,9 @@ Creates documentation with parallel analysis and generation.
 After input resolution, run agents in 3 batches:
 
 **Batch 1 (Parallel):**
-- Task: analyze-artifacts with requirements: $ARTIFACT_PATHS
-- Task: analyze-implementation with requirements: $IMPLEMENTATION_PATHS
-- Task: analyze-existing-docs (scans project for existing documentation inventory)
+- Task: analyze-artifacts (maxTurns: 6) with requirements: $ARTIFACT_PATHS
+- Task: analyze-implementation (maxTurns: 10) with requirements: $IMPLEMENTATION_PATHS
+- Task: analyze-existing-docs (maxTurns: 6) (scans project for existing documentation inventory)
 
 **Gate 1 — Post-Analysis:**
 Check that each output file exists and is non-empty:
@@ -39,30 +39,23 @@ Check that each output file exists and is non-empty:
 If any file is missing or empty: halt pipeline, report which file(s) failed, preserve existing output for inspection. Write gate results to `$CSF_DIR/research/gate-analysis.md` (pass/fail per file, warnings for files under 5 lines).
 
 **Batch 2 (Parallel):**
-- Task: create-technical-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
-- Task: create-user-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
+- Task: create-technical-docs (maxTurns: 15) (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
+- Task: create-user-docs (maxTurns: 15) (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
 
 **Gate 2 — Post-Generation:**
 For each generated doc, verify:
-1. File exists and is non-empty
-2. Contains required h2 sections per structure contracts:
-   - `technical-docs.md`: `## Overview`, `## API Reference`, `## Setup`, `## Usage Examples`, `## Extension Points`
-   - `user-docs.md`: `## What It Does`, `## Getting Started`, `## Common Tasks`, `## Troubleshooting`
-3. No placeholder patterns: `TODO`, `TBD`, `PLACEHOLDER`, `[INSERT` (case-insensitive)
+1. File exists (empty is acceptable — means the change didn't warrant that doc type)
+2. No placeholder patterns: `TODO`, `TBD`, `PLACEHOLDER`, `[INSERT` (case-insensitive)
 
-Block on: empty file, placeholder-only content. Warn on: missing required sections (agent contracts allow omission when genuinely not applicable), sparse output (under 10 lines per section). Write gate results to `$CSF_DIR/research/gate-generation.md`.
+Block on: placeholder-only content. Empty files are valid — they mean the agent correctly determined no docs were needed. Write gate results to `$CSF_DIR/research/gate-generation.md`.
 
 **Batch 3:**
-- Task: integrate-docs (reads docs-inventory.md to update existing files or create new ones)
+- Task: integrate-docs (maxTurns: 15) (reads docs-inventory.md to update existing files or create new ones)
 
 **Gate 3 — Post-Integration:**
-Verify final output files exist and are non-empty in `docs/` and/or `docs/user/`. Block if no output files were created or all are empty. Write gate results to `$CSF_DIR/research/gate-integration.md`.
+Verify integration completed. If no docs were updated or created, that's valid — report "no documentation changes needed" and finish cleanly. Write gate results to `$CSF_DIR/research/gate-integration.md`.
 
-Output: Documentation in `docs/` and `docs/user/` + terminal summary (include any gate warnings)
+Output: Documentation updates (if any) + terminal summary
 
 ## Gate Failure Behavior
-On any gate failure: halt immediately, do not proceed to the next batch. Report which gate failed and the specific reason(s). Preserve all failed output for inspection — do not delete or overwrite it.
-
-## Performance
-- 20%+ speed improvement through parallel generation
-- Specialized agents for focused output quality
+On any gate failure: halt immediately, do not proceed to the next batch. Report which gate failed and why. Preserve output for inspection.

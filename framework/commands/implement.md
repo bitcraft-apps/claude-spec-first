@@ -26,11 +26,11 @@ Creates minimal implementation following existing patterns.
 After input resolution, run sequential agents:
 
 **Step 1: Learn**
-- Use Agent tool with subagent_type="Explore" to find similar patterns in the codebase for: $SPECIFICATION (request "medium" thoroughness in the prompt)
+- Use Agent tool with subagent_type="Explore", maxTurns=10 to find similar patterns in the codebase for: $SPECIFICATION (request "medium" thoroughness in the prompt)
 - Save findings to `.claude/.csf/research/pattern-example.md`
 
-**Step 2: Implement**  
-- Task: implement-minimal with spec: $SPECIFICATION
+**Step 2: Implement**
+- Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION
 
 Output: Implementation + `.claude/.csf/implementation-summary.md`
 

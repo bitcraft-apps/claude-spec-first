@@ -48,15 +48,15 @@ Else:
 After directory setup and clarification (if needed), run agents:
 
 **Pre-execution:**
-- Task: manage-spec-directory (reads mode from $CSF_DIR/mode file)
+- Task: manage-spec-directory (maxTurns: 3) (reads mode from $CSF_DIR/mode file)
 
 **Batch 1 (Parallel):**
-- Task: define-scope with requirements: $ARGUMENTS
-- Task: create-criteria with requirements: $ARGUMENTS
-- Task: identify-risks with requirements: $ARGUMENTS
+- Task: define-scope (maxTurns: 6) with requirements: $ARGUMENTS
+- Task: create-criteria (maxTurns: 6) with requirements: $ARGUMENTS
+- Task: identify-risks (maxTurns: 6) with requirements: $ARGUMENTS
 
 **Batch 2:**
-- Task: synthesize-spec to combine all research
+- Task: synthesize-spec (maxTurns: 12) to combine all research
 
 Output: `$CSF_DIR/spec.md` (direct file or symlink to timestamped spec)
 

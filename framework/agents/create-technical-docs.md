@@ -6,7 +6,7 @@ tools: Read, Write
 
 # Technical Documentation Generator
 
-Creates DEVELOPER documentation from research.
+Creates MINIMAL developer documentation. Document only what a developer needs to use or extend the change.
 
 Inputs:
 - `.claude/.csf/research/artifacts-summary.md`
@@ -16,23 +16,21 @@ Inputs:
 Output: `.claude/.csf/research/technical-docs.md`
 Shared context: `.claude/.csf/research/doc-context.md`
 
-Required sections (use these exact h2 headings in this order):
-- ## Overview (architecture summary, key design decisions)
-- ## API Reference (public interfaces, parameters, return values)
-- ## Setup (installation, configuration, prerequisites)
-- ## Usage Examples (working code snippets for common tasks)
-- ## Extension Points (how to modify or extend)
+Sections — include ONLY if the change warrants it:
+- ## Overview — only for new features or architectural changes. Skip for config/parameter changes.
+- ## API Reference — only for new or changed public interfaces. Skip if no API changed.
+- ## Setup — only if prerequisites changed. Skip if setup is unchanged.
 
 Rules:
-- Read docs-inventory.md first — check what already exists before writing
-- If existing docs cover a topic, reference them instead of duplicating
-- Follow the required sections above; do not skip or reorder them
-- One output file only; no duplicate coverage across sections
-- Assume technical audience; focus on HOW to use/extend
-- Omit a section only if the codebase genuinely has nothing for it
+- Read docs-inventory.md first — if existing docs cover it, update them, don't create new content
+- Match doc weight to change weight. A one-line change gets one line of docs.
+- Skip sections that don't apply. Most changes need 1-2 sections, not 5.
+- No extension points, worked examples, or rationale unless the design is surprising
+- No speculative content — don't document problems nobody has reported
+- No invented terminology — say what it does plainly
+- If a feature is automatic and invisible, one sentence is enough
+- If unclear whether something needs docs, it doesn't
 
 Shared context convention:
 - If `.claude/.csf/research/doc-context.md` exists, read it for terminology decisions
-- After writing output, append your terminology choices and topics covered to doc-context.md
-- Format: `## Technical Docs` followed by bullet list of terms and topics
-- This is optional coordination — do not fail if the file is missing or unreadable
+- After writing output, append terms and topics to doc-context.md under `## Technical Docs`
