@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Standardize agent description frontmatter**: All 12 agent descriptions now follow a consistent two-sentence pattern: `[Verb phrase]. Use when [condition].` No behavior changes (#111).
+
 ## [0.25.0] - 2026-03-10
 
 ### Added
