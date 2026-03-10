@@ -213,8 +213,17 @@ else
     print_status "VERSION file exists" 1
 fi
 
-# Version utilities are available in both repository and installed modes
-# The installation script copies version utilities to the installed framework
+# Check plugin.json version matches VERSION file (repository mode only)
+if [ "$EXECUTION_MODE" = "repository" ] && [ -n "$VERSION_CONTENT" ] && [ -f "./.claude-plugin/plugin.json" ] && command -v jq &>/dev/null; then
+    MANIFEST_VERSION=$(jq -r '.version // empty' "./.claude-plugin/plugin.json" 2>/dev/null || true)
+    if [ -n "$MANIFEST_VERSION" ]; then
+        if [ "$MANIFEST_VERSION" = "$VERSION_CONTENT" ]; then
+            print_status "plugin.json version matches VERSION file ($MANIFEST_VERSION)" 0
+        else
+            print_status "plugin.json version matches VERSION file (got $MANIFEST_VERSION, expected $VERSION_CONTENT)" 1
+        fi
+    fi
+fi
 
 # Check agents directory
 if [ "$EXECUTION_MODE" = "repository" ]; then
@@ -270,7 +279,7 @@ if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_F
     done < <(jq -r '.commands[]' "$MANIFEST_FILE")
     print_info "Loaded component lists from plugin.json"
 else
-    REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs")
+    REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs" "manage-spec-directory")
     REQUIRED_COMMANDS=("spec" "implement" "document")
 fi
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
