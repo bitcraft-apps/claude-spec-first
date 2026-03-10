@@ -1,6 +1,6 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-10 | Framework version: 0.23.0 -->
+<!-- Generated: 2026-03-10 | Framework version: 0.24.0 -->
 
 ## Overview
 
@@ -141,7 +141,7 @@ The first covers the legacy layout (`.csf/` at project root). The second covers 
 
 ### Version
 
-The framework version is `0.23.0`, stored in `framework/VERSION`.
+The framework version is `0.24.0`, stored in `framework/VERSION`.
 
 ## Extension Points
 

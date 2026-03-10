@@ -1,6 +1,6 @@
 # User Guide: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-10 | Framework version: 0.23.0 -->
+<!-- Generated: 2026-03-10 | Framework version: 0.24.0 -->
 
 ## What Changed in v0.23.0
 
