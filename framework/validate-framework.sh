@@ -250,9 +250,29 @@ echo ""
 echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
-# Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs")
-REQUIRED_COMMANDS=("spec" "implement" "document")
+# Framework Configuration - read from plugin manifest with hardcoded fallback
+MANIFEST_FILE=""
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    MANIFEST_FILE="./.claude-plugin/plugin.json"
+else
+    # In installed mode, check repo root relative to script dir
+    MANIFEST_FILE="$SCRIPT_DIR/../../.claude-plugin/plugin.json"
+fi
+
+if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_FILE" 2>/dev/null; then
+    REQUIRED_AGENTS=()
+    while IFS= read -r agent; do
+        REQUIRED_AGENTS+=("$agent")
+    done < <(jq -r '.agents[]' "$MANIFEST_FILE")
+    REQUIRED_COMMANDS=()
+    while IFS= read -r cmd; do
+        REQUIRED_COMMANDS+=("$cmd")
+    done < <(jq -r '.commands[]' "$MANIFEST_FILE")
+    print_info "Loaded component lists from plugin.json"
+else
+    REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs")
+    REQUIRED_COMMANDS=("spec" "implement" "document")
+fi
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
 

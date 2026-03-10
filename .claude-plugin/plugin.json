@@ -1,0 +1,29 @@
+{
+  "name": "claude-spec-first",
+  "version": "0.25.2",
+  "description": "Minimalist spec-first development workflow",
+  "agents": [
+    "analyze-artifacts",
+    "analyze-existing-docs",
+    "analyze-implementation",
+    "create-criteria",
+    "create-technical-docs",
+    "create-user-docs",
+    "define-scope",
+    "identify-risks",
+    "implement-minimal",
+    "integrate-docs",
+    "manage-spec-directory",
+    "synthesize-spec"
+  ],
+  "commands": [
+    "document",
+    "implement",
+    "spec"
+  ],
+  "hooks": [
+    "validate-implementation.sh",
+    "validate-spec.sh",
+    "validate-subagent.sh"
+  ]
+}

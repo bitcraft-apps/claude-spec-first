@@ -261,14 +261,40 @@ install_framework_files() {
         clean_stale_files "$FRAMEWORK_DIR/hooks" "$CLAUDE_DIR/hooks/$CSF_PREFIX" "hook" "sh"
     fi
 
+    # Check for plugin manifest
+    local MANIFEST="$SCRIPT_DIR/.claude-plugin/plugin.json"
+    local USE_MANIFEST=false
+    if [ -f "$MANIFEST" ] && command -v jq &>/dev/null; then
+        if jq empty "$MANIFEST" 2>/dev/null; then
+            USE_MANIFEST=true
+        else
+            echo -e "${YELLOW}⚠️  Malformed plugin.json, falling back to directory glob${NC}"
+        fi
+    fi
+
     # Install commands with CSF prefix
-    if [ -d "$FRAMEWORK_DIR/commands" ]; then
-        local cmd_count=0
+    local cmd_count=0
+    if [ "$USE_MANIFEST" = true ]; then
+        while IFS= read -r cmd_name; do
+            local cmd_file="$FRAMEWORK_DIR/commands/${cmd_name}.md"
+            local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/${cmd_name}.md"
+            if [ -f "$cmd_file" ]; then
+                if ! cp "$cmd_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy command ${cmd_name}.md${NC}"
+                    exit 1
+                fi
+                INSTALLED+=("$target_file")
+                echo "📄 ${operation}: $CSF_PREFIX/${cmd_name}.md"
+                cmd_count=$((cmd_count + 1))
+            else
+                echo -e "${YELLOW}⚠️  Command listed in manifest not found: ${cmd_name}.md${NC}"
+            fi
+        done < <(jq -r '.commands[]' "$MANIFEST")
+    elif [ -d "$FRAMEWORK_DIR/commands" ]; then
         for cmd_file in "$FRAMEWORK_DIR/commands"/*.md; do
             if [ -f "$cmd_file" ]; then
-                cmd_name="$(basename "$cmd_file")"
-                target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/$cmd_name"
-                
+                local cmd_name="$(basename "$cmd_file")"
+                local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/$cmd_name"
                 if ! cp "$cmd_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy command $cmd_name${NC}"
                     exit 1
@@ -278,17 +304,32 @@ install_framework_files() {
                 cmd_count=$((cmd_count + 1))
             fi
         done
-        echo "✅ $cmd_count commands $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
-    
+    echo "✅ $cmd_count commands $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
+
     # Install agents with CSF prefix
-    if [ -d "$FRAMEWORK_DIR/agents" ]; then
-        local agent_count=0
+    local agent_count=0
+    if [ "$USE_MANIFEST" = true ]; then
+        while IFS= read -r agent_name; do
+            local agent_file="$FRAMEWORK_DIR/agents/${agent_name}.md"
+            local target_file="$CLAUDE_DIR/agents/$CSF_PREFIX/${agent_name}.md"
+            if [ -f "$agent_file" ]; then
+                if ! cp "$agent_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy agent ${agent_name}.md${NC}"
+                    exit 1
+                fi
+                INSTALLED+=("$target_file")
+                echo "📄 ${operation}: $CSF_PREFIX/${agent_name}.md"
+                agent_count=$((agent_count + 1))
+            else
+                echo -e "${YELLOW}⚠️  Agent listed in manifest not found: ${agent_name}.md${NC}"
+            fi
+        done < <(jq -r '.agents[]' "$MANIFEST")
+    elif [ -d "$FRAMEWORK_DIR/agents" ]; then
         for agent_file in "$FRAMEWORK_DIR/agents"/*.md; do
             if [ -f "$agent_file" ]; then
-                agent_name="$(basename "$agent_file")"
-                target_file="$CLAUDE_DIR/agents/$CSF_PREFIX/$agent_name"
-
+                local agent_name="$(basename "$agent_file")"
+                local target_file="$CLAUDE_DIR/agents/$CSF_PREFIX/$agent_name"
                 if ! cp "$agent_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy agent $agent_name${NC}"
                     exit 1
@@ -298,17 +339,33 @@ install_framework_files() {
                 agent_count=$((agent_count + 1))
             fi
         done
-        echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
+    echo "✅ $agent_count agents $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
 
     # Install hooks with CSF prefix
-    if [ -d "$FRAMEWORK_DIR/hooks" ]; then
-        local hook_count=0
+    local hook_count=0
+    if [ "$USE_MANIFEST" = true ]; then
+        while IFS= read -r hook_name; do
+            local hook_file="$FRAMEWORK_DIR/hooks/${hook_name}"
+            local target_file="$CLAUDE_DIR/hooks/$CSF_PREFIX/${hook_name}"
+            if [ -f "$hook_file" ]; then
+                if ! cp "$hook_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy hook ${hook_name}${NC}"
+                    exit 1
+                fi
+                chmod +x "$target_file"
+                INSTALLED+=("$target_file")
+                echo "📄 ${operation}: $CSF_PREFIX/${hook_name}"
+                hook_count=$((hook_count + 1))
+            else
+                echo -e "${YELLOW}⚠️  Hook listed in manifest not found: ${hook_name}${NC}"
+            fi
+        done < <(jq -r '.hooks[]' "$MANIFEST")
+    elif [ -d "$FRAMEWORK_DIR/hooks" ]; then
         for hook_file in "$FRAMEWORK_DIR/hooks"/*.sh; do
             if [ -f "$hook_file" ]; then
-                hook_name="$(basename "$hook_file")"
-                target_file="$CLAUDE_DIR/hooks/$CSF_PREFIX/$hook_name"
-
+                local hook_name="$(basename "$hook_file")"
+                local target_file="$CLAUDE_DIR/hooks/$CSF_PREFIX/$hook_name"
                 if ! cp "$hook_file" "$target_file"; then
                     echo -e "${RED}❌ Failed to copy hook $hook_name${NC}"
                     exit 1
@@ -319,8 +376,8 @@ install_framework_files() {
                 hook_count=$((hook_count + 1))
             fi
         done
-        echo "✅ $hook_count hooks $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
     fi
+    echo "✅ $hook_count hooks $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
 
 }
 
