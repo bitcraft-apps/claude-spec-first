@@ -251,7 +251,7 @@ echo "🤖 Validating Sub-Agents..."
 echo "=========================="
 
 # Framework Configuration - centralized list of required components
-REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "create-technical-docs" "create-user-docs" "integrate-docs")
+REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs")
 REQUIRED_COMMANDS=("spec" "implement" "document")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
@@ -337,7 +337,7 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
             if [ "$MODEL_VALID" = true ]; then
                 print_status "$agent has valid model field ($MODEL_VALUE)" 0
             else
-                print_status "$agent has valid model field (got '$MODEL_VALUE', expected one of: ${VALID_MODELS[*]})" 1
+                print_status "$agent has invalid model field (got '$MODEL_VALUE', expected one of: ${VALID_MODELS[*]})" 1
             fi
         fi
 
