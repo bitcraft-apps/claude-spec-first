@@ -1,6 +1,6 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Framework version: 0.25.0 -->
+<!-- Framework version: 0.25.3 -->
 
 ## Overview
 
@@ -25,6 +25,27 @@ Agent turn limits (`maxTurns`) are set in command files, not agent frontmatter.
 ### pattern-example.md
 
 `.claude/.csf/research/pattern-example.md` is the handoff between Explore (Step 1) and `implement-minimal` (Step 2) in `/csf:implement`. Free-form markdown. Referenced in `framework/commands/implement.md` and `framework/agents/implement-minimal.md`.
+
+### plugin.json
+
+`.claude-plugin/plugin.json` declares the framework's component inventory: agents, commands, and hooks. `install.sh` and `validate-framework.sh` read it to enumerate files instead of maintaining separate lists.
+
+Schema:
+
+```json
+{
+  "name": "string",
+  "version": "string (must match framework/VERSION)",
+  "description": "string",
+  "agents": ["string — basename without extension"],
+  "commands": ["string — basename without extension"],
+  "hooks": ["string — filename with extension"]
+}
+```
+
+**Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, both scripts fall back to their previous behavior (directory globs for install, hardcoded arrays for validation).
+
+**Version drift:** `validate-framework.sh` checks that `plugin.json` version matches `framework/VERSION` and fails validation if they differ. This check only runs in repository mode.
 
 ## Setup
 
