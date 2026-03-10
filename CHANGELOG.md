@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.3] - 2026-03-10
+
+### Fixed
+- Add `manage-spec-directory` to fallback agent list in `validate-framework.sh`
+- Add plugin.json vs VERSION file consistency check to catch version drift
+
 ## [0.25.2] - 2026-03-10
 
 ### Changed

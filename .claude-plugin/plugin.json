@@ -1,6 +1,6 @@
 {
   "name": "claude-spec-first",
-  "version": "0.25.2",
+  "version": "0.25.3",
   "description": "Minimalist spec-first development workflow",
   "agents": [
     "analyze-artifacts",
