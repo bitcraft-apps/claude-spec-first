@@ -254,6 +254,7 @@ echo "=========================="
 REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "create-technical-docs" "create-user-docs" "integrate-docs")
 REQUIRED_COMMANDS=("spec" "implement" "document")
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
+VALID_MODELS=("haiku")
 
 # Function to build agent pattern dynamically from REQUIRED_AGENTS array
 build_agent_pattern() {
@@ -321,6 +322,23 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
             done
         else
             print_warning "$agent missing tools field (optional but recommended)"
+        fi
+
+        # Check model field (optional, but must be valid if present)
+        if grep -q "^model:" "$AGENT_FILE"; then
+            MODEL_VALUE=$(grep "^model:" "$AGENT_FILE" | head -1 | sed 's/^model:[[:space:]]*//')
+            MODEL_VALID=false
+            for valid_model in "${VALID_MODELS[@]}"; do
+                if [ "$MODEL_VALUE" = "$valid_model" ]; then
+                    MODEL_VALID=true
+                    break
+                fi
+            done
+            if [ "$MODEL_VALID" = true ]; then
+                print_status "$agent has valid model field ($MODEL_VALUE)" 0
+            else
+                print_status "$agent has valid model field (got '$MODEL_VALUE', expected one of: ${VALID_MODELS[*]})" 1
+            fi
         fi
 
         # Check content structure

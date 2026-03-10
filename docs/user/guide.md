@@ -6,9 +6,9 @@
 
 Claude Spec-First (CSF) is a development workflow framework built on top of Claude Code. It provides three commands -- `/csf:spec`, `/csf:implement`, and `/csf:document` -- that break work into small, focused steps carried out by 12 specialized agents. The framework handles specification, implementation, and documentation through a structured pipeline so you can focus on describing what you want built.
 
-## What Changed with Model Routing
+## Model Routing
 
-Seven of the framework's twelve agents now run on Haiku, a faster and more cost-effective model. The remaining five agents continue to run on whatever model you are already using (typically Sonnet or Opus).
+Seven of the framework's twelve agents run on Haiku, a faster and more cost-effective model. The remaining five agents run on whatever model you are already using (typically Sonnet or Opus).
 
 **What this means in practice:**
 
