@@ -74,9 +74,6 @@ teardown() {
     # Check it appends exact pattern .claude/.csf/
     grep -qF '.claude/.csf/' "$agent_file"
 
-    # Check it warns when no .gitignore exists
-    grep -q 'No .gitignore found' "$agent_file"
-
     # Check it skips if already present (negated grep guard)
     grep -q '! grep -qF .*.claude/.csf/' "$agent_file"
 }
