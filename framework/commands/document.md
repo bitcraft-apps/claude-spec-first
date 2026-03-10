@@ -26,9 +26,9 @@ Creates documentation with parallel analysis and generation.
 After input resolution, run agents in 3 batches:
 
 **Batch 1 (Parallel):**
-- Task: analyze-artifacts with requirements: $ARTIFACT_PATHS
-- Task: analyze-implementation with requirements: $IMPLEMENTATION_PATHS
-- Task: analyze-existing-docs (scans project for existing documentation inventory)
+- Task: analyze-artifacts (maxTurns: 6) with requirements: $ARTIFACT_PATHS
+- Task: analyze-implementation (maxTurns: 10) with requirements: $IMPLEMENTATION_PATHS
+- Task: analyze-existing-docs (maxTurns: 6) (scans project for existing documentation inventory)
 
 **Gate 1 — Post-Analysis:**
 Check that each output file exists and is non-empty:
@@ -39,8 +39,8 @@ Check that each output file exists and is non-empty:
 If any file is missing or empty: halt pipeline, report which file(s) failed, preserve existing output for inspection. Write gate results to `$CSF_DIR/research/gate-analysis.md` (pass/fail per file, warnings for files under 5 lines).
 
 **Batch 2 (Parallel):**
-- Task: create-technical-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
-- Task: create-user-docs (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
+- Task: create-technical-docs (maxTurns: 15) (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
+- Task: create-user-docs (maxTurns: 15) (reads $CSF_DIR/research/artifacts-summary.md, $CSF_DIR/research/implementation-summary.md)
 
 **Gate 2 — Post-Generation:**
 For each generated doc, verify:
@@ -53,7 +53,7 @@ For each generated doc, verify:
 Block on: empty file, placeholder-only content. Warn on: missing required sections (agent contracts allow omission when genuinely not applicable), sparse output (under 10 lines per section). Write gate results to `$CSF_DIR/research/gate-generation.md`.
 
 **Batch 3:**
-- Task: integrate-docs (reads docs-inventory.md to update existing files or create new ones)
+- Task: integrate-docs (maxTurns: 15) (reads docs-inventory.md to update existing files or create new ones)
 
 **Gate 3 — Post-Integration:**
 Verify final output files exist and are non-empty in `docs/` and/or `docs/user/`. Block if no output files were created or all are empty. Write gate results to `$CSF_DIR/research/gate-integration.md`.
