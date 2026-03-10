@@ -1,6 +1,26 @@
 # User Guide: Claude Spec-First Framework
 
-<!-- Generated: 2026-03-10 | Framework version: 0.24.0 -->
+<!-- Generated: 2026-03-10 | Updated: 2026-03-10 (PR #110 maxTurns) | Framework version: 0.25.0 -->
+
+## What Changed in v0.25.0
+
+Every agent in the framework now has a built-in turn limit (called `maxTurns`). A "turn" is one round of work an agent performs -- reading a file, writing output, or making a decision. Turn limits prevent any agent from running indefinitely if it gets stuck or enters a loop.
+
+This is a safety net, not a restriction. Under normal use, agents finish well within their limits. The limits exist to catch edge cases where an agent might otherwise spin without producing useful results.
+
+Each agent's limit is sized to match its job:
+
+- **Simple tasks** (like setting up directories) get 3 turns -- they need very few steps.
+- **Research tasks** (like analyzing code or scanning for risks) get 6 turns.
+- **Deep analysis** (like exploring a codebase for patterns) gets 10 turns.
+- **Writing tasks** (like generating documentation or synthesizing a spec) get 12-15 turns.
+- **Implementation** (writing and editing code) gets 25 turns -- the most complex work.
+
+There is nothing to configure. Turn limits are built into the framework and apply automatically. No new flags, environment variables, or settings are needed. If you are already using Claude Spec-First, update to the latest version and the limits take effect immediately.
+
+If an agent reaches its turn limit, it stops and returns whatever progress it has made. The command orchestrator continues with the next step. In practice, the limits are generous enough that this rarely happens. If you work with an unusually large codebase and see incomplete output, breaking the task into smaller pieces is the most effective approach -- which aligns with the framework's core philosophy of delivering the narrowest viable change.
+
+For technical details on the tiered scheme, see the [Technical Reference](../technical-reference.md#tiered-maxturns-scheme).
 
 ## What Changed in v0.23.0
 
@@ -65,6 +85,14 @@ Going forward, new artifacts are ignored automatically.
 
 ## Troubleshooting
 
+### An agent seems to have produced incomplete output
+
+The agent likely reached its turn limit. This is most common with large codebases or highly complex tasks. Re-run the command -- agents may take a different path on the second attempt and finish within the limit. If the issue persists, break the task into smaller pieces. For example, implement one feature at a time rather than several at once.
+
+### I want to change the turn limits
+
+Turn limits are set in the framework's command files and are not user-configurable through flags or settings. They are tuned to balance safety against practical needs. If you consistently find a specific agent hitting its limit, that is worth reporting as a framework issue. For one-off adjustments, see the [Technical Reference](../technical-reference.md#no-maxturns-configuration-needed) for instructions on editing values directly in the command files.
+
 ### Pattern discovery produces different output than before
 
 The Explore subagent may structure its findings slightly differently from the old `explore-patterns` agent. The output file (`.claude/.csf/research/pattern-example.md`) still serves the same purpose and feeds into the same downstream agent (`implement-minimal`). If the output looks different but the implementation step succeeds, everything is working correctly.
@@ -81,6 +109,9 @@ If you have custom scripts or tooling that references the `explore-patterns` age
 
 | Term | Meaning |
 |------|---------|
+| Turn | One round of agent work -- a file read, a write, or a decision step |
+| Turn limit (maxTurns) | The maximum number of turns an agent can take before it stops and returns its progress |
+| Tiered limits | The scheme where agents get different turn limits based on task complexity (3 for simple ops, up to 25 for implementation) |
 | Explore subagent | Claude Code's built-in subagent for codebase exploration, replacing the custom `explore-patterns` agent |
 | LSP | Language Server Protocol; used for semantic code navigation (go-to-definition, find-references, hover) |
 | Pattern discovery | Step 1 of `/csf:implement`, where the framework learns codebase patterns before generating code |

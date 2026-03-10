@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.0] - 2026-03-10
+
+### Added
+- **Add maxTurns limits to all agent invocations**: Every agent invocation (13 total across 3 commands) now has an explicit `maxTurns` parameter preventing runaway execution. Values follow a six-tier scheme based on task complexity: Lightweight (3), Research (6), Deep analysis (10), Synthesis (12), Generation (15), Implementation (25). No configuration needed -- limits are embedded in command files and take effect automatically (#110).
+
 ## [0.24.0] - 2026-03-10
 
 ### Changed
