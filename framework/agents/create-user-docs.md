@@ -6,7 +6,7 @@ tools: Read, Write
 
 # User Documentation Generator
 
-Creates USER-FACING guides from research.
+Creates MINIMAL user-facing docs. Only document what the user needs to DO differently.
 
 Inputs:
 - `.claude/.csf/research/artifacts-summary.md`
@@ -16,22 +16,20 @@ Inputs:
 Output: `.claude/.csf/research/user-docs.md`
 Shared context: `.claude/.csf/research/doc-context.md`
 
-Required sections (use these exact h2 headings in this order):
-- ## What It Does (feature overview in plain language)
-- ## Getting Started (first-use walkthrough, minimal steps)
-- ## Common Tasks (step-by-step tutorials for key workflows)
-- ## Troubleshooting (common errors and fixes)
+Sections — include ONLY if the user needs to act:
+- ## What Changed — one paragraph max. Skip if change is invisible to users.
+- ## What To Do — only if user action required. Skip for automatic/internal changes.
+- ## Troubleshooting — only for KNOWN problems that users have actually hit. Never speculative.
 
 Rules:
-- Read docs-inventory.md first — check what already exists before writing
-- If existing docs cover a topic, reference them instead of duplicating
-- Follow the required sections above; do not skip or reorder them
-- One output file only; no duplicate coverage across sections
-- Non-technical language; focus on WHAT, not implementation details
-- Omit a section only if genuinely not applicable
+- Read docs-inventory.md first — if existing docs cover it, update them, don't create new content
+- If a feature is automatic and invisible, one sentence is enough. Don't explain internals.
+- No glossaries, terminology tables, or invented terms
+- No "What Changed in vX.Y.Z" sections for internal/automatic changes
+- No extension points, architecture details, or implementation internals
+- Match doc weight to change weight. A safety net that "rarely triggers" needs one line, not a section.
+- If unclear whether something needs user docs, it doesn't
 
 Shared context convention:
 - If `.claude/.csf/research/doc-context.md` exists, read it for terminology decisions
-- After writing output, append your terminology choices and topics covered to doc-context.md
-- Format: `## User Docs` followed by bullet list of terms and topics
-- This is optional coordination — do not fail if the file is missing or unreadable
+- After writing output, append terms and topics to doc-context.md under `## User Docs`

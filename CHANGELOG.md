@@ -10,423 +10,170 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.25.0] - 2026-03-10
 
 ### Added
-- **Add maxTurns limits to all agent invocations**: Every agent invocation (13 total across 3 commands) now has an explicit `maxTurns` parameter preventing runaway execution. Values follow a six-tier scheme based on task complexity: Lightweight (3), Research (6), Deep analysis (10), Synthesis (12), Generation (15), Implementation (25). No configuration needed -- limits are embedded in command files and take effect automatically (#110).
+- `maxTurns` limits on all 13 agent invocations to prevent runaway execution (#110)
 
 ## [0.24.0] - 2026-03-10
 
 ### Changed
-- **Route 7 research agents to Haiku**: Add `model: haiku` to lightweight research/analysis agents (define-scope, create-criteria, identify-risks, analyze-artifacts, analyze-implementation, analyze-existing-docs, manage-spec-directory) for faster, cheaper execution. Synthesis and implementation agents remain on the caller's model (#90).
-- **Add model field validation**: Validate `model:` frontmatter values in `validate-framework.sh` against allowed list.
-- **Add analyze-existing-docs to REQUIRED_AGENTS**: Include in validation so its frontmatter is checked.
+- Route 7 research agents to Haiku for faster, cheaper execution (#90)
+- Add model field validation to `validate-framework.sh`
 
 ## [0.23.0] - 2026-03-09
 
 ### Changed
-- **Replace explore-patterns agent with built-in Explore**: Removed custom `explore-patterns` agent in favor of Claude Code's built-in Explore subagent for pattern discovery in `/csf:implement` (#54).
-- **Add LSP to analyze-implementation agent**: Enable semantic code navigation (goToDefinition, findReferences, hover) when a language server is available (#53).
-- **Add `.claude/.csf/` to `.gitignore`**: Prevent CSF output from being tracked when stored under `.claude/`.
+- Replace `explore-patterns` agent with Claude Code's built-in Explore subagent (#54)
+- Add LSP support to `analyze-implementation` agent (#53)
+- Add `.claude/.csf/` to `.gitignore`
 
 ### Fixed
-- **Same-version update message**: Show "reinstalled" message instead of misleading arrow notation when `csf update` runs against the same version (#86).
+- Same-version update message shows "reinstalled" instead of misleading arrow (#86)
 
 ## [0.22.2] - 2026-03-09
 
 ### Fixed
-- **Legacy .csf/ warning false positive**: Suppress incorrect "Legacy .csf/ directory detected" warning in installed mode by reordering `detect_execution_mode()` before the legacy directory check and gating on `EXECUTION_MODE != "installed"` (#71).
+- Suppress false positive legacy `.csf/` warning in installed mode (#71)
 
 ## [0.22.1] - 2026-03-09
 
 ### Fixed
-- **$ARGUMENTS placeholder**: Updated implement and document commands to reference `$ARGUMENTS` in input resolution, eliminating validation warnings.
+- `$ARGUMENTS` placeholder in implement and document commands
 
 ## [0.22.0] - 2026-03-09
 
 ### Added
-- **Gitignore protection**: Auto-append `.claude/.csf/` to target repo `.gitignore` when creating spec directory. Warns if no `.gitignore` found. Skips non-git directories.
+- Auto-append `.claude/.csf/` to `.gitignore` when creating spec directory
 
 ## [0.21.0] - 2026-03-09
 
 ### Changed
-- **2-tier size constraints**: Collapsed 3-tier system (micro-agents 25 / doc agents 50 / commands 50) into 2 tiers: agents (50 lines max) and commands (75 lines max). All 13 agents already comply.
-- **Terminology**: Replaced "micro-agent" and "doc agent" with "agent" in CLAUDE.md and README.md.
-- **manage-spec-directory**: Trimmed from 52 to 50 lines (removed blank lines only, no behavior changes).
+- Collapse 3-tier size constraints into 2: agents (50 lines) and commands (75 lines)
 
 ## [0.20.0] - 2026-03-09
 
 ### Changed
-- **Doc agent line limit**: Raised from 25 to 50 for `create-technical-docs`, `create-user-docs`, and `integrate-docs` to support richer documentation output.
-- **Dedup checks**: Doc agents now read `docs-inventory.md` before writing to avoid duplicating existing content.
-- **Shared context**: Added `doc-context.md` convention for terminology consistency across parallel doc agents.
-- **CLAUDE.md**: Differentiated size constraints for doc agents (50 lines) vs micro-agents (25 lines).
+- Raise doc agent line limit from 25 to 50
+- Add dedup checks via `docs-inventory.md` and shared `doc-context.md`
 
 ## [0.19.1] - 2026-03-09
 
 ### Fixed
-- **Quality gate 2**: Downgraded missing required sections from block to warn, aligning with agent contracts that allow section omission when genuinely not applicable.
-- **Terminal summary**: Gate warnings now included in output summary.
-- **Trailing newline**: Fixed missing newline at end of `document.md`.
+- Gate 2: downgrade missing sections from block to warn
+- Include gate warnings in terminal summary
 
 ## [0.19.0] - 2026-03-09
 
 ### Added
-- **Doc inventory agent**: New `analyze-existing-docs` micro-agent scans existing documentation and produces a manifest (`filepath | primary topic`), enabling doc agents to update existing files instead of creating duplicates on repeated runs.
-
-### Changed
-- **Document command**: Added inventory scan to Batch 1 (parallel), piped manifest to `integrate-docs` agent. Batch count unchanged at 3.
-- **Doc integration agent**: `integrate-docs` now reads doc inventory manifest to update existing files or create new ones, supporting update-or-create behavior.
+- `analyze-existing-docs` agent for doc inventory, enabling update-or-create behavior
 
 ## [0.18.0] - 2026-03-09
 
 ### Changed
-- **Doc agent structure contracts**: Added required-sections templates to `create-technical-docs` and `create-user-docs` agents. Technical docs require: Overview, API Reference, Setup, Usage Examples, Extension Points. User docs require: What It Does, Getting Started, Common Tasks, Troubleshooting. Ensures consistent document structure across runs.
+- Add required-sections contracts to `create-technical-docs` and `create-user-docs`
 
 ## [0.17.0] - 2026-03-09
 
 ### Changed
-- **integrate-docs agent**: Rewritten for content synthesis — merges into existing docs via Edit/MultiEdit instead of relocating files. Adds cross-reference links between technical and user docs. Preserves manually curated content.
+- Rewrite `integrate-docs` for content synthesis via Edit/MultiEdit
 
 ## [0.16.1] - 2026-03-09
 
 ### Fixed
-- **Install Script Repo URL**: Corrected GitHub org from `bitcraft-labs` to `bitcraft-apps` — pipe install (`curl | bash`) was completely broken
-- **Temp Directory Leak**: Moved cleanup trap before download block so temp dirs are cleaned up even on early exit failures
-- **Install Test**: Updated "missing framework directory" test for download fallback behavior; added teardown safety net to prevent cascading test failures
+- Install script repo URL: `bitcraft-labs` → `bitcraft-apps`
+- Temp directory leak on early exit
+- Install test for download fallback behavior
 
 ## [0.16.0] - 2026-03-09
 
 ### Added
-- **SubagentStop Hooks**: New `validate-subagent.sh` hook validates micro-agent research output is non-empty
-  - Fires on SubagentStop events with `"*"` matcher
-  - Follows existing hook patterns: stdin JSON, `stop_hook_active` guard, fail-open
-- **Installer Support**: `install.sh` now configures both Stop and SubagentStop hooks in settings.json
+- SubagentStop hook (`validate-subagent.sh`) for non-empty output validation
+- Installer configures both Stop and SubagentStop hooks
 
 ### Fixed
-- **Hook Exit Codes**: All hook scripts now explicitly `exit 0` on the happy path
-  - Prevents implicit non-zero exit from last failed test condition
+- Hook scripts explicitly `exit 0` on happy path
 
 ## [0.15.1] - 2025-09-24
 
 ### Fixed
-- **CSF Directory Paths**: Fixed agents creating files in wrong locations (GitHub issue #43)
-  - Replaced bash function calls with literal paths in agent Output declarations
-  - Claude Code interprets agent markdown as text, not executable bash
-  - All agents now use `.claude/.csf/research/` paths directly
-  - Removed unnecessary `csf-paths.sh` utility from user installations
-  - Updated validation script to read VERSION file directly
-  - Simplified framework following KISS principle (removed 300+ lines of utility code)
-
-### Removed
-- **Development Utilities**: Removed version.sh installation for end users
-  - End users don't need version management functions
-  - Validation script still shows framework version for troubleshooting
-  - Development utilities remain available for framework developers
+- Agent paths: use literal `.claude/.csf/research/` instead of bash function calls
+- Remove unnecessary `csf-paths.sh` utility (300+ lines removed)
 
 ## [0.15.0] - 2025-09-23
 
 ### Added
-- **Path Centralization**: Created centralized utility for CSF directory path management
-  - New `framework/utils/csf-paths.sh` utility with functions: `get_csf_dir()`, `get_research_dir()`, `get_specs_dir()`
-  - Eliminates hardcoded `.claude/.csf/` paths across the framework
-  - Makes path structure easily configurable for future changes
-
-### Changed
-- **Framework Maintainability**: Updated all commands and agents to use centralized path utility
-  - 3 commands (spec, implement, document) now source utility for path resolution
-  - 11 agents now use `$(get_*_dir)` patterns instead of hardcoded paths
-  - Reduced from 15+ hardcoded path references to 1 (in utility itself)
-  - Follows DRY principles and improves maintainability
+- Centralized path utility `csf-paths.sh` for CSF directory management
 
 ## [0.14.0] - 2025-09-16
 
 ### Fixed
-- **File Placement Architecture**: Corrected framework installation vs. output separation
-  - Framework installation: Global `~/.claude/` (where Claude Code expects it)
-  - Framework output: Project-local `./.claude/.csf/` (where work artifacts go)
-  - Project root detection: CLAUDE.md upward traversal for cross-platform compatibility
-  - Auto-create project `./.claude/.csf/` structure when missing
-  - Works from any subdirectory within project
-
-### Changed
-- **Path Resolution**: Updated all 11 agents + 3 commands + 2 scripts for project-local output
-  - All agents now output to project's `./.claude/.csf/research/` directory
-  - Commands detect project root via CLAUDE.md traversal
-  - Cross-platform compatible (Windows/macOS/Linux)
-  - Clear error messages for invalid project locations
-
-### Technical
-- **Architecture Correction**: Reverted installation scripts to global framework installation
-- **Test Updates**: Updated E2E and integration tests for corrected architecture
-- **CI Compatibility**: Fixed CI workflows for project-local structure expectations
+- Framework installs globally (`~/.claude/`), outputs project-locally (`./.claude/.csf/`)
 
 ## [0.13.0] - 2025-09-16
 
 ### Changed
-- **Storage Migration**: Migrated CSF storage from `.csf/` to `.claude/.csf/` for better organization
-  - All framework files now use `$CLAUDE_DIR/.csf/` (defaults to `$HOME/.claude/.csf/`)
-  - Legacy `.csf/` directory detection with migration guidance
-  - Backward compatibility maintained through symlink structure
-  - Updated all agents, commands, and scripts to use new storage location
-
-### Technical
-- **Framework Compliance**: Optimized `manage-spec-directory` agent to meet 25-line constraint
-- **Installation Updates**: Updated install/uninstall scripts for new directory structure
-- **Validation Updates**: Framework validation script updated for new storage paths
+- Migrate CSF storage from `.csf/` to `.claude/.csf/`
 
 ## [0.12.0] - 2025-09-13
 
 ### Added
-- **Spec Directory Isolation**: Prevents spec runs from overwriting each other (#36)
-  - User-controlled behavior: prompts "Update (u) or Create new (n)?" on subsequent runs
-  - Timestamped directories: `.csf/specs/YYYY-MM-DD-HHMMSS/` when creating new
-  - Safe backup system: only backs up when user chooses update
-  - Symlink compatibility: maintains `.csf/spec.md` and `.csf/research/` paths
-  - New micro-agent: `manage-spec-directory` (25 lines, user consent required)
-
-### Changed
-- **Enhanced /csf:spec Command**: Added user-controlled directory management
-  - Non-destructive: no operations without user consent
-  - Flexible workflow: supports both updating existing and creating new specs
-  - Backward compatible: existing tools work with symlinked paths
-
-### Technical
-- **User Agency**: All destructive operations require explicit user consent
-- **KISS Principle**: Simple single-character user prompt (u/n)
-- **Framework Compliance**: Follows YAGNI, SRP, and 25-line agent constraints
-- **Safe Operations**: Backup and timestamping only when requested
+- Spec directory isolation: prompts update/create-new on subsequent runs (#36)
+- `manage-spec-directory` agent
 
 ## [0.11.0] - 2025-09-01
 
-### Added
-- **Parallel Documentation Micro-Agents**: Transformed /csf:document from monolithic to parallel micro-agents (#30)
-  - analyze-artifacts: Read and parse development artifacts (20 lines)
-  - analyze-implementation: Analyze code structure and patterns (20 lines)  
-  - create-technical-docs: Generate developer documentation (35 lines)
-  - create-user-docs: Generate user-facing documentation (35 lines)
-  - integrate-docs: Combine and organize final documentation (15 lines)
-  - 3-batch orchestrated execution: Parallel analysis → Parallel generation → Sequential integration
-  - 20%+ performance improvement through parallel processing
-
 ### Changed
-- **Documentation Philosophy**: Specialized micro-agents for focused output quality
-  - Parallel artifact and implementation analysis for speed
-  - Separate technical and user documentation generation for clarity
-  - Clean boundaries: analyzers read, generators write to .csf/research/, integrator moves to final locations
-  - Input resolution logic: check .csf/ artifacts, ask user if missing
-
-### Removed
-- **Monolithic csf-document agent** (156 lines) - replaced with 5 focused micro-agents (125 lines total)
-
-### Technical
-- Updated validation script with new micro-agent requirements
-- Updated installation tests for new agent structure
-- Updated README.md with current micro-agent architecture (11 total agents)
+- Split monolithic `/csf:document` into 5 parallel micro-agents (#30)
 
 ## [0.10.0] - 2025-09-01
 
-### Added
-- **Sequential Implementation Micro-Agents**: Transformed /csf:implement from monolithic to sequential micro-agents (#34)
-  - explore-patterns: Find existing patterns to follow (18 lines)
-  - implement-minimal: Write simplest working code (23 lines)
-  - Sequential workflow: Learn patterns → Implement solution
-  - Embedded minimalist principles: Pattern consistency over creativity, Working code over perfect code
-
 ### Changed
-- **Implementation Philosophy**: Enforces pattern discovery before code generation
-  - "Pattern consistency over creativity" - must find existing approach first
-  - "Working code over perfect code" - implements simplest solution that works
-  - "Minimal solution over extensible solution" - no future-proofing abstractions
-  - Technology-agnostic approach for any language/framework
-
-### Removed
-- **Monolithic csf-implement agent** (136 lines) - replaced with focused micro-agents
-- Verbose implementation principles documentation - embedded in agent behavior instead
-
-### Technical
-- 55% code reduction in implementation area (191→86 total lines)
-- Updated validation script for new agent requirements
-- Updated all test suites for sequential micro-agent architecture
-- Framework validation: 67/67 tests passing
+- Split monolithic `/csf:implement` into sequential `explore-patterns` + `implement-minimal` (#34)
 
 ## [0.9.0] - 2025-09-01
 
-### Added
-- **Micro-Agent Architecture**: Transformed /csf:spec from monolithic to parallel micro-agents (#28)
-  - csf-define-scope: Define narrowest viable solution (18 lines)
-  - csf-create-criteria: Generate minimal acceptance criteria (18 lines) 
-  - csf-identify-risks: Identify essential risks only (18 lines)
-  - csf-synthesize-spec: Combine research into 50-line specifications (18 lines)
-  - Command-level clarification logic for vague requirements
-  - Parallel execution of research agents for improved performance
-
 ### Changed
-- **CLAUDE.md Simplification**: Radically simplified project guidance from 296 to 93 lines (69% reduction)
-  - Established minimalist engineering principles (YAGNI, KISS, SRP, MVP-first)
-  - Added anti-patterns to avoid (enterprise solutions, blind pattern following, unnecessary complexity)
-  - Introduced "Smart Implementation" guidance for choosing between direct CLI usage vs code
-  - Enabled "Challenge Mode" to question requirements for robustness
-  - Merged planning phase into specification phase to reduce redundancy
-  - Removed verbose documentation in favor of self-documenting, actionable rules
-
-- **Agent Output Philosophy**: Embedded minimalist principles directly in agent outputs
-  - Agents now produce MVP-focused specifications (51 lines vs 122 lines previously)
-  - Automatic YAGNI application: "Last 5 actions (not 10 - YAGNI)"
-  - KISS technical approaches: Cache over real-time, progressive enhancement
-  - Challenge assumptions: Agents ask clarifying questions instead of assuming enterprise needs
-  - Prevent overengineering: No enterprise metrics unless explicitly requested
+- Split monolithic `/csf:spec` into 4 parallel micro-agents (#28)
+- Simplify CLAUDE.md from 296 to 93 lines (69% reduction)
 
 ## [0.8.0] - 2025-08-29
 
 ### Added
-- **File Persistence System**: Persistent `.csf/` directory for development artifacts enabling safe context clearing
-- **Poison Context Awareness**: Built-in guidance and mitigations for context contamination between phases
-- **Workflow Archival**: Automatic archiving of previous workflow runs with timestamped backups
-- **Context-Safe Operations**: Enhanced agents with standalone task messaging and explicit phase boundaries
-
-### Enhanced
-- **Agent Instructions**: Updated all agents with file input/output requirements and persistence capabilities
-- **Command Documentation**: Added context management guidance and best practices for individual vs workflow commands
-- **Framework Architecture**: Integrated file persistence with existing 4-phase workflow
-- **User Guidance**: Comprehensive documentation on when to use `/clear` and individual commands vs workflow
-
-### Changed
-- **Agent Behavior**: All agents now write artifacts to `.csf/current/` directory for persistent storage
-- **Workflow Process**: Enhanced with archival step and persistent artifact management
-- **Documentation Approach**: Framework now enterprise-ready with professional audit trail capabilities
+- File persistence system (`.csf/` directory)
 
 ## [0.7.0] - 2025-08-28
 
 ### Added
-- **Planning Phase**: New technical planning phase between specification and implementation
-- **Planning Agent (`csf-plan`)**: Specialized agent for creating technical implementation strategies
-- **Planning Command (`/csf:plan`)**: Command for generating implementation plans from specifications
-- **Planning Templates**: Comprehensive templates for standard, refactoring, and migration planning
-- **4-Phase Workflow**: Enhanced workflow: Specification → Planning → Implementation → Documentation
-
-### Changed
-- **Framework Architecture**: Updated from 3-agent to 4-agent system with planning integration
-- **Workflow Command**: Enhanced `/csf:workflow` to include planning phase between spec and implementation
-- **Template Organization**: Templates moved to `.csf/templates/` directory to avoid Claude Code conflicts
-- **Installation Process**: Updated to install planning templates in framework-specific location
-
-### Enhanced
-- **Risk Mitigation**: Planning phase provides safe research before execution
-- **Implementation Strategy**: Technical approach validated before coding begins
-- **Test Coverage**: Added comprehensive tests for all planning components (118 total tests)
-- **Documentation**: Updated CLAUDE.md and README.md with 4-phase workflow details
+- Planning phase and `csf-plan` agent (later merged into spec)
 
 ## [0.6.0] - 2025-08-27
 
 ### Added
-- **Installation Validation**: Added validation script to installation process (installed at `~/.claude/.csf/validate-framework.sh`)
-- **Development Testing**: Added `tests/` directory with integration and version testing scripts
-- **Version Management**: Added `scripts/version.sh` for semantic version management
-
-### Changed
-- **Framework Structure**: Streamlined framework directory to contain only essential installable components
-- **Validation Script**: Enhanced dual-mode operation with proper installed mode support
-- **Installation Process**: Now installs validation script and provides validation instructions
-- **Issue Templates**: Simplified GitHub issue templates to focus on bug reports and feature requests only
-
-### Removed
-- **Outdated Documentation**: Removed entire `docs/` directory with obsolete 6-agent system documentation
-- **Framework Bloat**: Removed unused `framework/config/`, `framework/templates/`, and outdated examples
-- **Redundant Files**: Removed duplicate `framework/README.md` and `framework/CLAUDE.md`
-- **Development Utils**: Moved `framework/utils/` to `scripts/` and `tests/` directories
-- **Issue Template Complexity**: Removed documentation, installation, and usage question templates
-
-### Fixed
-- **Validation Paths**: Fixed validation script to properly handle `.csf/` installation directory
-- **Component References**: Updated all validation checks to use current 3-agent, 4-command structure
+- Validation script, version management, test infrastructure
 
 ## [0.5.0] - 2025-08-26
 
-### Added
-- **Context Clearing**: Implemented context clearing between workflow phases for focused work
-- **Streamlined Command Structure**: New clean command naming with 4 primary commands
-- **Simplified Agent System**: Consolidated functionality into 3 specialized agents
-
 ### Changed
-- **BREAKING**: Revolutionary framework simplification from 6 agents down to 3 agents
-- **BREAKING**: Command structure changed from 9 commands to 4 primary commands
-- **BREAKING**: Agent names updated to `csf-spec`, `csf-implement`, `csf-document`
-- **BREAKING**: Command names updated to `spec`, `implement`, `document`, `workflow`
-- Updated workflow to use baby steps evolution approach with clear phase separation
-- Enhanced documentation and examples for simplified structure
-
-### Removed
-- **BREAKING**: Removed `csf-test-designer` agent (testing integrated into implementation phase)
-- **BREAKING**: Removed `csf-arch-designer` agent (architecture integrated into implementation phase)
-- **BREAKING**: Removed `csf-qa-validator` agent (QA integrated into implementation phase)
-- **BREAKING**: Removed `spec-review`, `impl-plan`, `qa-check`, `complexity-eval`, `spec-mvp` commands
-- Eliminated complexity that had accumulated over multiple iterations
+- **BREAKING**: 6 agents → 3, 9 commands → 4
 
 ## [0.4.0] - 2025-08-26
 
-### Added
-- **Smart Command Routing**: `/csf:spec-init` now functions as intelligent router that automatically selects optimal workflow based on project complexity
-- **Streamlined Command Structure**: Simplified from 9 commands to 4 primary + 5 utility commands with consistent `csf:` prefixes
-- **Decision Matrix**: Clear workflow routing with automatic escalation from simple to complex workflows
-
 ### Changed
-- **BREAKING**: Command routing behavior - `/csf:spec-init` now routes to appropriate workflow rather than direct specification
-- Updated all documentation to use consistent `csf:` command prefixes
-- Improved user experience with reduced cognitive load for workflow selection
-
-### Removed
-- Overengineered GitHub automation and monitoring system that added unnecessary complexity
+- Smart command routing via `/csf:spec-init`
+- Removed overengineered GitHub automation
 
 ## [0.3.0] - 2025-08-25
 
-### Added
-- **Agent Namespacing**: All framework agents now use `csf-` prefix to prevent conflicts with other Claude Code tools
-- Agents installed to `~/.claude/agents/csf/` and commands to `~/.claude/commands/csf/`
-- Dual-mode validation works in both repository and installed environments
-
 ### Changed
-- **BREAKING**: Agent naming convention changed to include `csf-` prefix
+- **BREAKING**: Agent namespacing with `csf-` prefix
 
 ## [0.2.0] - 2025-08-25
 
 ### Added
-- **MVP Workflow Support**: New `/implement-now`, `/spec-mvp`, `/complexity-eval` commands for rapid development
-- **Configuration System**: Configurable LOC limits (500-line default) and complexity modes
-- **Token Optimization**: 60-70% token reduction in MVP mode through streamlined outputs
-- **Performance Improvements**: 50% faster implementation for simple features
+- MVP workflow commands, configurable LOC limits
 
 ## [0.1.0] - 2025-08-25
 
 ### Added
-- **Semantic Versioning System**: Complete versioning utilities with CLI interface and framework integration
-- VERSION file with semantic versioning (X.Y.Z format)
-- Dual-mode operation support for both repository and installed environments
-- Comprehensive testing with 45+ unit tests and 20 integration tests
-- Enhanced framework validation with version display
-
-## Pre-versioned Releases
-
-The following releases occurred before the versioning system was implemented:
-
-### Dual-Mode Validation Script - 2025-08-25
-- Security enhancements and validation improvements
-- Support for both development and production environments
-
-### Documentation System - 2025-08-24
-- Comprehensive documentation generation system and framework validation
-- Phase 6 workflow documentation
-- Framework validation testing suite
-
-### GitHub Integration - 2025-08-23
-- Comprehensive documentation system with Phase 6 workflow
-- Comprehensive GitHub Issues setup with monitoring capabilities
-- Automated issue management and labeling system
-
-### Initial Framework - 2025-08-22
-- **Core Framework**: Complete Claude Spec-First Framework with 6 specialized agents and 5 workflow commands
-- **Core Agents**: spec-analyst, test-designer, arch-designer, impl-specialist, qa-validator, doc-synthesizer  
-- **Workflow Commands**: spec-init, spec-review, impl-plan, qa-check, spec-workflow
-- **Installation System**: Smart installer with backup/merge capabilities and update/uninstall scripts
-- **Validation Suite**: Comprehensive framework validation with 83+ automated checks
-- **GitHub Integration**: CI/CD workflows for validation and installation testing
+- Semantic versioning system, dual-mode validation
 
 [Unreleased]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.5.0...HEAD
 [0.5.0]: https://github.com/bitcraft-apps/claude-spec-first/compare/v0.4.0...v0.5.0
