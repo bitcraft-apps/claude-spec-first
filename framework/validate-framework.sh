@@ -240,19 +240,27 @@ else
     AGENT_COUNT=0
 fi
 
-# Check commands directory
+# Check skills/commands directory
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    COMMANDS_DIR=$(build_safe_path "commands")
+    SKILLS_DIR="./framework/skills"
+    if [ -d "$SKILLS_DIR" ]; then
+        print_status "skills/ directory exists" 0
+        SKILL_COUNT=$(find "$SKILLS_DIR" -name "SKILL.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+        print_info "Found $SKILL_COUNT skill files"
+    else
+        print_status "skills/ directory exists" 1
+        SKILL_COUNT=0
+    fi
 else
     COMMANDS_DIR=$(build_safe_path "commands/csf")
-fi
-if [ -d "$COMMANDS_DIR" ]; then
-    print_status "commands/ directory exists" 0
-    COMMAND_COUNT=$(find "$COMMANDS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
-    print_info "Found $COMMAND_COUNT command files"
-else
-    print_status "commands/ directory exists" 1
-    COMMAND_COUNT=0
+    if [ -d "$COMMANDS_DIR" ]; then
+        print_status "commands/ directory exists" 0
+        SKILL_COUNT=$(find "$COMMANDS_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+        print_info "Found $SKILL_COUNT command files"
+    else
+        print_status "commands/ directory exists" 1
+        SKILL_COUNT=0
+    fi
 fi
 
 echo ""
@@ -273,14 +281,14 @@ if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_F
     while IFS= read -r agent; do
         REQUIRED_AGENTS+=("$agent")
     done < <(jq -r '.agents[]' "$MANIFEST_FILE")
-    REQUIRED_COMMANDS=()
-    while IFS= read -r cmd; do
-        REQUIRED_COMMANDS+=("$cmd")
-    done < <(jq -r '.commands[]' "$MANIFEST_FILE")
+    REQUIRED_SKILLS=()
+    while IFS= read -r skill; do
+        REQUIRED_SKILLS+=("$skill")
+    done < <(jq -r '.skills[]' "$MANIFEST_FILE")
     print_info "Loaded component lists from plugin.json"
 else
     REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs" "manage-spec-directory")
-    REQUIRED_COMMANDS=("spec" "implement" "document")
+    REQUIRED_SKILLS=("spec" "implement" "document")
 fi
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
@@ -383,55 +391,51 @@ for agent in "${REQUIRED_AGENTS[@]}"; do
 done
 
 echo ""
-echo "📋 Validating Commands..."
+echo "📋 Validating Skills..."
 echo "========================"
 
-# Using centralized REQUIRED_COMMANDS from framework configuration above
-
-for command in "${REQUIRED_COMMANDS[@]}"; do
-    # Set command file path
+for skill in "${REQUIRED_SKILLS[@]}"; do
+    # Set skill file path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        COMMAND_FILE=$(build_safe_path "commands/${command}.md")
+        SKILL_FILE="./framework/skills/${skill}/SKILL.md"
     else
-        COMMAND_FILE=$(build_safe_path "commands/csf/${command}.md")
+        SKILL_FILE=$(build_safe_path "commands/csf/${skill}.md")
     fi
 
-    if [ -f "$COMMAND_FILE" ]; then
-        print_status "$command.md exists" 0
+    if [ -f "$SKILL_FILE" ]; then
+        print_status "$skill skill exists" 0
 
         # Check YAML frontmatter
-        if head -1 "$COMMAND_FILE" | grep -q "^---$"; then
-            print_status "$command has YAML frontmatter" 0
+        if head -1 "$SKILL_FILE" | grep -q "^---$"; then
+            print_status "$skill has YAML frontmatter" 0
         else
-            print_status "$command has YAML frontmatter" 1
+            print_status "$skill has YAML frontmatter" 1
         fi
 
         # Check description field
-        if grep -q "^description:" "$COMMAND_FILE"; then
-            print_status "$command has description field" 0
+        if grep -q "^description:" "$SKILL_FILE"; then
+            print_status "$skill has description field" 0
         else
-            print_status "$command has description field" 1
+            print_status "$skill has description field" 1
         fi
 
-        # CSF prefix is handled by the command routing system
-
         # Check for $ARGUMENTS usage
-        if grep -q '\$ARGUMENTS' "$COMMAND_FILE"; then
-            print_status "$command uses \$ARGUMENTS placeholder" 0
+        if grep -q '\$ARGUMENTS' "$SKILL_FILE"; then
+            print_status "$skill uses \$ARGUMENTS placeholder" 0
         else
-            print_warning "$command doesn't use \$ARGUMENTS (may be intentional)"
+            print_warning "$skill doesn't use \$ARGUMENTS (may be intentional)"
         fi
 
         # Check for agent delegation
-        AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$COMMAND_FILE" || true)
+        AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$SKILL_FILE" || true)
         if [ $AGENT_MENTIONS -gt 0 ]; then
-            print_status "$command delegates to agents ($AGENT_MENTIONS mentions)" 0
+            print_status "$skill delegates to agents ($AGENT_MENTIONS mentions)" 0
         else
-            print_warning "$command doesn't delegate to agents"
+            print_warning "$skill doesn't delegate to agents"
         fi
 
     else
-        print_status "$command.md exists" 1
+        print_status "$skill skill exists" 1
     fi
 done
 
@@ -520,19 +524,28 @@ echo ""
 echo "🔧 Integration Checks..."
 echo "======================="
 
-# Check for consistency between agents and commands
-if [ -d "$COMMANDS_DIR" ] && ls "$COMMANDS_DIR"/*.md >/dev/null 2>&1; then
-    COMMAND_AGENT_REFS=$(grep -h "$AGENT_PATTERN" "$COMMANDS_DIR"/*.md | wc -l | tr -d ' ')
-    print_info "Found $COMMAND_AGENT_REFS agent references in commands"
+# Check for consistency between agents and skills
+SKILL_AGENT_REFS=0
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    if [ -d "./framework/skills" ]; then
+        SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./framework/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
+        print_info "Found $SKILL_AGENT_REFS agent references in skills"
+    else
+        print_warning "skills/ directory missing"
+    fi
 else
-    print_warning "commands/ directory missing or contains no .md files"
-    COMMAND_AGENT_REFS=0
+    if [ -d "$COMMANDS_DIR" ] && ls "$COMMANDS_DIR"/*.md >/dev/null 2>&1; then
+        SKILL_AGENT_REFS=$(grep -h "$AGENT_PATTERN" "$COMMANDS_DIR"/*.md | wc -l | tr -d ' ')
+        print_info "Found $SKILL_AGENT_REFS agent references in commands"
+    else
+        print_warning "commands/ directory missing or contains no .md files"
+    fi
 fi
 
-if [ $COMMAND_AGENT_REFS -gt 0 ]; then
-    print_status "Commands integrate with agents" 0
+if [ $SKILL_AGENT_REFS -gt 0 ]; then
+    print_status "Skills integrate with agents" 0
 else
-    print_status "Commands integrate with agents" 1
+    print_status "Skills integrate with agents" 1
 fi
 
 # Documentation consistency validation
@@ -540,29 +553,17 @@ echo ""
 echo "📋 Documentation Consistency..."
 echo "=============================="
 
-# Only validate documentation consistency in repository mode
-if [ "$EXECUTION_MODE" = "repository" ]; then
-    # Count actual agents and commands
-    ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
-    ACTUAL_COMMAND_COUNT=$(echo "${#REQUIRED_COMMANDS[@]}")
-
-    # AGENTS.md is the source of truth — no agent/command counts to validate there
-    # (counts are derived from REQUIRED_AGENTS/REQUIRED_COMMANDS arrays above)
-
-    # README references framework/commands/ for details — no counts to validate
-fi
-
-# Check workflow completeness (using centralized command list)
+# Check workflow completeness (using centralized skill list)
 WORKFLOW_COMPLETE=true
 
-for cmd in "${REQUIRED_COMMANDS[@]}"; do
-    # Set command path
+for skill in "${REQUIRED_SKILLS[@]}"; do
+    # Set skill path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        CMD_PATH=$(build_safe_path "commands/${cmd}.md")
+        SKILL_PATH="./framework/skills/${skill}/SKILL.md"
     else
-        CMD_PATH=$(build_safe_path "commands/csf/${cmd}.md")
+        SKILL_PATH=$(build_safe_path "commands/csf/${skill}.md")
     fi
-    if [ ! -f "$CMD_PATH" ]; then
+    if [ ! -f "$SKILL_PATH" ]; then
         WORKFLOW_COMPLETE=false
         break
     fi

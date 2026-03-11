@@ -1,5 +1,8 @@
 ---
+name: document
 description: Generate minimal documentation through parallel agents
+disable-model-invocation: true
+argument-hint: "[SPECIFICATION_AND_IMPLEMENTATION_PATHS]"
 ---
 
 # Document Command

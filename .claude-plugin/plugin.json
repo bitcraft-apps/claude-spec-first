@@ -1,6 +1,6 @@
 {
   "name": "claude-spec-first",
-  "version": "0.25.3",
+  "version": "0.26.0",
   "description": "Minimalist spec-first development workflow",
   "agents": [
     "analyze-artifacts",
@@ -16,7 +16,7 @@
     "manage-spec-directory",
     "synthesize-spec"
   ],
-  "commands": [
+  "skills": [
     "document",
     "implement",
     "spec"

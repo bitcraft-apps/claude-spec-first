@@ -48,13 +48,13 @@ teardown() {
     grep -q "rm -f.*mode" "$agent_file"
 }
 
-@test "spec command includes directory management step" {
-    # Check spec command references the new agent
-    grep -q "manage-spec-directory" "$PROJECT_ROOT/framework/commands/spec.md"
+@test "spec skill includes directory management step" {
+    # Check spec skill references the new agent
+    grep -q "manage-spec-directory" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
 
     # Check it explains directory management workflow
-    grep -q "Directory Management" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "Update (u) or Create new (n)" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "Directory Management" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q "Update (u) or Create new (n)" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
 }
 
 @test "directory isolation maintains backward compatibility" {
@@ -62,7 +62,7 @@ teardown() {
     grep -q "active.*directory\|symlink-aware" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 
     # Check output paths are documented correctly (now uses $CSF_DIR variable)
-    grep -q "CSF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "CSF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
 }
 
 @test "manage-spec-directory agent includes gitignore protection" {

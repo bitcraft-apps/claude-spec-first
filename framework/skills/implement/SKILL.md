@@ -1,5 +1,8 @@
 ---
+name: implement
 description: Implement through pattern learning
+disable-model-invocation: true
+argument-hint: "[SPECIFICATION_OR_PATH]"
 ---
 
 # Implement Command

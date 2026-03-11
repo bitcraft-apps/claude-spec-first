@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-03-11
+
+### Changed
+- Migrate commands to skills format — `framework/commands/*.md` → `framework/skills/*/SKILL.md` with YAML frontmatter (#95)
+- Update `validate-framework.sh` to validate skills in repo mode, commands in installed mode
+- Update `install.sh` to install from `framework/skills/*/SKILL.md` instead of `framework/commands/`
+- Update `plugin.json` key from `commands` to `skills`
+- Update integration tests for new skill paths
+- Update stale "command files" reference in AGENTS.md
+
 ## [0.25.3] - 2026-03-10
 
 ### Fixed

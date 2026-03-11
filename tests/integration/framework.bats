@@ -24,7 +24,7 @@ teardown() {
 @test "framework directory structure exists" {
     [ -f "$PROJECT_ROOT/CLAUDE.md" ]
     [ -f "$PROJECT_ROOT/framework/VERSION" ]
-    [ -d "$PROJECT_ROOT/framework/commands" ]
+    [ -d "$PROJECT_ROOT/framework/skills" ]
     [ -d "$PROJECT_ROOT/framework/agents" ]
     [ -x "$PROJECT_ROOT/framework/validate-framework.sh" ]
 }
@@ -56,18 +56,18 @@ teardown() {
     grep -q "tools: Write" "$PROJECT_ROOT/framework/agents/define-scope.md"
 }
 
-@test "spec command delegates to agents properly" {
-    [ -f "$PROJECT_ROOT/framework/commands/spec.md" ]
-    
-    # Check YAML frontmatter  
-    grep -q "description:" "$PROJECT_ROOT/framework/commands/spec.md"
-    
+@test "spec skill delegates to agents properly" {
+    [ -f "$PROJECT_ROOT/framework/skills/spec/SKILL.md" ]
+
+    # Check YAML frontmatter
+    grep -q "description:" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+
     # Check delegation to agents
-    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "synthesize-spec" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "define-scope" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q "synthesize-spec" "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
 }
 
 @test "agents have file persistence instructions" {
