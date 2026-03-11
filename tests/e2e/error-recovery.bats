@@ -28,6 +28,9 @@ setup_framework_to() {
     for f in "$PROJECT_ROOT/framework/agents/"*.md; do
         [ -f "$f" ] && cp "$f" "$target/agents/csf/"
     done
+    for d in "$PROJECT_ROOT/framework/skills/"*/; do
+        [ -d "$d" ] && cp "$d/SKILL.md" "$target/commands/csf/$(basename "$d").md"
+    done
 }
 
 assert_success() {
