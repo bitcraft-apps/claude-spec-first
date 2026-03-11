@@ -106,6 +106,9 @@ teardown() {
         "agents/csf" \
         ".csf"
     
+    # Verify hooks.json manifest
+    [ -f "$TEST_INSTALL_DIR/hooks/csf/hooks.json" ]
+
     # Verify installation marker
     [ -f "$TEST_INSTALL_DIR/.csf/.installed" ]
     

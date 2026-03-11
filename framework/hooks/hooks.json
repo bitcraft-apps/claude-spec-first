@@ -3,8 +3,8 @@
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "validate-spec.sh" },
-          { "type": "command", "command": "validate-implementation.sh" }
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/csf/validate-spec.sh" },
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/csf/validate-implementation.sh" }
         ]
       }
     ],
@@ -12,7 +12,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "validate-subagent.sh" }
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/csf/validate-subagent.sh" }
         ]
       }
     ]

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-03-11
+
+### Changed
+- Migrate hooks from `settings.json` injection to plugin-native `hooks.json` format
+- Use `${CLAUDE_PLUGIN_ROOT}` for hook command paths per Claude Code plugin spec
+- Add `cleanup_old_hooks()` to remove legacy CSF hook entries from `settings.json` on upgrade
+
+### Fixed
+- Fix flaky test 19 ("works without git repository") failing on broken symlinks in local `.csf/` state
+
 ## [0.26.0] - 2026-03-11
 
 ### Changed
