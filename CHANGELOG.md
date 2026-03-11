@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-03-11
+
 ### Changed
 - Update CI pipeline for plugin structure: replace deleted install-test job with plugin-validation and format-checks jobs (#98)
 - Migrate test suite for plugin structure: delete 5 obsolete test files, add `plugin-validation.bats` (#99)
