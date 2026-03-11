@@ -11,18 +11,14 @@ The Claude Spec-First Framework uses **BATS (Bash Automated Testing System)** fo
 The framework uses a **well-organized directory structure** that separates different types of tests:
 
 ```
-scripts/
-├── version.sh                   # Version utilities
-└── version.test.bats            # Unit tests (collocated)
-
 tests/
 ├── integration/                 # Integration tests
+│   ├── directory-isolation.bats # Spec directory isolation
 │   ├── framework.bats           # Framework structure tests
-│   └── version-system.bats      # Version system integration
+│   ├── plugin-validation.bats   # Plugin artifact validation
+│   └── workflow.bats            # Workflow integration
 │
 ├── e2e/                        # End-to-end tests
-│   ├── complete-workflow.bats   # Full workflow tests
-│   ├── ci-simulation.bats       # CI pipeline simulation
 │   └── error-recovery.bats      # Error handling tests
 │
 ├── helpers/                    # Granular test helpers
@@ -39,17 +35,10 @@ tests/
 
 ### Test Organization Philosophy
 
-**Unit Tests (Collocated):**
-- Located next to the code they test
-- Easy to discover and maintain  
-- Run with: `make test-unit` or `./run-tests.sh --unit`
-- Example: `scripts/version.test.bats` tests `scripts/version.sh`
-
-**Integration Tests (Organized):**
-- Test interactions between components
+**Integration Tests:**
+- Test interactions between components and plugin artifacts
 - Located in `tests/integration/`
 - Run with: `make test-integration` or `./run-tests.sh --integration`
-- Focus on framework functionality and installation
 
 **End-to-End Tests (Comprehensive):**
 - Test complete workflows from start to finish
@@ -133,26 +122,20 @@ bats e2e/                           # All E2E tests
 
 ## Test Suites
 
-### 1. Unit Tests (`scripts/version.test.bats`) 🔗 Collocated
+### Integration Tests (`tests/integration/`)
 
-**Purpose**: Test individual functions in isolation
-**Location**: Next to the code being tested
-**Coverage**: 39 test cases for version utility functions
-
-### 2. Integration Tests (`tests/integration/`) 🏢 Organized
-
-**Purpose**: Test component interactions and workflows
+**Purpose**: Test component interactions, plugin artifacts, and workflows
 **Files**:
-- `framework.bats`: Framework structure and validation (3 tests)
-- `version-system.bats`: Version system integration (4 tests)
+- `directory-isolation.bats`: Spec directory isolation
+- `framework.bats`: Framework structure and validation
+- `plugin-validation.bats`: Plugin artifact validation (requires `python3`)
+- `workflow.bats`: Workflow integration
 
-### 3. End-to-End Tests (`tests/e2e/`) 🌍 Comprehensive
+### End-to-End Tests (`tests/e2e/`)
 
-**Purpose**: Test complete user workflows and edge cases
+**Purpose**: Test error handling and edge cases
 **Files**:
-- `complete-workflow.bats`: Full installation and usage workflows (2 tests)
-- `ci-simulation.bats`: GitHub Actions simulation (4 tests)
-- `error-recovery.bats`: Error handling and recovery (5 tests)
+- `error-recovery.bats`: Error handling and recovery
 
 ## Helper System
 
