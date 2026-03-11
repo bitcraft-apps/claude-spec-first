@@ -1,6 +1,6 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Framework version: 0.26.0 -->
+<!-- Framework version: 0.27.0 -->
 
 ## Overview
 
@@ -46,6 +46,30 @@ Schema:
 **Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, both scripts fall back to their previous behavior (directory globs for install, hardcoded arrays for validation).
 
 **Version drift:** `validate-framework.sh` checks that `plugin.json` version matches `framework/VERSION` and fails validation if they differ. This check only runs in repository mode.
+
+### hooks.json
+
+`framework/hooks/hooks.json` declares hook commands in Claude Code's plugin-native format. `install.sh` copies it to `~/.claude/hooks/csf/hooks.json`.
+
+Schema:
+
+```json
+{
+  "hooks": {
+    "<EventName>": [{
+      "matcher": "string (optional — glob pattern for SubagentStop)",
+      "hooks": [{
+        "type": "command",
+        "command": "string"
+      }]
+    }]
+  }
+}
+```
+
+Hook commands use `${CLAUDE_PLUGIN_ROOT}` as a path prefix. Claude Code resolves this to the plugin's install directory at runtime, so hook scripts do not contain absolute paths.
+
+Current events: `Stop` (2 hooks: validate-spec, validate-implementation), `SubagentStop` (1 hook: validate-subagent, matcher `*`).
 
 ## Setup
 
