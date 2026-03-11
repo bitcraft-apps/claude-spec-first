@@ -8,7 +8,7 @@
 
 ## Commands
 
-Commands are defined in `framework/commands/`. Each file is the source of truth for agent orchestration, batching, and gates.
+Commands are defined as skills in `skills/`. Each `SKILL.md` is the source of truth for agent orchestration, batching, and gates.
 
 - `/csf:spec [REQUIREMENTS]` — parallel research → synthesis into `spec.md`
 - `/csf:implement [SPEC_OR_PATH]` — Explore subagent for patterns → `implement-minimal` for code
@@ -24,7 +24,7 @@ Agent turn limits (`maxTurns`) are set in command files, not agent frontmatter.
 
 ### pattern-example.md
 
-`.claude/.csf/research/pattern-example.md` is the handoff between Explore (Step 1) and `implement-minimal` (Step 2) in `/csf:implement`. Free-form markdown. Referenced in `framework/commands/implement.md` and `framework/agents/implement-minimal.md`.
+`.claude/.csf/research/pattern-example.md` is the handoff between Explore (Step 1) and `implement-minimal` (Step 2) in `/csf:implement`. Free-form markdown. Referenced in `skills/implement/SKILL.md` and `framework/agents/implement-minimal.md`.
 
 ### plugin.json
 
@@ -38,7 +38,7 @@ Schema:
   "version": "string (must match framework/VERSION)",
   "description": "string",
   "agents": ["string — basename without extension"],
-  "commands": ["string — basename without extension"],
+  "skills": ["string — basename without extension"],
   "hooks": ["string — filename with extension"]
 }
 ```

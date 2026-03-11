@@ -16,7 +16,7 @@
     "manage-spec-directory",
     "synthesize-spec"
   ],
-  "commands": [
+  "skills": [
     "document",
     "implement",
     "spec"

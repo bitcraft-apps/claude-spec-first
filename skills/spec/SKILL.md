@@ -1,5 +1,8 @@
 ---
+name: spec
 description: Create specifications through parallel analysis
+disable-model-invocation: true
+argument-hint: "[REQUIREMENTS]"
 ---
 
 # Spec Command
