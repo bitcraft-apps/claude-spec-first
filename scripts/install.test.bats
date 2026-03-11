@@ -415,8 +415,9 @@ teardown() {
 
 @test "works without git repository" {
     # Create a temporary copy of the project without .git
+    # Exclude .csf (local state with potential broken symlinks)
     local NO_GIT_DIR="$TEST_DIR/no-git-project"
-    cp -r "$PROJECT_ROOT" "$NO_GIT_DIR"
+    rsync -a --exclude='.csf' "$PROJECT_ROOT/" "$NO_GIT_DIR/"
     rm -rf "$NO_GIT_DIR/.git"
     
     # Make script executable

@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "validate-spec.sh" },
+          { "type": "command", "command": "validate-implementation.sh" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "validate-subagent.sh" }
+        ]
+      }
+    ]
+  }
+}

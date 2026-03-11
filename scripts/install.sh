@@ -391,84 +391,45 @@ install_framework_files() {
     fi
     echo "✅ $hook_count hooks $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
 
+    # Install hooks.json (plugin hook manifest)
+    if [ -f "$FRAMEWORK_DIR/hooks/hooks.json" ]; then
+        if cp "$FRAMEWORK_DIR/hooks/hooks.json" "$CLAUDE_DIR/hooks/$CSF_PREFIX/hooks.json"; then
+            INSTALLED+=("$CLAUDE_DIR/hooks/$CSF_PREFIX/hooks.json")
+            echo "📄 ${operation}: $CSF_PREFIX/hooks.json"
+        fi
+    fi
+
 }
 
-# Merge CSF hooks into settings.json
-merge_settings_json() {
+# Remove old CSF hook entries from settings.json (migration cleanup)
+cleanup_old_hooks() {
     local settings_file="$CLAUDE_DIR/settings.json"
-    local hooks_dir="$CLAUDE_DIR/hooks/$CSF_PREFIX"
 
-    # Check if jq is available
-    if ! command -v jq &> /dev/null; then
-        echo -e "${YELLOW}⚠️  jq not found - skipping settings.json merge${NC}"
-        echo -e "${YELLOW}   Install jq and re-run to enable stop hooks${NC}"
+    # Nothing to clean if no settings.json or no jq
+    if [ ! -f "$settings_file" ] || ! command -v jq &>/dev/null; then
         return 0
     fi
 
-    # Build Stop hooks configuration
-    local csf_stop_hooks
-    csf_stop_hooks=$(cat <<EOF
-{
-  "hooks": [
-    {"type": "command", "command": "$hooks_dir/validate-spec.sh"},
-    {"type": "command", "command": "$hooks_dir/validate-implementation.sh"}
-  ]
-}
-EOF
-)
-
-    # Build SubagentStop hooks configuration
-    local csf_subagent_hooks
-    csf_subagent_hooks=$(cat <<EOF
-{
-  "matcher": "*",
-  "hooks": [
-    {"type": "command", "command": "$hooks_dir/validate-subagent.sh"}
-  ]
-}
-EOF
-)
+    # Check if settings.json contains any CSF hook references
+    if ! grep -q "/hooks/csf/" "$settings_file" 2>/dev/null; then
+        return 0
+    fi
 
     local temp_file
     temp_file=$(mktemp)
 
-    if [ -f "$settings_file" ]; then
-        # Validate existing JSON
-        if ! jq empty "$settings_file" 2>/dev/null; then
-            echo -e "${YELLOW}⚠️  Invalid settings.json - creating backup and new file${NC}"
-            cp "$settings_file" "$settings_file.bak"
-            echo '{}' > "$settings_file"
-        fi
-
-        # Merge: remove existing CSF hooks, add new ones
-        jq --argjson csf_stop "$csf_stop_hooks" --argjson csf_subagent "$csf_subagent_hooks" '
-            # Ensure hooks.Stop exists as array
-            .hooks.Stop = (.hooks.Stop // [])
-            # Remove existing CSF Stop hooks (containing /hooks/csf/)
-            | .hooks.Stop = [.hooks.Stop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
-            # Add our CSF Stop hooks
-            | .hooks.Stop += [$csf_stop]
-            # Ensure hooks.SubagentStop exists as array
-            | .hooks.SubagentStop = (.hooks.SubagentStop // [])
-            # Remove existing CSF SubagentStop hooks
-            | .hooks.SubagentStop = [.hooks.SubagentStop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
-            # Add our CSF SubagentStop hooks
-            | .hooks.SubagentStop += [$csf_subagent]
-        ' "$settings_file" > "$temp_file"
-    else
-        # Create new settings.json
-        jq -n --argjson csf_stop "$csf_stop_hooks" --argjson csf_subagent "$csf_subagent_hooks" \
-            '{hooks: {Stop: [$csf_stop], SubagentStop: [$csf_subagent]}}' > "$temp_file"
-    fi
-
-    # Validate result and move into place
-    if jq empty "$temp_file" 2>/dev/null; then
+    if jq '
+        if .hooks.Stop then
+            .hooks.Stop = [.hooks.Stop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
+        else . end
+        | if .hooks.SubagentStop then
+            .hooks.SubagentStop = [.hooks.SubagentStop[] | select(.hooks | all((.command // "") | contains("/hooks/csf/") | not))]
+        else . end
+    ' "$settings_file" > "$temp_file" 2>/dev/null && jq empty "$temp_file" 2>/dev/null; then
         mv "$temp_file" "$settings_file"
-        echo "⚙️  Stop and SubagentStop hooks configured in settings.json"
+        echo "🧹 Removed old CSF hook entries from settings.json"
     else
-        echo -e "${YELLOW}⚠️  Failed to merge settings.json${NC}"
         rm -f "$temp_file"
-        return 1
     fi
 }
 
@@ -479,8 +440,8 @@ else
     install_framework_files "Updating"
 fi
 
-# Merge settings.json with CSF hooks
-merge_settings_json
+# Clean old CSF hooks from settings.json (migration from pre-plugin installs)
+cleanup_old_hooks
 
 # Disable error trap after successful file operations
 trap - ERR
