@@ -24,9 +24,9 @@ assert 'hooks' in data, 'missing hooks'
 
 @test "plugin.json agents match framework/agents directory" {
     local manifest_agents
-    manifest_agents=$(python3 -c "
-import json
-data = json.load(open('$PROJECT_ROOT/.claude-plugin/plugin.json'))
+    manifest_agents=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
 print('\n'.join(sorted(data['agents'])))
 ")
 
@@ -38,9 +38,9 @@ print('\n'.join(sorted(data['agents'])))
 
 @test "plugin.json skills match framework/skills directory" {
     local manifest_skills
-    manifest_skills=$(python3 -c "
-import json
-data = json.load(open('$PROJECT_ROOT/.claude-plugin/plugin.json'))
+    manifest_skills=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
 print('\n'.join(sorted(data['skills'])))
 ")
 
@@ -95,16 +95,30 @@ import sys, json
 data = json.load(sys.stdin)
 assert 'hooks' in data, 'missing hooks key'
 hooks = data['hooks']
-assert 'Stop' in hooks or 'SubagentStop' in hooks, 'missing hook events'
+assert 'Stop' in hooks, 'missing Stop hook event'
+assert 'SubagentStop' in hooks, 'missing SubagentStop hook event'
 "
 }
 
-@test "hooks reference existing shell scripts" {
+@test "hooks.json references existing shell scripts" {
     local hooks_dir="$PROJECT_ROOT/framework/hooks"
-    for hook_script in "$hooks_dir"/*.sh; do
-        [ -f "$hook_script" ] || continue
-        [ -s "$hook_script" ] || {
-            echo "Empty hook script: $(basename "$hook_script")" >&2
+    local referenced_scripts
+    referenced_scripts=$(cat "$hooks_dir/hooks.json" | python3 -c "
+import sys, json, os
+data = json.load(sys.stdin)
+for event in data['hooks'].values():
+    for entry in event:
+        hooks = entry.get('hooks', [entry]) if 'hooks' in entry else [entry]
+        for h in hooks:
+            cmd = h.get('command', '')
+            # Extract script basename from command like 'bash .../validate-spec.sh'
+            parts = cmd.split('/')
+            if parts:
+                print(parts[-1])
+")
+    for script in $referenced_scripts; do
+        [ -f "$hooks_dir/$script" ] || {
+            echo "Missing hook script: $script" >&2
             return 1
         }
     done
