@@ -18,7 +18,7 @@ Commands are defined as skills in `skills/`. Each `SKILL.md` is the source of tr
 
 Agent files live in `framework/agents/`. Each has YAML frontmatter: `name`, `description`, `tools` (required), `model` (optional, only `haiku`). See agent files for details — they are the source of truth.
 
-Agent turn limits (`maxTurns`) are set in command files, not agent frontmatter.
+Agent turn limits (`maxTurns`) are set in skill files, not agent frontmatter.
 
 ## Integration Contracts
 
@@ -28,7 +28,7 @@ Agent turn limits (`maxTurns`) are set in command files, not agent frontmatter.
 
 ### plugin.json
 
-`.claude-plugin/plugin.json` declares the framework's component inventory: agents, commands, and hooks. `install.sh` and `validate-framework.sh` read it to enumerate files instead of maintaining separate lists.
+`.claude-plugin/plugin.json` declares the framework's component inventory: agents, skills, and hooks. `install.sh` and `validate-framework.sh` read it to enumerate files instead of maintaining separate lists.
 
 Schema:
 
