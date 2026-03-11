@@ -1,6 +1,6 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Framework version: 0.25.3 -->
+<!-- Framework version: 0.26.0 -->
 
 ## Overview
 

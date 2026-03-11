@@ -553,16 +553,6 @@ echo ""
 echo "📋 Documentation Consistency..."
 echo "=============================="
 
-# Only validate documentation consistency in repository mode
-if [ "$EXECUTION_MODE" = "repository" ]; then
-    # Count actual agents and skills
-    ACTUAL_AGENT_COUNT=$(echo "${#REQUIRED_AGENTS[@]}")
-    ACTUAL_SKILL_COUNT=$(echo "${#REQUIRED_SKILLS[@]}")
-
-    # AGENTS.md is the source of truth — no agent/skill counts to validate there
-    # (counts are derived from REQUIRED_AGENTS/REQUIRED_SKILLS arrays above)
-fi
-
 # Check workflow completeness (using centralized skill list)
 WORKFLOW_COMPLETE=true
 
