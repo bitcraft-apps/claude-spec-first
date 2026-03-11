@@ -97,29 +97,6 @@ jobs:
           chmod +x framework/validate-framework.sh
           ./framework/validate-framework.sh
 
-      - name: Verify installation scripts
-        run: |
-          echo "📋 Verifying installation scripts..."
-
-          # Check script existence and permissions
-          for script in install.sh uninstall.sh; do
-            if [ -f "scripts/$script" ]; then
-              echo "✅ scripts/$script exists"
-            else
-              echo "❌ scripts/$script missing"
-              exit 1
-            fi
-
-            if [ -x "scripts/$script" ]; then
-              echo "✅ scripts/$script is executable"
-            else
-              echo "❌ scripts/$script not executable"
-              exit 1
-            fi
-          done
-
-          echo "✅ All installation scripts validated"
-
   # Version requirement enforcement - always runs on PRs to enforce version policy
   version-validation:
     name: Version Policy Enforcement
@@ -184,17 +161,6 @@ jobs:
           cd tests
           ./run-tests.sh --tap
 
-      - name: Test installation on ${{ matrix.os }}
-        run: |
-          echo "Testing installation on ${{ matrix.os }}..."
-          # Create test project directory with CLAUDE.md
-          TEST_PROJECT="/tmp/test-project-${{ runner.os }}"
-          mkdir -p "$TEST_PROJECT"
-          echo "# Test Project" > "$TEST_PROJECT/CLAUDE.md"
-          cd "$TEST_PROJECT"
-          ${{ github.workspace }}/scripts/install.sh
-          echo "✅ Installation completed on ${{ matrix.os }}"
-
       - name: Validate platform compatibility
         run: |
           echo "Platform: ${{ runner.os }}"
@@ -228,22 +194,6 @@ jobs:
 
           echo "✅ Release readiness validation setup complete"
 
-      - name: Test production installation
-        run: |
-          echo "📦 Testing production installation process..."
-          # Create test project directory with CLAUDE.md
-          TEST_PROJECT="/tmp/release-test-project"
-          mkdir -p "$TEST_PROJECT"
-          echo "# Test Project" > "$TEST_PROJECT/CLAUDE.md"
-          cd "$TEST_PROJECT"
-
-          ${{ github.workspace }}/scripts/install.sh
-
-          cd ".claude"
-          ./.csf/validate-framework.sh
-
-          echo "✅ Production installation validated"
-
       - name: Generate release summary
         run: |
           echo "## Release Validation Summary" >> $GITHUB_STEP_SUMMARY
@@ -251,5 +201,5 @@ jobs:
           echo "**Test Suite**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
           echo "**Framework Validation**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
           echo "**Version Validation**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "**Installation Test**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
+          echo "**Framework Structure**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
           echo "**Ready for Release**: ✅ YES" >> $GITHUB_STEP_SUMMARY

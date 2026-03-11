@@ -2,11 +2,7 @@
 
 ## Getting Started
 
-Install and run. No configuration needed.
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bitcraft-apps/claude-spec-first/main/scripts/remote-install.sh | bash
-```
+Clone and use as a Claude Code plugin. No configuration needed.
 
 Then use the three commands:
 

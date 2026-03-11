@@ -25,16 +25,14 @@ setup() {
     echo "framework example" > framework/examples/example.md
     
     # Create scripts
-    echo "#!/bin/bash" > scripts/install.sh
     echo "#!/bin/bash" > scripts/uninstall.sh
     echo "#!/bin/bash" > scripts/version.sh
-    
+
     # Create non-version-requiring files
     echo "name: CI" > .github/workflows/ci.yml
     echo "#!/usr/bin/env bats" > tests/example.bats
     echo "# README" > README.md
     echo "# Documentation" > docs/guide.md
-    echo "# Installation test" > scripts/install.test.bats
     
     # Copy scripts under test
     cp "$ORIGINAL_DIR/scripts/check-version-requirements.sh" scripts/
@@ -89,16 +87,6 @@ teardown() {
     [ "$status" -ne 0 ]
     [[ "$output" == *"Version bump REQUIRED"* ]]
     [[ "$output" == *"framework/agents/spec-analyst.md"* ]]
-}
-
-@test "allows changes to install script" {
-    echo "#!/bin/bash\necho updated" > scripts/install.sh
-    git add scripts/install.sh
-    git commit -m "Update install script" --quiet
-    
-    run scripts/check-version-requirements.sh
-    [ "$status" -eq 0 ]
-    [[ "$output" == *"No version bump required"* ]]
 }
 
 @test "allows changes to test files" {

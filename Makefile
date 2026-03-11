@@ -1,6 +1,6 @@
 # Makefile for Claude Spec-First Framework
 
-.PHONY: help test test-verbose test-integration test-version test-unit test-e2e test-parallel setup install validate clean
+.PHONY: help test test-verbose test-integration test-version test-unit test-e2e test-parallel setup validate clean
 
 # Default target
 help:
@@ -12,13 +12,12 @@ help:
 	@echo "  test-verbose      Run tests with verbose output"
 	@echo "  test-integration  Run only integration tests (centralized)"
 	@echo "  test-version      Run only version utility tests (collocated)"
-	@echo "  test-scripts      Run only install/uninstall script tests (collocated)"
+	@echo "  test-scripts      Run only uninstall script tests (collocated)"
 	@echo "  test-unit         Run all unit tests (collocated with code)"
 	@echo "  test-e2e          Run end-to-end tests"
 	@echo "  test-parallel     Run tests in parallel"
 	@echo ""
 	@echo "  setup             Initialize git submodules and setup"
-	@echo "  install           Install framework to ~/.claude"
 	@echo "  validate          Validate framework configuration"
 	@echo "  clean             Clean up test artifacts"
 	@echo ""
@@ -29,7 +28,7 @@ help:
 	@echo "Examples:"
 	@echo "  make setup && make test      # Setup and run all tests"
 	@echo "  make test-unit               # Run only unit tests"
-	@echo "  make test-scripts            # Run only install/uninstall tests"
+	@echo "  make test-scripts            # Run only uninstall tests"
 	@echo "  make test-integration        # Run only integration tests"
 	@echo "  make test-e2e                # Run only E2E tests"
 	@echo "  make test-verbose            # Detailed test output"
@@ -65,10 +64,10 @@ test-version: setup
 	@echo "🧪 Running version utility tests (collocated)..."
 	cd tests && ./run-tests.sh --filter version
 
-# Run install/uninstall script tests (collocated)
+# Run uninstall script tests (collocated)
 test-scripts: setup
-	@echo "🧪 Running install/uninstall script tests (collocated)..."
-	cd tests && ./run-tests.sh --filter "install\|uninstall"
+	@echo "🧪 Running uninstall script tests (collocated)..."
+	cd tests && ./run-tests.sh --filter "uninstall"
 
 # Run all unit tests (collocated with source code)
 test-unit: setup
@@ -85,11 +84,6 @@ test-parallel: setup
 	@echo "🧪 Running BATS test suite (parallel)..."
 	cd tests && ./run-tests.sh --parallel $(if $(FILTER),--filter $(FILTER))
 
-
-# Install framework
-install: validate
-	@echo "📦 Installing Claude Spec-First Framework..."
-	./scripts/install.sh
 
 # Validate framework
 validate: setup
