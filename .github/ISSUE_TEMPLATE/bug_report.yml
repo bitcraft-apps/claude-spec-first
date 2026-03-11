@@ -24,9 +24,8 @@ body:
       label: How to reproduce
       description: Steps to reproduce the issue
       placeholder: |
-        1. Run command: ./scripts/install.sh
-        2. Try to use: /csf:spec
-        3. Error occurs: ...
+        1. Run command: /csf:spec Add login page
+        2. Error occurs: ...
     validations:
       required: true
   

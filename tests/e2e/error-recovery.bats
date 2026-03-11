@@ -18,6 +18,18 @@ create_mock_home() {
     echo "$home_dir"
 }
 
+# Set up framework structure for testing
+setup_framework_to() {
+    local target="$1/.claude"
+    mkdir -p "$target/.csf" "$target/agents/csf" "$target/commands/csf"
+    cp "$PROJECT_ROOT/framework/VERSION" "$target/.csf/"
+    cp "$PROJECT_ROOT/framework/validate-framework.sh" "$target/.csf/"
+    chmod +x "$target/.csf/validate-framework.sh"
+    for f in "$PROJECT_ROOT/framework/agents/"*.md; do
+        [ -f "$f" ] && cp "$f" "$target/agents/csf/"
+    done
+}
+
 assert_success() {
     [ "$status" -eq 0 ] || {
         echo "Expected success (exit code 0), got: $status" >&2
@@ -86,11 +98,10 @@ teardown() {
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
+    setup_framework_to "$HOME_DIR"
 
     cd "$HOME_DIR/.claude"
-    
+
     # Corrupt the VERSION file with invalid content
     echo "invalid.version.format" > .csf/VERSION
 
@@ -116,11 +127,10 @@ teardown() {
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
+    setup_framework_to "$HOME_DIR"
 
     cd "$HOME_DIR/.claude"
-    
+
     # Test missing VERSION file
     mv .csf/VERSION .csf/VERSION.backup
 
@@ -145,11 +155,10 @@ teardown() {
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
+    setup_framework_to "$HOME_DIR"
 
     cd "$HOME_DIR/.claude"
-    
+
     # Remove execute permissions from validation script
     chmod -x .csf/validate-framework.sh
 
@@ -173,11 +182,10 @@ teardown() {
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
+    setup_framework_to "$HOME_DIR"
 
     cd "$HOME_DIR/.claude"
-    
+
     # Make .csf directory read-only to simulate write permission issues
     chmod 555 .csf/
 
@@ -201,11 +209,10 @@ teardown() {
     HOME_DIR="$TEST_DIR/home"
     create_mock_home "$HOME_DIR"
 
-    cd "$PROJECT_ROOT"
-    env HOME="$HOME_DIR" ./scripts/install.sh >/dev/null 2>&1
+    setup_framework_to "$HOME_DIR"
 
     cd "$HOME_DIR/.claude"
-    
+
     # Simulate concurrent validation access
     # This tests for race conditions and file locking issues
 

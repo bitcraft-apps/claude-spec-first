@@ -4,29 +4,18 @@ Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP p
 
 ## Quick Start
 
-### One-Command Installation
+### Installation
+
+Clone the repository and add it as a Claude Code plugin:
 
 ```bash
-# Install framework directly from GitHub (recommended)
-curl -fsSL https://raw.githubusercontent.com/bitcraft-apps/claude-spec-first/main/scripts/remote-install.sh | bash
-```
-
-### Alternative Installation Methods
-
-```bash
-# Using wget
-wget -qO- https://raw.githubusercontent.com/bitcraft-apps/claude-spec-first/main/scripts/remote-install.sh | bash
-
-# Manual installation (requires cloning)
 git clone https://github.com/bitcraft-apps/claude-spec-first.git
-cd claude-spec-first
-./scripts/install.sh
 ```
 
-### Validate Installation
+### Validate
 
 ```bash
-~/.claude/.csf/validate-framework.sh
+bash framework/validate-framework.sh
 ```
 
 ## Core Philosophy

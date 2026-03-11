@@ -44,15 +44,27 @@ setup() {
     # Create temporary test directory
     TEST_DIR="$(mktemp -d)"
     export TEST_DIR
-    
+
     # Create unique test directories - uninstall.sh expects HOME/.claude structure
-    export TEST_HOME_DIR="$TEST_DIR/home" 
+    export TEST_HOME_DIR="$TEST_DIR/home"
     export TEST_CLAUDE_DIR="$TEST_HOME_DIR/.claude"
     export CSF_PREFIX="csf"
-    
+
     # Make scripts executable
-    chmod +x "$PROJECT_ROOT/scripts/install.sh"
     chmod +x "$PROJECT_ROOT/scripts/uninstall.sh"
+}
+
+# Set up framework structure for testing
+setup_framework_to() {
+    local target="$1"
+    mkdir -p "$target/.csf" "$target/agents/csf" "$target/commands/csf"
+    cp "$PROJECT_ROOT/framework/VERSION" "$target/.csf/"
+    cp "$PROJECT_ROOT/framework/validate-framework.sh" "$target/.csf/"
+    chmod +x "$target/.csf/validate-framework.sh"
+    date > "$target/.csf/.installed"
+    for f in "$PROJECT_ROOT/framework/agents/"*.md; do
+        [ -f "$f" ] && cp "$f" "$target/agents/csf/"
+    done
 }
 
 teardown() {
@@ -82,7 +94,7 @@ teardown() {
 
 @test "shows confirmation prompt" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Set HOME for uninstall script
     export HOME="$TEST_HOME_DIR"
@@ -99,7 +111,7 @@ teardown() {
 
 @test "cancels uninstallation when user says no" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Set HOME for uninstall script  
     export HOME="${TEST_CLAUDE_DIR%/*}"
@@ -118,7 +130,7 @@ teardown() {
 
 @test "removes commands directory when user confirms" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Verify commands exist before uninstall
     [ -d "$TEST_CLAUDE_DIR/commands/csf" ]
@@ -140,7 +152,7 @@ teardown() {
 
 @test "removes agents directory when user confirms" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Verify agents exist before uninstall
     [ -d "$TEST_CLAUDE_DIR/agents/csf" ]
@@ -162,7 +174,7 @@ teardown() {
 
 @test "removes .csf metadata directory when user confirms" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Create some additional files in .csf
     echo "test backup" > "$TEST_CLAUDE_DIR/.csf/backup.txt"
@@ -188,7 +200,7 @@ teardown() {
 
 @test "cleans up empty parent directories" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Verify parent directories exist
     [ -d "$TEST_CLAUDE_DIR/commands" ]
@@ -213,7 +225,7 @@ teardown() {
 
 @test "preserves non-empty parent directories" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Create additional files in parent directories
     echo "other command" > "$TEST_CLAUDE_DIR/commands/other.md"
@@ -241,7 +253,7 @@ teardown() {
 
 @test "shows correct success messages" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Set HOME for uninstall script
     export HOME="${TEST_CLAUDE_DIR%/*}"
@@ -263,7 +275,7 @@ teardown() {
 
 @test "shows analysis of what will be removed" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Set HOME for uninstall script
     export HOME="${TEST_CLAUDE_DIR%/*}"
@@ -310,7 +322,7 @@ teardown() {
 
 @test "handles permission errors gracefully" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
     
     # Make a directory read-only to cause permission error
     chmod 444 "$TEST_CLAUDE_DIR/commands/csf"
@@ -337,7 +349,7 @@ teardown() {
     
     for response in "${responses[@]}"; do
         # Install framework
-        env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+        setup_framework_to "$TEST_CLAUDE_DIR"
         
         # Set HOME
         export HOME="${TEST_CLAUDE_DIR%/*}"
@@ -361,7 +373,7 @@ teardown() {
     mkdir -p "$TEST_CLAUDE_DIR/.claude"
     
     # Install framework first (to the correct .claude subdirectory)
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR/.claude" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR/.claude"
     
     # Test various ways to say "no"
     local responses=("n" "N" "no" "NO" "" "anything")
@@ -386,7 +398,7 @@ teardown() {
 
 @test "preserves parent directories and cleans up properly" {
     # Install framework first
-    env CLAUDE_DIR="$TEST_CLAUDE_DIR" "$PROJECT_ROOT/scripts/install.sh" > /dev/null
+    setup_framework_to "$TEST_CLAUDE_DIR"
 
     # Verify framework is installed
     [ -d "$TEST_CLAUDE_DIR/.csf" ]

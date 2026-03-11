@@ -28,7 +28,7 @@ Agent turn limits (`maxTurns`) are set in skill files, not agent frontmatter.
 
 ### plugin.json
 
-`.claude-plugin/plugin.json` declares the framework's component inventory: agents, skills, and hooks. `install.sh` and `validate-framework.sh` read it to enumerate files instead of maintaining separate lists.
+`.claude-plugin/plugin.json` declares the framework's component inventory: agents, skills, and hooks. `validate-framework.sh` reads it to enumerate files instead of maintaining separate lists.
 
 Schema:
 
@@ -43,13 +43,13 @@ Schema:
 }
 ```
 
-**Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, both scripts fall back to their previous behavior (directory globs for install, hardcoded arrays for validation).
+**Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, `validate-framework.sh` falls back to hardcoded arrays.
 
 **Version drift:** `validate-framework.sh` checks that `plugin.json` version matches `framework/VERSION` and fails validation if they differ. This check only runs in repository mode.
 
 ### hooks.json
 
-`framework/hooks/hooks.json` declares hook commands in Claude Code's plugin-native format. `install.sh` copies it to `~/.claude/hooks/csf/hooks.json`.
+`framework/hooks/hooks.json` declares hook commands in Claude Code's plugin-native format.
 
 Schema:
 
