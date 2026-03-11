@@ -18,7 +18,6 @@ scripts/
 tests/
 ├── integration/                 # Integration tests
 │   ├── framework.bats           # Framework structure tests
-│   ├── installation.bats        # Installation workflow tests  
 │   └── version-system.bats      # Version system integration
 │
 ├── e2e/                        # End-to-end tests
@@ -145,7 +144,6 @@ bats e2e/                           # All E2E tests
 **Purpose**: Test component interactions and workflows
 **Files**:
 - `framework.bats`: Framework structure and validation (3 tests)
-- `installation.bats`: Installation workflows (5 tests) 
 - `version-system.bats`: Version system integration (4 tests)
 
 ### 3. End-to-End Tests (`tests/e2e/`) 🌍 Comprehensive

@@ -8,6 +8,7 @@ on:
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/**"
+      - ".claude-plugin/**"
   push:
     branches: [main]
     paths:
@@ -15,6 +16,7 @@ on:
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/**"
+      - ".claude-plugin/**"
 
 # Cancel in-progress runs when a new run is triggered
 concurrency:
@@ -81,125 +83,134 @@ jobs:
           echo "**Runner**: Ubuntu Latest" >> $GITHUB_STEP_SUMMARY
           echo "**Date**: $(date)" >> $GITHUB_STEP_SUMMARY
 
-  # Single framework validation job
-  framework-validation:
-    name: Framework Validation
+  plugin-validation:
+    name: Plugin Validation
     runs-on: ubuntu-latest
-    needs: tests
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate framework structure
+      - name: Validate plugin.json
         run: |
-          echo "🔍 Validating framework structure..."
-          chmod +x framework/validate-framework.sh
-          ./framework/validate-framework.sh
-
-  # Version requirement enforcement - always runs on PRs to enforce version policy
-  version-validation:
-    name: Version Policy Enforcement
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup git references for version checking
-        run: |
-          # Ensure we have the main branch reference for comparison
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin main:refs/remotes/origin/main
+          echo "Validating .claude-plugin/plugin.json..."
+          if ! jq empty .claude-plugin/plugin.json 2>/dev/null; then
+            echo "FAIL: plugin.json is not valid JSON"
+            exit 1
           fi
+          for field in name description version; do
+            if ! jq -e "has(\"$field\")" .claude-plugin/plugin.json > /dev/null 2>&1; then
+              echo "FAIL: plugin.json missing required field: $field"
+              exit 1
+            fi
+          done
+          echo "PASS: plugin.json is valid"
 
-      - name: Check version requirements
-        id: version-requirements
+      - name: Validate hooks.json
         run: |
-          echo "🔍 Checking if changes require version bump..."
-          chmod +x scripts/check-version-requirements.sh
-          ./scripts/check-version-requirements.sh --github-actions
+          echo "Validating framework/hooks/hooks.json..."
+          if ! jq empty framework/hooks/hooks.json 2>/dev/null; then
+            echo "FAIL: hooks.json is not valid JSON"
+            exit 1
+          fi
+          echo "PASS: hooks.json is valid"
 
-      - name: Validate version and changelog
-        if: steps.version-requirements.outputs.version_required == 'true'
+      - name: Validate skill files exist
         run: |
-          echo "📋 Validating version bump and changelog..."
-          chmod +x scripts/check-version-changes.sh
-          ./scripts/check-version-changes.sh --github-actions
+          echo "Checking framework/skills/*/SKILL.md..."
+          count=0
+          for f in framework/skills/*/SKILL.md; do
+            if [ ! -f "$f" ]; then
+              echo "FAIL: no SKILL.md files found"
+              exit 1
+            fi
+            echo "  Found: $f"
+            count=$((count + 1))
+          done
+          echo "PASS: $count skill files found"
 
-  # Single installation test per OS
-  cross-platform-validation:
-    name: Cross-Platform Validation
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    needs: [tests, framework-validation]
-
-    # Only run on main branch pushes or when explicitly needed for PRs
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cross-platform'))
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup environment
+      - name: Validate agent files exist
         run: |
-          git submodule update --init --recursive
-          chmod +x tests/run-tests.sh
-          chmod +x tests/bats-core/bin/bats
-          chmod +x scripts/version.sh
+          echo "Checking framework/agents/*.md..."
+          count=0
+          for f in framework/agents/*.md; do
+            if [ ! -f "$f" ]; then
+              echo "FAIL: no agent .md files found"
+              exit 1
+            fi
+            echo "  Found: $f"
+            count=$((count + 1))
+          done
+          echo "PASS: $count agent files found"
 
-      - name: Run platform-specific tests
-        run: |
-          echo "Running tests on ${{ matrix.os }}..."
-          cd tests
-          ./run-tests.sh --tap
-
-      - name: Validate platform compatibility
-        run: |
-          echo "Platform: ${{ runner.os }}"
-          echo "Shell: $SHELL"
-          bash --version
-          git --version
-
-  # Release readiness check - only for main branch pushes
-  release-readiness:
-    name: Release Readiness
+  format-checks:
+    name: Format Checks
     runs-on: ubuntu-latest
-    needs: [tests, framework-validation, version-validation]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
-      - name: Final release validation
+      - name: Validate SKILL.md frontmatter
         run: |
-          echo "🚀 Performing final release readiness check..."
+          failed=0
+          for f in framework/skills/*/SKILL.md; do
+            echo "Checking $f..."
+            # Extract frontmatter (between first and second ---)
+            frontmatter=$(sed -n '/^---$/,/^---$/p' "$f")
+            for field in name description; do
+              if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo "  FAIL: missing '$field' in frontmatter"
+                failed=1
+              fi
+            done
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "PASS: all SKILL.md files have required frontmatter"
 
-          # Initialize environment (consolidated setup)
-          git submodule update --init --recursive
-          chmod +x tests/run-tests.sh
-          chmod +x tests/bats-core/bin/bats
-          chmod +x scripts/version.sh
-          chmod +x framework/validate-framework.sh
-
-          echo "✅ Release readiness validation setup complete"
-
-      - name: Generate release summary
+      - name: Validate agent frontmatter
         run: |
-          echo "## Release Validation Summary" >> $GITHUB_STEP_SUMMARY
-          echo "**Framework Version**: $(cat framework/VERSION)" >> $GITHUB_STEP_SUMMARY
-          echo "**Test Suite**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "**Framework Validation**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "**Version Validation**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "**Framework Structure**: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-          echo "**Ready for Release**: ✅ YES" >> $GITHUB_STEP_SUMMARY
+          failed=0
+          for f in framework/agents/*.md; do
+            echo "Checking $f..."
+            frontmatter=$(sed -n '/^---$/,/^---$/p' "$f")
+            for field in name description tools; do
+              if ! echo "$frontmatter" | grep -q "^${field}:"; then
+                echo "  FAIL: missing '$field' in frontmatter of $f"
+                failed=1
+              fi
+            done
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "PASS: all agent files have required frontmatter"
+
+      - name: Validate agent prompt length
+        run: |
+          failed=0
+          for f in framework/agents/*.md; do
+            # Count lines after frontmatter (after second ---)
+            body_lines=$(awk 'BEGIN{n=0} /^---$/{n++; next} n>=2{print}' "$f" | wc -l)
+            body_lines=$((body_lines))
+            if [ "$body_lines" -gt 50 ]; then
+              echo "FAIL: $f has $body_lines body lines (max 50)"
+              failed=1
+            else
+              echo "OK: $f has $body_lines body lines"
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "PASS: all agents under 50 body lines"
+
+      - name: Check for placeholder text
+        run: |
+          failed=0
+          for f in framework/agents/*.md framework/skills/*/SKILL.md; do
+            # Strip inline code spans before checking for placeholders
+            if sed 's/`[^`]*`//g' "$f" | grep -qE '\bTODO\b|\bTBD\b|\bPLACEHOLDER\b'; then
+              echo "FAIL: placeholder text found in $f"
+              sed 's/`[^`]*`//g' "$f" | grep -nE '\bTODO\b|\bTBD\b|\bPLACEHOLDER\b'
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "PASS: no placeholder text found"
