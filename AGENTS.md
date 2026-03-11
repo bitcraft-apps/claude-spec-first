@@ -43,7 +43,7 @@ Claude Spec-First Framework — minimalist development workflow.
 4. **Proportional to the change.** A one-line config change does not need a new section, glossary entries, ASCII diagrams, or worked examples. Match doc weight to change weight.
 5. **No branding internal mechanics.** Do not invent terms for simple concepts. Say what it does plainly.
 6. **User guide = user actions only.** If the user doesn't need to do anything, don't explain the internals.
-7. **Technical reference = contract surface.** Document interfaces and schemas. Do not duplicate orchestration flows already defined in command files.
+7. **Technical reference = contract surface.** Document interfaces and schemas. Do not duplicate orchestration flows already defined in skill files.
 
 ## Code Rules
 

@@ -256,7 +256,18 @@ install_framework_files() {
     # Clean stale files before installing (only on update)
     if [ "$MODE" = "update" ]; then
         echo -e "${BLUE}🧹 Cleaning stale files...${NC}"
-        clean_stale_files "$FRAMEWORK_DIR/commands" "$CLAUDE_DIR/commands/$CSF_PREFIX" "command"
+        # Clean stale commands by comparing against current skills
+        local target_cmd_dir="$CLAUDE_DIR/commands/$CSF_PREFIX"
+        if [ -d "$target_cmd_dir" ]; then
+            for target_file in "$target_cmd_dir"/*.md; do
+                [ -f "$target_file" ] || continue
+                local cmd_name="$(basename "$target_file" .md)"
+                if [ ! -d "$SCRIPT_DIR/skills/$cmd_name" ]; then
+                    rm -f "$target_file"
+                    echo "🗑️  Removed stale command: $(basename "$target_file")"
+                fi
+            done
+        fi
         clean_stale_files "$FRAMEWORK_DIR/agents" "$CLAUDE_DIR/agents/$CSF_PREFIX" "agent"
         clean_stale_files "$FRAMEWORK_DIR/hooks" "$CLAUDE_DIR/hooks/$CSF_PREFIX" "hook" "sh"
     fi
@@ -272,40 +283,41 @@ install_framework_files() {
         fi
     fi
 
-    # Install commands with CSF prefix
+    # Install skills (from skills/*/SKILL.md) as commands with CSF prefix
     local cmd_count=0
     if [ "$USE_MANIFEST" = true ]; then
-        while IFS= read -r cmd_name; do
-            local cmd_file="$FRAMEWORK_DIR/commands/${cmd_name}.md"
-            local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/${cmd_name}.md"
-            if [ -f "$cmd_file" ]; then
-                if ! cp "$cmd_file" "$target_file"; then
-                    echo -e "${RED}❌ Failed to copy command ${cmd_name}.md${NC}"
+        while IFS= read -r skill_name; do
+            local skill_file="$SCRIPT_DIR/skills/${skill_name}/SKILL.md"
+            local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/${skill_name}.md"
+            if [ -f "$skill_file" ]; then
+                if ! cp "$skill_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy skill ${skill_name}.md${NC}"
                     exit 1
                 fi
                 INSTALLED+=("$target_file")
-                echo "📄 ${operation}: $CSF_PREFIX/${cmd_name}.md"
+                echo "📄 ${operation}: $CSF_PREFIX/${skill_name}.md"
                 cmd_count=$((cmd_count + 1))
             else
-                echo -e "${YELLOW}⚠️  Command listed in manifest not found: ${cmd_name}.md${NC}"
+                echo -e "${YELLOW}⚠️  Skill listed in manifest not found: skills/${skill_name}/SKILL.md${NC}"
             fi
-        done < <(jq -r '.commands[]' "$MANIFEST")
-    elif [ -d "$FRAMEWORK_DIR/commands" ]; then
-        for cmd_file in "$FRAMEWORK_DIR/commands"/*.md; do
-            if [ -f "$cmd_file" ]; then
-                local cmd_name="$(basename "$cmd_file")"
-                local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/$cmd_name"
-                if ! cp "$cmd_file" "$target_file"; then
-                    echo -e "${RED}❌ Failed to copy command $cmd_name${NC}"
+        done < <(jq -r '.skills[]' "$MANIFEST")
+    elif [ -d "$SCRIPT_DIR/skills" ]; then
+        for skill_dir in "$SCRIPT_DIR/skills"/*/; do
+            local skill_file="${skill_dir}SKILL.md"
+            if [ -f "$skill_file" ]; then
+                local skill_name="$(basename "$skill_dir")"
+                local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/${skill_name}.md"
+                if ! cp "$skill_file" "$target_file"; then
+                    echo -e "${RED}❌ Failed to copy skill $skill_name${NC}"
                     exit 1
                 fi
                 INSTALLED+=("$target_file")
-                echo "📄 ${operation}: $CSF_PREFIX/$cmd_name"
+                echo "📄 ${operation}: $CSF_PREFIX/${skill_name}.md"
                 cmd_count=$((cmd_count + 1))
             fi
         done
     fi
-    echo "✅ $cmd_count commands $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
+    echo "✅ $cmd_count skills $(echo "$operation" | tr '[:upper:]' '[:lower:]')"
 
     # Install agents with CSF prefix
     local agent_count=0

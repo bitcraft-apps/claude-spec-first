@@ -75,31 +75,31 @@ teardown() {
     grep -q "name: integrate-docs" "$PROJECT_ROOT/framework/agents/integrate-docs.md"
 }
 
-@test "all phases have corresponding commands" {
+@test "all phases have corresponding skills" {
     # Phase 1: Specification
-    [ -f "$PROJECT_ROOT/framework/commands/spec.md" ]
-    grep -q "spec" "$PROJECT_ROOT/framework/commands/spec.md"
-    
+    [ -f "$PROJECT_ROOT/skills/spec/SKILL.md" ]
+    grep -q "spec" "$PROJECT_ROOT/skills/spec/SKILL.md"
+
     # Phase 2: Implementation
-    [ -f "$PROJECT_ROOT/framework/commands/implement.md" ]
-    grep -q "Explore" "$PROJECT_ROOT/framework/commands/implement.md"
-    grep -q "implement-minimal" "$PROJECT_ROOT/framework/commands/implement.md"
-    
+    [ -f "$PROJECT_ROOT/skills/implement/SKILL.md" ]
+    grep -q "Explore" "$PROJECT_ROOT/skills/implement/SKILL.md"
+    grep -q "implement-minimal" "$PROJECT_ROOT/skills/implement/SKILL.md"
+
     # Phase 3: Documentation
-    [ -f "$PROJECT_ROOT/framework/commands/document.md" ]
-    grep -q "analyze-artifacts" "$PROJECT_ROOT/framework/commands/document.md"
-    grep -q "analyze-implementation" "$PROJECT_ROOT/framework/commands/document.md"
-    grep -q "create-technical-docs" "$PROJECT_ROOT/framework/commands/document.md"
-    grep -q "create-user-docs" "$PROJECT_ROOT/framework/commands/document.md"
-    grep -q "integrate-docs" "$PROJECT_ROOT/framework/commands/document.md"
+    [ -f "$PROJECT_ROOT/skills/document/SKILL.md" ]
+    grep -q "analyze-artifacts" "$PROJECT_ROOT/skills/document/SKILL.md"
+    grep -q "analyze-implementation" "$PROJECT_ROOT/skills/document/SKILL.md"
+    grep -q "create-technical-docs" "$PROJECT_ROOT/skills/document/SKILL.md"
+    grep -q "create-user-docs" "$PROJECT_ROOT/skills/document/SKILL.md"
+    grep -q "integrate-docs" "$PROJECT_ROOT/skills/document/SKILL.md"
 }
 
-@test "spec command orchestrates agents" {
-    # Check that spec command references agents
-    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "synthesize-spec" "$PROJECT_ROOT/framework/commands/spec.md"
+@test "spec skill orchestrates agents" {
+    # Check that spec skill references agents
+    grep -q "define-scope" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "synthesize-spec" "$PROJECT_ROOT/skills/spec/SKILL.md"
 }
 
 @test "agents are properly configured for safe research" {
@@ -119,13 +119,13 @@ teardown() {
 }
 
 @test "specification agents execute in parallel" {
-    # Verify spec command uses parallel execution
-    grep -q "Batch 1.*Parallel" "$PROJECT_ROOT/framework/commands/spec.md"
-    
+    # Verify spec skill uses parallel execution
+    grep -q "Batch 1.*Parallel" "$PROJECT_ROOT/skills/spec/SKILL.md"
+
     # Verify agents are listed
-    grep -q "define-scope" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "create-criteria" "$PROJECT_ROOT/framework/commands/spec.md"
-    grep -q "identify-risks" "$PROJECT_ROOT/framework/commands/spec.md"
+    grep -q "define-scope" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/skills/spec/SKILL.md"
 }
 
 @test "agents follow minimalist principles" {
@@ -142,13 +142,13 @@ teardown() {
 }
 
 @test "implementation follows sequential workflow" {
-    # Verify implement command uses sequential execution (Step 1, Step 2)
-    grep -q "Step 1.*Learn" "$PROJECT_ROOT/framework/commands/implement.md"
-    grep -q "Step 2.*Implement" "$PROJECT_ROOT/framework/commands/implement.md"
-    
+    # Verify implement skill uses sequential execution (Step 1, Step 2)
+    grep -q "Step 1.*Learn" "$PROJECT_ROOT/skills/implement/SKILL.md"
+    grep -q "Step 2.*Implement" "$PROJECT_ROOT/skills/implement/SKILL.md"
+
     # Verify the philosophy of pattern-first implementation
-    grep -q "Pattern consistency over creativity" "$PROJECT_ROOT/framework/commands/implement.md"
-    grep -q "Working code over perfect code" "$PROJECT_ROOT/framework/commands/implement.md"
+    grep -q "Pattern consistency over creativity" "$PROJECT_ROOT/skills/implement/SKILL.md"
+    grep -q "Working code over perfect code" "$PROJECT_ROOT/skills/implement/SKILL.md"
 }
 
 @test "risk agent focuses on essential risks" {
@@ -178,19 +178,19 @@ teardown() {
     [[ "$output" == *"synthesize-spec"* ]]
 }
 
-@test "framework validation recognizes all 3 commands" {
+@test "framework validation recognizes all 3 skills" {
     cd "$PROJECT_ROOT"
     run ./framework/validate-framework.sh
     [ "$status" -eq 0 ]
-    
-    # Check that framework finds 3 command files (spec, implement, document)
-    [[ "$output" == *"Found 3 command files"* ]]
+
+    # Check that framework finds 3 skill files (spec, implement, document)
+    [[ "$output" == *"Found 3 skill files"* ]]
 }
 
 @test "specification maintains minimalist philosophy" {
-    # Verify spec command maintains specification-first philosophy
-    grep -q "specification" "$PROJECT_ROOT/framework/commands/spec.md"
-    
+    # Verify spec skill maintains specification-first philosophy
+    grep -q "specification" "$PROJECT_ROOT/skills/spec/SKILL.md"
+
     # Verify synthesize-spec enforces line limits
     grep -q "under 50 lines" "$PROJECT_ROOT/framework/agents/synthesize-spec.md"
 }
