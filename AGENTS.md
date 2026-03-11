@@ -24,7 +24,7 @@ Claude Spec-First Framework — minimalist development workflow.
 ## Size Constraints
 
 - Agents: 50 lines max
-- Commands: 75 lines max
+- Skills: 75 lines max
 - Self-documenting through clear naming
 
 ## Development Checklist
