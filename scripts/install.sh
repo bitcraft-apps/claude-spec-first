@@ -262,7 +262,7 @@ install_framework_files() {
             for target_file in "$target_cmd_dir"/*.md; do
                 [ -f "$target_file" ] || continue
                 local cmd_name="$(basename "$target_file" .md)"
-                if [ ! -d "$SCRIPT_DIR/skills/$cmd_name" ]; then
+                if [ ! -d "$FRAMEWORK_DIR/skills/$cmd_name" ]; then
                     rm -f "$target_file"
                     echo "🗑️  Removed stale command: $(basename "$target_file")"
                 fi
@@ -287,7 +287,7 @@ install_framework_files() {
     local cmd_count=0
     if [ "$USE_MANIFEST" = true ]; then
         while IFS= read -r skill_name; do
-            local skill_file="$SCRIPT_DIR/skills/${skill_name}/SKILL.md"
+            local skill_file="$FRAMEWORK_DIR/skills/${skill_name}/SKILL.md"
             local target_file="$CLAUDE_DIR/commands/$CSF_PREFIX/${skill_name}.md"
             if [ -f "$skill_file" ]; then
                 if ! cp "$skill_file" "$target_file"; then
@@ -301,8 +301,8 @@ install_framework_files() {
                 echo -e "${YELLOW}⚠️  Skill listed in manifest not found: skills/${skill_name}/SKILL.md${NC}"
             fi
         done < <(jq -r '.skills[]' "$MANIFEST")
-    elif [ -d "$SCRIPT_DIR/skills" ]; then
-        for skill_dir in "$SCRIPT_DIR/skills"/*/; do
+    elif [ -d "$FRAMEWORK_DIR/skills" ]; then
+        for skill_dir in "$FRAMEWORK_DIR/skills"/*/; do
             local skill_file="${skill_dir}SKILL.md"
             if [ -f "$skill_file" ]; then
                 local skill_name="$(basename "$skill_dir")"
