@@ -47,7 +47,7 @@ Schema:
 
 ### marketplace.json
 
-Root-level file for GitHub marketplace plugin discovery. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
+`.claude-plugin/marketplace.json` — GitHub marketplace plugin discovery file. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
 
 Schema:
 
