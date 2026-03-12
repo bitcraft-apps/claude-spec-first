@@ -27,13 +27,15 @@ assert 'hooks' in data, 'missing hooks'
     manifest_agents=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
 import sys, json, os, glob
 data = json.load(sys.stdin)
-names = []
+names = set()
 for entry in data['agents']:
-    if entry.startswith('./'):
+    if entry.endswith('.md'):
+        names.add(os.path.splitext(os.path.basename(entry))[0])
+    elif entry.startswith('./'):
         path = os.path.join('$PROJECT_ROOT', entry)
-        names.extend(os.path.splitext(os.path.basename(f))[0] for f in sorted(glob.glob(os.path.join(path, '*.md'))))
+        names.update(os.path.splitext(os.path.basename(f))[0] for f in glob.glob(os.path.join(path, '*.md')))
     else:
-        names.append(entry)
+        names.add(entry)
 print('\n'.join(sorted(names)))
 ")
 
@@ -48,13 +50,16 @@ print('\n'.join(sorted(names)))
     manifest_skills=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
 import sys, json, os
 data = json.load(sys.stdin)
-names = []
+names = set()
 for entry in data['skills']:
     if entry.startswith('./'):
         path = os.path.join('$PROJECT_ROOT', entry)
-        names.extend(os.path.basename(d) for d in sorted(os.listdir(path)) if os.path.isdir(os.path.join(path, d)))
+        if os.path.isdir(path) and os.path.exists(os.path.join(path, 'SKILL.md')):
+            names.add(os.path.basename(entry))
+        elif os.path.isdir(path):
+            names.update(d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d)))
     else:
-        names.append(entry)
+        names.add(entry)
 print('\n'.join(sorted(names)))
 ")
 
