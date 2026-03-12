@@ -2,7 +2,7 @@
   "name": "claude-spec-first",
   "version": "0.28.0",
   "description": "Minimalist spec-first development workflow",
-  "agents": "./framework/agents",
-  "skills": "./framework/skills",
+  "agents": ["./framework/agents"],
+  "skills": ["./framework/skills"],
   "hooks": "./framework/hooks/hooks.json"
 }
