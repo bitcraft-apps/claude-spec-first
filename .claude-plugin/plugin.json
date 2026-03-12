@@ -17,9 +17,9 @@
     "./framework/agents/synthesize-spec.md"
   ],
   "skills": [
-    "./framework/skills/document",
-    "./framework/skills/implement",
-    "./framework/skills/spec"
+    "./framework/skills/csf/document",
+    "./framework/skills/csf/implement",
+    "./framework/skills/csf/spec"
   ],
   "hooks": "./framework/hooks/hooks.json"
 }

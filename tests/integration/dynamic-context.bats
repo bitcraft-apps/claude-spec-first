@@ -107,19 +107,19 @@ teardown() {
 # --- Skills contain Project Context sections ---
 
 @test "spec skill has Project Context with dynamic injection" {
-    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
-    grep -q '!`git branch --show-current 2>/dev/null`' "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
-    grep -q '!`git log --oneline -5 2>/dev/null`' "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
-    grep -q '!`git status --short 2>/dev/null | head -20`' "$PROJECT_ROOT/framework/skills/spec/SKILL.md"
+    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/csf/spec/SKILL.md"
+    grep -q '!`git branch --show-current 2>/dev/null`' "$PROJECT_ROOT/framework/skills/csf/spec/SKILL.md"
+    grep -q '!`git log --oneline -5 2>/dev/null`' "$PROJECT_ROOT/framework/skills/csf/spec/SKILL.md"
+    grep -q '!`git status --short 2>/dev/null | head -20`' "$PROJECT_ROOT/framework/skills/csf/spec/SKILL.md"
 }
 
 @test "implement skill has Project Context with dynamic injection" {
-    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/implement/SKILL.md"
-    grep -q '!`git branch --show-current 2>/dev/null`' "$PROJECT_ROOT/framework/skills/implement/SKILL.md"
-    grep -q '!`test -f .claude/.csf/spec.md && echo "yes" || echo "no"`' "$PROJECT_ROOT/framework/skills/implement/SKILL.md"
+    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/csf/implement/SKILL.md"
+    grep -q '!`git branch --show-current 2>/dev/null`' "$PROJECT_ROOT/framework/skills/csf/implement/SKILL.md"
+    grep -q '!`test -f .claude/.csf/spec.md && echo "yes" || echo "no"`' "$PROJECT_ROOT/framework/skills/csf/implement/SKILL.md"
 }
 
 @test "document skill has Project Context with dynamic injection" {
-    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/document/SKILL.md"
-    grep -q '!`test -f .claude/.csf/implementation-summary.md' "$PROJECT_ROOT/framework/skills/document/SKILL.md"
+    grep -q '## Project Context' "$PROJECT_ROOT/framework/skills/csf/document/SKILL.md"
+    grep -q '!`test -f .claude/.csf/implementation-summary.md' "$PROJECT_ROOT/framework/skills/csf/document/SKILL.md"
 }

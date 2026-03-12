@@ -64,7 +64,7 @@ print('\n'.join(sorted(names)))
 ")
 
     local dir_skills
-    dir_skills=$(ls -d "$PROJECT_ROOT/framework/skills/"*/ | xargs -n1 basename | sort)
+    dir_skills=$(ls -d "$PROJECT_ROOT/framework/skills/csf/"*/ | xargs -n1 basename | sort)
 
     [ "$manifest_skills" = "$dir_skills" ]
 }
@@ -88,7 +88,7 @@ print('\n'.join(sorted(names)))
 }
 
 @test "skill frontmatter is parseable YAML" {
-    for skill_dir in "$PROJECT_ROOT/framework/skills/"*/; do
+    for skill_dir in "$PROJECT_ROOT/framework/skills/csf/"*/; do
         local skill_file="$skill_dir/SKILL.md"
         [ -f "$skill_file" ] || {
             echo "Missing SKILL.md in $(basename "$skill_dir")" >&2
