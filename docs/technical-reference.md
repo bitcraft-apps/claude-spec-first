@@ -94,6 +94,5 @@ bash framework/validate-framework.sh
 
 ## Cross-References
 
-- [User Guide](user/guide.md)
 - [CLAUDE.md](../CLAUDE.md) — framework philosophy and rules
 - [CHANGELOG.md](../CHANGELOG.md)
