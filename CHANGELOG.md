@@ -5,6 +5,19 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.30.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.29.0...v0.30.0) (2026-03-12)
+
+
+### Features
+
+* Add dynamic context injection to CSF skills ([#133](https://github.com/bitcraft-apps/claude-spec-first/issues/133)) ([5ab89db](https://github.com/bitcraft-apps/claude-spec-first/commit/5ab89db4e6ae8a8c84e18e6a53e637947c650845))
+* Namespace skills under csf/ for plugin discovery ([#134](https://github.com/bitcraft-apps/claude-spec-first/issues/134)) ([bc32c79](https://github.com/bitcraft-apps/claude-spec-first/commit/bc32c79cb0545013c3125de732ba2f1202199dd7))
+
+
+### Bug Fixes
+
+* Use individual file paths in plugin.json for CLI compatibility ([#131](https://github.com/bitcraft-apps/claude-spec-first/issues/131)) ([2e946e7](https://github.com/bitcraft-apps/claude-spec-first/commit/2e946e73fc43e58438db701ddcfc839017395c58))
+
 ## [0.29.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.28.0...v0.29.0) (2026-03-12)
 
 
