@@ -291,7 +291,10 @@ fi
 if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_FILE" 2>/dev/null; then
     REQUIRED_AGENTS=()
     while IFS= read -r agent; do
-        if [[ "$agent" == ./* ]]; then
+        if [[ "$agent" == *.md ]]; then
+            # Individual file path — extract name from basename
+            REQUIRED_AGENTS+=("$(basename "$agent" .md)")
+        elif [[ "$agent" == ./* ]]; then
             # Directory path — discover agent .md files within it
             while IFS= read -r agent_file; do
                 REQUIRED_AGENTS+=("$(basename "$agent_file" .md)")
@@ -303,12 +306,8 @@ if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_F
     REQUIRED_SKILLS=()
     while IFS= read -r skill; do
         if [[ "$skill" == ./* ]]; then
-            # Directory path — discover skill subdirectories containing SKILL.md
-            while IFS= read -r skill_dir; do
-                if [ -f "$skill_dir/SKILL.md" ]; then
-                    REQUIRED_SKILLS+=("$(basename "$skill_dir")")
-                fi
-            done < <(find "$skill" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+            # Path entry — extract skill name from basename
+            REQUIRED_SKILLS+=("$(basename "$skill")")
         else
             REQUIRED_SKILLS+=("$skill")
         fi
