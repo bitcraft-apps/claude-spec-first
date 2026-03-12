@@ -7,8 +7,14 @@ Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP p
 ### Installation
 
 ```bash
-git clone https://github.com/bitcraft-apps/claude-spec-first.git
-claude plugin install ./claude-spec-first
+claude plugin marketplace add bitcraft-apps/claude-spec-first
+claude plugin install claude-spec-first
+```
+
+For local development, use `--plugin-dir` to point at your clone:
+
+```bash
+claude --plugin-dir ./claude-spec-first
 ```
 
 ## Core Philosophy
