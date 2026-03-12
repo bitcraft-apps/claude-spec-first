@@ -17,9 +17,9 @@ Creates specifications with intelligent clarification.
 ---
 
 ## Project Context
-- Branch: !`git branch --show-current`
-- Recent commits: !`git log --oneline -5`
-- Working tree: !`git status --short`
+- Branch: !`git branch --show-current 2>/dev/null`
+- Recent commits: !`git log --oneline -5 2>/dev/null`
+- Working tree: !`git status --short 2>/dev/null | head -20`
 
 ## Clarification Check
 
