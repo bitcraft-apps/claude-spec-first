@@ -5,6 +5,13 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.28.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.27.1...v0.28.0) (2026-03-12)
+
+
+### Features
+
+* Add release-please for automated releases ([#121](https://github.com/bitcraft-apps/claude-spec-first/issues/121)) ([e7a9912](https://github.com/bitcraft-apps/claude-spec-first/commit/e7a99121bf578249e799c0cab781ebe48626abca))
+
 ## [0.27.1] - 2026-03-11
 
 ### Changed
@@ -221,4 +228,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Semantic versioning system, dual-mode validation
-
