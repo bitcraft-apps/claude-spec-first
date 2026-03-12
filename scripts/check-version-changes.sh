@@ -121,10 +121,10 @@ get_version() {
     
     if [ "$branch" = "HEAD" ]; then
         # Current working version
-        version=$(cat "$PROJECT_ROOT/framework/VERSION" 2>/dev/null || echo "0.0.0")
+        version=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "0.0.0")
     else
         # Version from git branch/commit
-        version=$(git show "$branch:framework/VERSION" 2>/dev/null || echo "0.0.0")
+        version=$(git show "$branch:VERSION" 2>/dev/null || echo "0.0.0")
     fi
     
     echo "$version"

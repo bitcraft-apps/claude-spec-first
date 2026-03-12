@@ -429,7 +429,7 @@ make test-legacy
 
 ### Getting Help
 
-- **Framework Issues**: Check `./framework/validate-framework.sh` output
+- **Framework Issues**: Check `./scripts/validate-framework.sh` output
 - **Version Problems**: Run `./scripts/version.sh info` for diagnostics
 - **Test Debugging**: Use `make test-verbose` and `debug_test_failure()`
 - **CI Problems**: Check GitHub Actions logs and workflow configuration

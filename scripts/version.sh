@@ -14,11 +14,8 @@ SIMPLE_VERSION_REGEX='^[0-9]+\.[0-9]+\.[0-9]+$'
 # Function to get framework directory based on execution context
 # Returns the appropriate path prefix for framework files
 get_framework_dir() {
-    # Check if we're in repository mode (has ./framework/ directory with VERSION file)
-    if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
-        echo "./framework"
-    # Check if we're in installed mode (has VERSION file in current directory)
-    elif [ -f "./VERSION" ]; then
+    # Check if we're in repository mode (has ./VERSION file at root)
+    if [ -f "./VERSION" ]; then
         echo "."
     # Check if we're in .csf subdirectory (installed mode)
     elif [ -f "./.csf/VERSION" ]; then

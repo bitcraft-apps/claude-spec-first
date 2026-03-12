@@ -2,7 +2,7 @@
 
 # Specification-First Development Framework Validation Script
 # Validates all components for Claude Code compliance and functionality
-# Supports dual-mode operation: repository mode (./framework/) and installed mode (~/.claude/)
+# Supports dual-mode operation: repository mode (./agents/, ./skills/, ./hooks/) and installed mode (~/.claude/)
 
 set -e  # Exit on any error
 
@@ -15,8 +15,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Look for VERSION file in the same directory (installed mode) or framework directory (repo mode)
 if [ -f "$SCRIPT_DIR/VERSION" ]; then
     FRAMEWORK_VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
-elif [ -f "$SCRIPT_DIR/../framework/VERSION" ]; then
-    FRAMEWORK_VERSION=$(cat "$SCRIPT_DIR/../framework/VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+elif [ -f "$SCRIPT_DIR/../VERSION" ]; then
+    FRAMEWORK_VERSION=$(cat "$SCRIPT_DIR/../VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
 else
     FRAMEWORK_VERSION="unknown"
 fi
@@ -107,11 +107,11 @@ detect_execution_mode() {
     local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local current_dir="$(pwd)"
 
-    # Check if we're in repository mode (has ./framework/ directory with VERSION)
-    if [ -d "./framework" ] && [ -f "./framework/VERSION" ]; then
+    # Check if we're in repository mode (has ./VERSION and ./agents/ at repo root)
+    if [ -f "./VERSION" ] && [ -d "./agents" ] && [ -d "./skills" ]; then
         EXECUTION_MODE="repository"
-        FRAMEWORK_PREFIX="./framework/"
-        print_info "Detected repository mode - using ./framework/ prefix"
+        FRAMEWORK_PREFIX="./"
+        print_info "Detected repository mode - using repo root"
         return 0
     fi
 
@@ -153,7 +153,7 @@ detect_execution_mode() {
     # Neither mode detected
     echo -e "${RED}❌ Invalid execution context${NC}" >&2
     echo -e "${RED}This script must be run from either:${NC}" >&2
-    echo -e "${RED}  - Repository root (with ./framework/ directory)${NC}" >&2
+    echo -e "${RED}  - Repository root (with ./VERSION, ./agents/, ./skills/)${NC}" >&2
     echo -e "${RED}  - Installed location (~/.claude/ or \$CLAUDE_DIR)${NC}" >&2
     echo -e "${RED}  - Framework metadata directory (~/.claude/.csf/)${NC}" >&2
     echo -e "${RED}Current directory: $current_dir${NC}" >&2
@@ -254,7 +254,7 @@ fi
 
 # Check skills/commands directory
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    SKILLS_DIR="./framework/skills/csf"
+    SKILLS_DIR="./skills/csf"
     if [ -d "$SKILLS_DIR" ]; then
         print_status "skills/ directory exists" 0
         SKILL_COUNT=$(find "$SKILLS_DIR" -name "SKILL.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -288,35 +288,21 @@ else
     MANIFEST_FILE="$SCRIPT_DIR/../../.claude-plugin/plugin.json"
 fi
 
-if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_FILE" 2>/dev/null; then
-    REQUIRED_AGENTS=()
-    while IFS= read -r agent; do
-        if [[ "$agent" == *.md ]]; then
-            # Individual file path — extract name from basename
-            REQUIRED_AGENTS+=("$(basename "$agent" .md)")
-        elif [[ "$agent" == ./* ]]; then
-            # Directory path — discover agent .md files within it
-            while IFS= read -r agent_file; do
-                REQUIRED_AGENTS+=("$(basename "$agent_file" .md)")
-            done < <(find "$agent" -maxdepth 1 -name "*.md" -type f 2>/dev/null | sort)
-        else
-            REQUIRED_AGENTS+=("$agent")
-        fi
-    done < <(jq -r '.agents[]' "$MANIFEST_FILE")
+# Auto-discover agents and skills from directory structure
+REQUIRED_AGENTS=()
+if [ "$EXECUTION_MODE" = "repository" ]; then
+    while IFS= read -r agent_file; do
+        REQUIRED_AGENTS+=("$(basename "$agent_file" .md)")
+    done < <(find "./agents" -maxdepth 1 -name "*.md" -type f 2>/dev/null | sort)
     REQUIRED_SKILLS=()
-    while IFS= read -r skill; do
-        if [[ "$skill" == ./* ]]; then
-            # Path entry — extract skill name from basename
-            REQUIRED_SKILLS+=("$(basename "$skill")")
-        else
-            REQUIRED_SKILLS+=("$skill")
-        fi
-    done < <(jq -r '.skills[]' "$MANIFEST_FILE")
-    print_info "Loaded component lists from plugin.json"
+    for skill_dir in ./skills/csf/*/; do
+        [ -f "$skill_dir/SKILL.md" ] && REQUIRED_SKILLS+=("$(basename "$skill_dir")")
+    done
 else
     REQUIRED_AGENTS=("define-scope" "create-criteria" "identify-risks" "synthesize-spec" "implement-minimal" "analyze-artifacts" "analyze-implementation" "analyze-existing-docs" "create-technical-docs" "create-user-docs" "integrate-docs" "manage-spec-directory")
     REQUIRED_SKILLS=("spec" "implement" "document")
 fi
+print_info "Discovered ${#REQUIRED_AGENTS[@]} agents and ${#REQUIRED_SKILLS[@]} skills"
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
 
@@ -424,7 +410,7 @@ echo "========================"
 for skill in "${REQUIRED_SKILLS[@]}"; do
     # Set skill file path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        SKILL_FILE="./framework/skills/csf/${skill}/SKILL.md"
+        SKILL_FILE="./skills/csf/${skill}/SKILL.md"
     else
         SKILL_FILE=$(build_safe_path "commands/csf/${skill}.md")
     fi
@@ -554,8 +540,8 @@ echo "======================="
 # Check for consistency between agents and skills
 SKILL_AGENT_REFS=0
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    if [ -d "./framework/skills/csf" ]; then
-        SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./framework/skills/csf/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
+    if [ -d "./skills/csf" ]; then
+        SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./skills/csf/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
         print_info "Found $SKILL_AGENT_REFS agent references in skills"
     else
         print_warning "skills/ directory missing"
@@ -586,7 +572,7 @@ WORKFLOW_COMPLETE=true
 for skill in "${REQUIRED_SKILLS[@]}"; do
     # Set skill path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        SKILL_PATH="./framework/skills/csf/${skill}/SKILL.md"
+        SKILL_PATH="./skills/csf/${skill}/SKILL.md"
     else
         SKILL_PATH=$(build_safe_path "commands/csf/${skill}.md")
     fi

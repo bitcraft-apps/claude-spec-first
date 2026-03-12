@@ -22,13 +22,13 @@ create_mock_home() {
 setup_framework_to() {
     local target="$1/.claude"
     mkdir -p "$target/.csf" "$target/agents/csf" "$target/commands/csf"
-    cp "$PROJECT_ROOT/framework/VERSION" "$target/.csf/"
-    cp "$PROJECT_ROOT/framework/validate-framework.sh" "$target/.csf/"
+    cp "$PROJECT_ROOT/VERSION" "$target/.csf/"
+    cp "$PROJECT_ROOT/scripts/validate-framework.sh" "$target/.csf/"
     chmod +x "$target/.csf/validate-framework.sh"
-    for f in "$PROJECT_ROOT/framework/agents/"*.md; do
+    for f in "$PROJECT_ROOT/agents/"*.md; do
         [ -f "$f" ] && cp "$f" "$target/agents/csf/"
     done
-    for d in "$PROJECT_ROOT/framework/skills/csf/"*/; do
+    for d in "$PROJECT_ROOT/skills/csf/"*/; do
         [ -d "$d" ] && cp "$d/SKILL.md" "$target/commands/csf/$(basename "$d").md"
     done
 }

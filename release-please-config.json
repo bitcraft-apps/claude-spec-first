@@ -5,7 +5,7 @@
       "release-type": "simple",
       "bump-minor-pre-major": true,
       "changelog-path": "CHANGELOG.md",
-      "version-file": "framework/VERSION",
+      "version-file": "VERSION",
       "extra-files": [
         {
           "type": "json",

@@ -4,19 +4,25 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "framework/**"
+      - "agents/**"
+      - "skills/**"
+      - "hooks/**"
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/**"
       - ".claude-plugin/**"
+      - "VERSION"
   push:
     branches: [main]
     paths:
-      - "framework/**"
+      - "agents/**"
+      - "skills/**"
+      - "hooks/**"
       - "scripts/**"
       - "tests/**"
       - ".github/workflows/**"
       - ".claude-plugin/**"
+      - "VERSION"
 
 # Cancel in-progress runs when a new run is triggered
 concurrency:
@@ -62,10 +68,7 @@ jobs:
           # Make scripts executable
           chmod +x tests/run-tests.sh
           chmod +x tests/bats-core/bin/bats
-          chmod +x scripts/version.sh
-          chmod +x scripts/check-version-changes.sh
-          chmod +x scripts/check-version-requirements.sh
-          chmod +x framework/validate-framework.sh
+          chmod +x scripts/*.sh
 
       - name: Run ${{ matrix.test-type }} tests
         id: test-execution
@@ -108,8 +111,8 @@ jobs:
 
       - name: Validate hooks.json
         run: |
-          echo "Validating framework/hooks/hooks.json..."
-          if ! jq empty framework/hooks/hooks.json 2>/dev/null; then
+          echo "Validating hooks/hooks.json..."
+          if ! jq empty hooks/hooks.json 2>/dev/null; then
             echo "FAIL: hooks.json is not valid JSON"
             exit 1
           fi
@@ -117,9 +120,9 @@ jobs:
 
       - name: Validate skill files exist
         run: |
-          echo "Checking framework/skills/csf/*/SKILL.md..."
+          echo "Checking skills/csf/*/SKILL.md..."
           count=0
-          for f in framework/skills/csf/*/SKILL.md; do
+          for f in skills/csf/*/SKILL.md; do
             if [ ! -f "$f" ]; then
               echo "FAIL: no SKILL.md files found"
               exit 1
@@ -131,9 +134,9 @@ jobs:
 
       - name: Validate agent files exist
         run: |
-          echo "Checking framework/agents/*.md..."
+          echo "Checking agents/*.md..."
           count=0
-          for f in framework/agents/*.md; do
+          for f in agents/*.md; do
             if [ ! -f "$f" ]; then
               echo "FAIL: no agent .md files found"
               exit 1
@@ -154,7 +157,7 @@ jobs:
       - name: Validate SKILL.md frontmatter
         run: |
           failed=0
-          for f in framework/skills/csf/*/SKILL.md; do
+          for f in skills/csf/*/SKILL.md; do
             echo "Checking $f..."
             # Extract frontmatter (between first and second ---)
             frontmatter=$(sed -n '/^---$/,/^---$/p' "$f")
@@ -171,7 +174,7 @@ jobs:
       - name: Validate agent frontmatter
         run: |
           failed=0
-          for f in framework/agents/*.md; do
+          for f in agents/*.md; do
             echo "Checking $f..."
             frontmatter=$(sed -n '/^---$/,/^---$/p' "$f")
             for field in name description tools; do
@@ -187,7 +190,7 @@ jobs:
       - name: Validate agent prompt length
         run: |
           failed=0
-          for f in framework/agents/*.md; do
+          for f in agents/*.md; do
             # Count lines after frontmatter (after second ---)
             body_lines=$(awk 'BEGIN{n=0} /^---$/{n++; next} n>=2{print}' "$f" | wc -l)
             body_lines=$((body_lines))
@@ -204,7 +207,7 @@ jobs:
       - name: Check for placeholder text
         run: |
           failed=0
-          for f in framework/agents/*.md framework/skills/csf/*/SKILL.md; do
+          for f in agents/*.md skills/csf/*/SKILL.md; do
             # Strip inline code spans before checking for placeholders
             if sed 's/`[^`]*`//g' "$f" | grep -qE '\bTODO\b|\bTBD\b|\bPLACEHOLDER\b'; then
               echo "FAIL: placeholder text found in $f"

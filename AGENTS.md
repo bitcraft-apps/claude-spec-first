@@ -38,7 +38,7 @@ Claude Spec-First Framework — minimalist development workflow.
 ## Documentation Rules
 
 1. **Minimum viable docs.** Document what the user needs to know. If a feature is automatic and invisible, one sentence is enough.
-2. **No duplication.** Agent files are the source of truth for agent details. Do not re-list agent names, tools, or descriptions in docs that readers can find in `framework/agents/`.
+2. **No duplication.** Agent files are the source of truth for agent details. Do not re-list agent names, tools, or descriptions in docs that readers can find in `agents/`.
 3. **No speculative content.** Do not add troubleshooting for problems nobody has reported. Do not document rationale unless the design is surprising.
 4. **Proportional to the change.** A one-line config change does not need a new section, glossary entries, ASCII diagrams, or worked examples. Match doc weight to change weight.
 5. **No branding internal mechanics.** Do not invent terms for simple concepts. Say what it does plainly.
