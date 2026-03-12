@@ -11,12 +11,6 @@ git clone https://github.com/bitcraft-apps/claude-spec-first.git
 claude plugin install ./claude-spec-first
 ```
 
-### Validate
-
-```bash
-bash framework/validate-framework.sh
-```
-
 ## Core Philosophy
 
 - **YAGNI**: Don't build it until you need it
@@ -49,9 +43,3 @@ See `framework/skills/` for orchestration details.
     ├── research/      # Agent outputs
     └── [project files remain in natural locations]
 ```
-
-## Documentation
-
-- [User Guide](docs/user/guide.md) — how to use the framework
-- [Technical Reference](docs/technical-reference.md) — contracts and setup
-- [CLAUDE.md](./CLAUDE.md) — framework rules and development guidelines

@@ -1,7 +1,5 @@
 # Technical Reference: Claude Spec-First Framework
 
-<!-- Framework version: 0.27.0 -->
-
 ## Overview
 
 3 commands orchestrate 13 agent invocations. 7 research agents run on Haiku; 5 synthesis/implementation agents use the caller's model. 1 built-in Explore subagent handles pattern discovery. All output goes to `.claude/.csf/research/` (gitignored).
@@ -94,6 +92,5 @@ bash framework/validate-framework.sh
 
 ## Cross-References
 
-- [User Guide](user/guide.md)
 - [CLAUDE.md](../CLAUDE.md) — framework philosophy and rules
 - [CHANGELOG.md](../CHANGELOG.md)
