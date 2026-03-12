@@ -254,7 +254,7 @@ fi
 
 # Check skills/commands directory
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    SKILLS_DIR="./framework/skills"
+    SKILLS_DIR="./framework/skills/csf"
     if [ -d "$SKILLS_DIR" ]; then
         print_status "skills/ directory exists" 0
         SKILL_COUNT=$(find "$SKILLS_DIR" -name "SKILL.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -424,7 +424,7 @@ echo "========================"
 for skill in "${REQUIRED_SKILLS[@]}"; do
     # Set skill file path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        SKILL_FILE="./framework/skills/${skill}/SKILL.md"
+        SKILL_FILE="./framework/skills/csf/${skill}/SKILL.md"
     else
         SKILL_FILE=$(build_safe_path "commands/csf/${skill}.md")
     fi
@@ -554,8 +554,8 @@ echo "======================="
 # Check for consistency between agents and skills
 SKILL_AGENT_REFS=0
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    if [ -d "./framework/skills" ]; then
-        SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./framework/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
+    if [ -d "./framework/skills/csf" ]; then
+        SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./framework/skills/csf/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
         print_info "Found $SKILL_AGENT_REFS agent references in skills"
     else
         print_warning "skills/ directory missing"
@@ -586,7 +586,7 @@ WORKFLOW_COMPLETE=true
 for skill in "${REQUIRED_SKILLS[@]}"; do
     # Set skill path
     if [ "$EXECUTION_MODE" = "repository" ]; then
-        SKILL_PATH="./framework/skills/${skill}/SKILL.md"
+        SKILL_PATH="./framework/skills/csf/${skill}/SKILL.md"
     else
         SKILL_PATH=$(build_safe_path "commands/csf/${skill}.md")
     fi

@@ -38,7 +38,7 @@ claude --plugin-dir ./claude-spec-first
 - `/csf:implement [SPEC_OR_PATH]` — Build the minimal working solution
 - `/csf:document [PATHS]` — Generate docs proportional to the change
 
-See `framework/skills/` for orchestration details.
+See `framework/skills/csf/` for orchestration details.
 
 ## File Structure
 
