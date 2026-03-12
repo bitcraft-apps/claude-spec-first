@@ -16,6 +16,9 @@ Creates minimal, proportional documentation. Match doc weight to change weight.
 
 ---
 
+## Project Context
+- Implementation summary: !`test -f .claude/.csf/implementation-summary.md && head -20 .claude/.csf/implementation-summary.md || echo "none"`
+
 ## Input Resolution
 
 **Input Resolution:**
