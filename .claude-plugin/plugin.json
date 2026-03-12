@@ -2,24 +2,7 @@
   "name": "claude-spec-first",
   "version": "0.29.0",
   "description": "Minimalist spec-first development workflow",
-  "agents": [
-    "analyze-artifacts",
-    "analyze-existing-docs",
-    "analyze-implementation",
-    "create-criteria",
-    "create-technical-docs",
-    "create-user-docs",
-    "define-scope",
-    "identify-risks",
-    "implement-minimal",
-    "integrate-docs",
-    "manage-spec-directory",
-    "synthesize-spec"
-  ],
-  "skills": [
-    "document",
-    "implement",
-    "spec"
-  ],
+  "agents": ["./framework/agents"],
+  "skills": ["./framework/skills"],
   "hooks": "./framework/hooks/hooks.json"
 }
