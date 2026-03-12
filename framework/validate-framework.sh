@@ -554,7 +554,7 @@ echo "======================="
 # Check for consistency between agents and skills
 SKILL_AGENT_REFS=0
 if [ "$EXECUTION_MODE" = "repository" ]; then
-    if [ -d "./framework/skills" ]; then
+    if [ -d "./framework/skills/csf" ]; then
         SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./framework/skills/csf/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
         print_info "Found $SKILL_AGENT_REFS agent references in skills"
     else
