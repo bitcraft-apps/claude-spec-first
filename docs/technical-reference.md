@@ -35,9 +35,9 @@ Schema:
   "name": "string",
   "version": "string (must match framework/VERSION)",
   "description": "string",
-  "agents": ["string — basename without extension"],
-  "skills": ["string — basename without extension"],
-  "hooks": ["string — filename with extension"]
+  "agents": ["string — relative path to agent directory"],
+  "skills": ["string — relative path to skill directory"],
+  "hooks": "string — relative path to hooks.json"
 }
 ```
 
