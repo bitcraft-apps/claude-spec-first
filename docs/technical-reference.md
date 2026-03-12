@@ -45,6 +45,25 @@ Schema:
 
 **Version drift:** `validate-framework.sh` checks that `plugin.json` version matches `framework/VERSION` and fails validation if they differ. This check only runs in repository mode.
 
+### marketplace.json
+
+Root-level file for GitHub marketplace plugin discovery. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
+
+Schema:
+
+```json
+{
+  "name": "string (plugin identifier)",
+  "description": "string",
+  "url": "string (GitHub repo URL)",
+  "version": "string (must match framework/VERSION)"
+}
+```
+
+Version is auto-synced by release-please alongside `plugin.json`. `validate-framework.sh` checks consistency.
+
+**Relationship to plugin.json:** `marketplace.json` handles discovery (how users find the plugin). `plugin.json` handles manifest (what the plugin provides). Both have version fields kept in sync automatically.
+
 ### hooks.json
 
 `framework/hooks/hooks.json` declares hook commands in Claude Code's plugin-native format.
