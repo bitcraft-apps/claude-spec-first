@@ -291,11 +291,27 @@ fi
 if [ -f "$MANIFEST_FILE" ] && command -v jq &>/dev/null && jq empty "$MANIFEST_FILE" 2>/dev/null; then
     REQUIRED_AGENTS=()
     while IFS= read -r agent; do
-        REQUIRED_AGENTS+=("$agent")
+        if [[ "$agent" == ./* ]]; then
+            # Directory path — discover agent .md files within it
+            while IFS= read -r agent_file; do
+                REQUIRED_AGENTS+=("$(basename "$agent_file" .md)")
+            done < <(find "$agent" -maxdepth 1 -name "*.md" -type f 2>/dev/null | sort)
+        else
+            REQUIRED_AGENTS+=("$agent")
+        fi
     done < <(jq -r '.agents[]' "$MANIFEST_FILE")
     REQUIRED_SKILLS=()
     while IFS= read -r skill; do
-        REQUIRED_SKILLS+=("$skill")
+        if [[ "$skill" == ./* ]]; then
+            # Directory path — discover skill subdirectories containing SKILL.md
+            while IFS= read -r skill_dir; do
+                if [ -f "$skill_dir/SKILL.md" ]; then
+                    REQUIRED_SKILLS+=("$(basename "$skill_dir")")
+                fi
+            done < <(find "$skill" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+        else
+            REQUIRED_SKILLS+=("$skill")
+        fi
     done < <(jq -r '.skills[]' "$MANIFEST_FILE")
     print_info "Loaded component lists from plugin.json"
 else

@@ -25,9 +25,16 @@ assert 'hooks' in data, 'missing hooks'
 @test "plugin.json agents match framework/agents directory" {
     local manifest_agents
     manifest_agents=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
-import sys, json
+import sys, json, os, glob
 data = json.load(sys.stdin)
-print('\n'.join(sorted(data['agents'])))
+names = []
+for entry in data['agents']:
+    if entry.startswith('./'):
+        path = os.path.join('$PROJECT_ROOT', entry)
+        names.extend(os.path.splitext(os.path.basename(f))[0] for f in sorted(glob.glob(os.path.join(path, '*.md'))))
+    else:
+        names.append(entry)
+print('\n'.join(sorted(names)))
 ")
 
     local dir_agents
@@ -39,9 +46,16 @@ print('\n'.join(sorted(data['agents'])))
 @test "plugin.json skills match framework/skills directory" {
     local manifest_skills
     manifest_skills=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
-import sys, json
+import sys, json, os
 data = json.load(sys.stdin)
-print('\n'.join(sorted(data['skills'])))
+names = []
+for entry in data['skills']:
+    if entry.startswith('./'):
+        path = os.path.join('$PROJECT_ROOT', entry)
+        names.extend(os.path.basename(d) for d in sorted(os.listdir(path)) if os.path.isdir(os.path.join(path, d)))
+    else:
+        names.append(entry)
+print('\n'.join(sorted(names)))
 ")
 
     local dir_skills

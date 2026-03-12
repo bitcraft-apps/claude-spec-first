@@ -5,6 +5,19 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.29.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.28.0...v0.29.0) (2026-03-12)
+
+
+### Features
+
+* Add marketplace.json for GitHub-based plugin installation ([#125](https://github.com/bitcraft-apps/claude-spec-first/issues/125)) ([8c09c94](https://github.com/bitcraft-apps/claude-spec-first/commit/8c09c94a15c1f9e6b14eef1c5e6c5c208404aed5))
+
+
+### Bug Fixes
+
+* Move marketplace.json to .claude-plugin/ for CLI discovery ([#128](https://github.com/bitcraft-apps/claude-spec-first/issues/128)) ([0dc75f4](https://github.com/bitcraft-apps/claude-spec-first/commit/0dc75f4db48b341b3f8cf15d3ff0b8412cf934e1))
+* Use path strings in plugin.json manifest ([#130](https://github.com/bitcraft-apps/claude-spec-first/issues/130)) ([65ef07b](https://github.com/bitcraft-apps/claude-spec-first/commit/65ef07bfebf359c146579df93497963139256eb5))
+
 ## [0.28.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.27.1...v0.28.0) (2026-03-12)
 
 
