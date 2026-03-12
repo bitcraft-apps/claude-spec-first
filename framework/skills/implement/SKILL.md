@@ -16,6 +16,10 @@ Creates minimal implementation following existing patterns.
 
 ---
 
+## Project Context
+- Branch: !`git branch --show-current 2>/dev/null`
+- Spec exists: !`test -f .claude/.csf/spec.md && echo "yes" || echo "no"`
+
 ## Input Resolution
 
 **Input Resolution:**

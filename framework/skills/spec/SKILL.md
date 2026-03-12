@@ -16,6 +16,11 @@ Creates specifications with intelligent clarification.
 
 ---
 
+## Project Context
+- Branch: !`git branch --show-current 2>/dev/null`
+- Recent commits: !`git log --oneline -5 2>/dev/null`
+- Working tree: !`git status --short 2>/dev/null | head -20`
+
 ## Clarification Check
 
 If requirements are vague (< 15 words or unclear), ask for clarification:
@@ -30,8 +35,6 @@ If requirements are vague (< 15 words or unclear), ask for clarification:
 If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
 
 ## Directory Management
-
-**Directory Management:**
 
 Claude Code will use `.claude/.csf/` as the working directory.
 
