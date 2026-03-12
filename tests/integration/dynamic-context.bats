@@ -28,8 +28,8 @@ teardown() {
 @test "git log --oneline -5 produces output in a repo with commits" {
     cd "$TEST_DIR"
     git init . >/dev/null 2>&1
-    git commit --allow-empty -m "first" >/dev/null 2>&1
-    git commit --allow-empty -m "second" >/dev/null 2>&1
+    git -c user.name="test" -c user.email="test@test" commit --allow-empty -m "first" >/dev/null 2>&1
+    git -c user.name="test" -c user.email="test@test" commit --allow-empty -m "second" >/dev/null 2>&1
     run git log --oneline -5 2>/dev/null
     [ "$status" -eq 0 ]
     [ "${#lines[@]}" -eq 2 ]
