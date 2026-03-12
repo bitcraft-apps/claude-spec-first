@@ -14,8 +14,8 @@
         },
         {
           "type": "json",
-          "path": "marketplace.json",
-          "jsonpath": "$.version"
+          "path": ".claude-plugin/marketplace.json",
+          "jsonpath": "$.plugins[0].version"
         }
       ]
     }

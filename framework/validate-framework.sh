@@ -225,6 +225,18 @@ if [ "$EXECUTION_MODE" = "repository" ] && [ -n "$VERSION_CONTENT" ] && [ -f "./
     fi
 fi
 
+# Check marketplace.json version matches VERSION file (repository mode only)
+if [ "$EXECUTION_MODE" = "repository" ] && [ -n "$VERSION_CONTENT" ] && [ -f "./.claude-plugin/marketplace.json" ] && command -v jq &>/dev/null; then
+    MARKETPLACE_VERSION=$(jq -r '.plugins[0].version // empty' "./.claude-plugin/marketplace.json" 2>/dev/null || true)
+    if [ -n "$MARKETPLACE_VERSION" ]; then
+        if [ "$MARKETPLACE_VERSION" = "$VERSION_CONTENT" ]; then
+            print_status "marketplace.json version matches VERSION file ($MARKETPLACE_VERSION)" 0
+        else
+            print_status "marketplace.json version matches VERSION file (got $MARKETPLACE_VERSION, expected $VERSION_CONTENT)" 1
+        fi
+    fi
+fi
+
 # Check agents directory
 if [ "$EXECUTION_MODE" = "repository" ]; then
     AGENTS_DIR=$(build_safe_path "agents")

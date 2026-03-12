@@ -47,22 +47,26 @@ Schema:
 
 ### marketplace.json
 
-Root-level file for GitHub marketplace plugin discovery. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
+`.claude-plugin/marketplace.json` — marketplace catalog for plugin discovery. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
 
 Schema:
 
 ```json
 {
-  "name": "string (plugin identifier)",
-  "description": "string",
-  "url": "string (GitHub repo URL)",
-  "version": "string (must match framework/VERSION)"
+  "name": "string (marketplace identifier)",
+  "owner": { "name": "string" },
+  "plugins": [{
+    "name": "string (plugin identifier)",
+    "source": { "source": "github", "repo": "owner/repo" },
+    "description": "string",
+    "version": "string (must match framework/VERSION)"
+  }]
 }
 ```
 
-Version is auto-synced by release-please alongside `plugin.json`. `validate-framework.sh` checks consistency.
+Plugin version is auto-synced by release-please alongside `plugin.json`. `validate-framework.sh` checks consistency.
 
-**Relationship to plugin.json:** `marketplace.json` handles discovery (how users find the plugin). `plugin.json` handles manifest (what the plugin provides). Both have version fields kept in sync automatically.
+**Relationship to plugin.json:** `marketplace.json` is the catalog (how users discover and install the plugin). `plugin.json` is the manifest (what the plugin provides). Both have version fields kept in sync automatically.
 
 ### hooks.json
 
