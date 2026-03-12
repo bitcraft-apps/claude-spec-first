@@ -15,7 +15,7 @@
         {
           "type": "json",
           "path": ".claude-plugin/marketplace.json",
-          "jsonpath": "$.version"
+          "jsonpath": "$.plugins[0].version"
         }
       ]
     }

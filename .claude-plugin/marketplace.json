@@ -1,6 +1,18 @@
 {
   "name": "claude-spec-first",
-  "description": "Minimalist spec-first development workflow",
-  "url": "https://github.com/bitcraft-apps/claude-spec-first",
-  "version": "0.27.1"
+  "description": "Minimalist spec-first development workflow for Claude Code",
+  "owner": {
+    "name": "bitcraft-apps"
+  },
+  "plugins": [
+    {
+      "name": "claude-spec-first",
+      "source": {
+        "source": "github",
+        "repo": "bitcraft-apps/claude-spec-first"
+      },
+      "description": "Minimalist spec-first development workflow",
+      "version": "0.27.1"
+    }
+  ]
 }

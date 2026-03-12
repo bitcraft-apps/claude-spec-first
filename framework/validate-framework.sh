@@ -227,7 +227,7 @@ fi
 
 # Check marketplace.json version matches VERSION file (repository mode only)
 if [ "$EXECUTION_MODE" = "repository" ] && [ -n "$VERSION_CONTENT" ] && [ -f "./.claude-plugin/marketplace.json" ] && command -v jq &>/dev/null; then
-    MARKETPLACE_VERSION=$(jq -r '.version // empty' "./.claude-plugin/marketplace.json" 2>/dev/null || true)
+    MARKETPLACE_VERSION=$(jq -r '.plugins[0].version // empty' "./.claude-plugin/marketplace.json" 2>/dev/null || true)
     if [ -n "$MARKETPLACE_VERSION" ]; then
         if [ "$MARKETPLACE_VERSION" = "$VERSION_CONTENT" ]; then
             print_status "marketplace.json version matches VERSION file ($MARKETPLACE_VERSION)" 0
