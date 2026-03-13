@@ -23,28 +23,27 @@ Creates specifications with intelligent clarification.
 
 ## Clarification Check
 
-If requirements are vague (< 15 words or unclear), ask for clarification:
+If requirements are vague (< 15 words or unclear), use the **AskUserQuestion** tool to gather missing context. Do NOT output questions as plain text — always use the tool so execution pauses for the user's answer.
 
-**Questions to consider:**
+**Questions to consider asking:**
 - What specific problem are you solving?
 - Who are the users?
 - What's the desired outcome?
 - Any technical constraints?
 - What's the minimal viable version?
 
-If unclear, prompt: "Your requirements seem brief. Could you provide more context about [specific unclear aspect]?"
-
 ## Directory Management
 
 Claude Code will use `.claude/.csf/` as the working directory.
 
-**Command-level logic** (Claude Code handles user interaction):
+**Command-level logic:**
 
 ```
 If .claude/.csf/spec.md exists:
-    Prompt: "Existing spec found. Update (u) or Create new (n)?"
-    If user chooses 'u': Write "update" to .claude/.csf/mode
-    If user chooses 'n': Write "new" to .claude/.csf/mode
+    Use AskUserQuestion tool: "Existing spec found. What would you like to do?"
+      Options: "Update existing" / "Create new"
+    If user chooses update: Write "update" to .claude/.csf/mode
+    If user chooses new: Write "new" to .claude/.csf/mode
 Else:
     Write "first" to .claude/.csf/mode
 ```

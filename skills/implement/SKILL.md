@@ -27,7 +27,7 @@ Creates minimal implementation following existing patterns.
 1. Parse $ARGUMENTS: If `--isolate` is present, set ISOLATE=true and strip it from remaining args
 2. If remaining args provided: Use as specification path or inline requirements
 3. Else if `.claude/.csf/spec.md` exists: Use it
-4. Else: Ask user for specification location
+4. Else: Use **AskUserQuestion** tool to ask for specification location
 
 ## Execution
 
