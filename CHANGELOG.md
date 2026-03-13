@@ -5,6 +5,13 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.30.2](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.1...v0.30.2) (2026-03-13)
+
+
+### Bug Fixes
+
+* Remove duplicate hooks reference from plugin.json ([#139](https://github.com/bitcraft-apps/claude-spec-first/issues/139)) ([40ea6b2](https://github.com/bitcraft-apps/claude-spec-first/commit/40ea6b27be696d2019816f832985e01d45c6ea58))
+
 ## [0.30.1](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.0...v0.30.1) (2026-03-13)
 
 
