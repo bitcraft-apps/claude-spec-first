@@ -49,3 +49,5 @@ See `skills/` for orchestration details.
     ├── research/      # Agent outputs
     └── [project files remain in natural locations]
 ```
+
+> **v0.x users:** The legacy install-based workflow is archived on the [`legacy/v0`](../../tree/legacy/v0) branch.
