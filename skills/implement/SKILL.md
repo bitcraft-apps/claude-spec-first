@@ -2,7 +2,7 @@
 name: implement
 description: Implement through pattern learning
 disable-model-invocation: true
-argument-hint: "[SPECIFICATION_OR_PATH]"
+argument-hint: "[--isolate] [SPECIFICATION_OR_PATH]"
 ---
 
 # Implement Command
@@ -11,7 +11,7 @@ Creates minimal implementation following existing patterns.
 
 ## Usage
 ```
-/csf:implement [SPECIFICATION_OR_PATH]
+/csf:implement [--isolate] [SPECIFICATION_OR_PATH]
 ```
 
 ---
@@ -24,9 +24,10 @@ Creates minimal implementation following existing patterns.
 
 **Input Resolution:**
 
-1. If $ARGUMENTS provided: Use as specification path or inline requirements
-2. Else if `.claude/.csf/spec.md` exists: Use it
-3. Else: Ask user for specification location
+1. Parse $ARGUMENTS: If `--isolate` is present, set ISOLATE=true and strip it from remaining args
+2. If remaining args provided: Use as specification path or inline requirements
+3. Else if `.claude/.csf/spec.md` exists: Use it
+4. Else: Ask user for specification location
 
 ## Execution
 
@@ -37,7 +38,8 @@ After input resolution, run sequential agents:
 - Save findings to `.claude/.csf/research/pattern-example.md`
 
 **Step 2: Implement**
-- Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION
+- If ISOLATE is true: Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION, isolation: "worktree"
+- Else: Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION
 
 Output: Implementation + `.claude/.csf/implementation-summary.md`
 
