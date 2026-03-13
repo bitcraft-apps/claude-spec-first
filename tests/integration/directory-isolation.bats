@@ -54,7 +54,7 @@ teardown() {
 
     # Check it explains directory management workflow
     grep -q "Directory Management" "$PROJECT_ROOT/skills/spec/SKILL.md"
-    grep -q "Update (u) or Create new (n)" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q '"Update existing" / "Create new"' "$PROJECT_ROOT/skills/spec/SKILL.md"
 }
 
 @test "directory isolation maintains backward compatibility" {
