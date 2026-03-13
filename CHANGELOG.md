@@ -5,6 +5,20 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.31.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.2...v0.31.0) (2026-03-13)
+
+
+### Features
+
+* Add --isolate flag to /csf:implement ([#144](https://github.com/bitcraft-apps/claude-spec-first/issues/144)) ([ee093a7](https://github.com/bitcraft-apps/claude-spec-first/commit/ee093a74f744c2327774a82777db43b61bcf9240))
+* Add structural template for synthesize-spec ([#103](https://github.com/bitcraft-apps/claude-spec-first/issues/103)) ([#143](https://github.com/bitcraft-apps/claude-spec-first/issues/143)) ([1f218b4](https://github.com/bitcraft-apps/claude-spec-first/commit/1f218b44fc1ef6dfa9acd2888dc4b2eea1b93bf5))
+* Archive legacy v0.x installation docs ([#108](https://github.com/bitcraft-apps/claude-spec-first/issues/108)) ([#141](https://github.com/bitcraft-apps/claude-spec-first/issues/141)) ([d65522e](https://github.com/bitcraft-apps/claude-spec-first/commit/d65522e99835bee4da6e6306718a26cbdff9a54f))
+
+
+### Bug Fixes
+
+* Use explicit AskUserQuestion tool in skills ([#146](https://github.com/bitcraft-apps/claude-spec-first/issues/146)) ([b5e6a3f](https://github.com/bitcraft-apps/claude-spec-first/commit/b5e6a3ff332f8fded7bad4c9ce5227c012e42867))
+
 ## [0.30.2](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.1...v0.30.2) (2026-03-13)
 
 
