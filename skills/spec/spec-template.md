@@ -21,7 +21,3 @@ Testable pass/fail conditions as a checklist.
 ## Risks
 
 Numbered blockers or unknowns with mitigation strategies.
-
-## Future Considerations
-
-Deferred ideas that may follow this work.
