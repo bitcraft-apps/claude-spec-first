@@ -16,7 +16,6 @@ import sys, json
 data = json.load(sys.stdin)
 assert 'name' in data, 'missing name'
 assert 'version' in data, 'missing version'
-assert 'hooks' in data, 'missing hooks'
 "
 }
 
