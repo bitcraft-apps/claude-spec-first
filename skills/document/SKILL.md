@@ -25,7 +25,7 @@ Creates minimal, proportional documentation. Match doc weight to change weight.
 
 1. If $ARGUMENTS provided: Use as artifact/implementation paths
 2. Else if `.claude/.csf/spec.md` and `.claude/.csf/implementation-summary.md` exist: Use them
-3. Else: Ask user for artifact locations
+3. Else: Use **AskUserQuestion** tool to ask for artifact locations
 
 ## Execution
 
