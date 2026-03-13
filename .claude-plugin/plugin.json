@@ -1,5 +1,5 @@
 {
-  "name": "claude-spec-first",
+  "name": "csf",
   "version": "0.30.0",
   "description": "Minimalist spec-first development workflow",
   "hooks": "./hooks/hooks.json"

@@ -31,7 +31,7 @@ assert 'hooks' in data, 'missing hooks'
 
 @test "skills directory contains skill files" {
     local count=0
-    for d in "$PROJECT_ROOT/skills/csf/"*/; do
+    for d in "$PROJECT_ROOT/skills/"*/; do
         [ -f "$d/SKILL.md" ] || continue
         count=$((count + 1))
     done
@@ -57,7 +57,7 @@ assert 'hooks' in data, 'missing hooks'
 }
 
 @test "skill frontmatter is parseable YAML" {
-    for skill_dir in "$PROJECT_ROOT/skills/csf/"*/; do
+    for skill_dir in "$PROJECT_ROOT/skills/"*/; do
         local skill_file="$skill_dir/SKILL.md"
         [ -f "$skill_file" ] || {
             echo "Missing SKILL.md in $(basename "$skill_dir")" >&2

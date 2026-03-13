@@ -13,7 +13,7 @@ bats_require_minimum_version 1.5.0
 # Create a mock repo structure that validate-plugin.sh can run against
 setup_mock_repo() {
     local repo_dir="$1"
-    mkdir -p "$repo_dir/agents" "$repo_dir/skills/csf" "$repo_dir/scripts"
+    mkdir -p "$repo_dir/agents" "$repo_dir/skills" "$repo_dir/scripts"
 
     # Copy VERSION
     cp "$PROJECT_ROOT/VERSION" "$repo_dir/"
@@ -28,9 +28,9 @@ setup_mock_repo() {
     done
 
     # Copy skills
-    for d in "$PROJECT_ROOT/skills/csf/"*/; do
-        [ -d "$d" ] && mkdir -p "$repo_dir/skills/csf/$(basename "$d")" && \
-            cp "$d/SKILL.md" "$repo_dir/skills/csf/$(basename "$d")/"
+    for d in "$PROJECT_ROOT/skills/"*/; do
+        [ -d "$d" ] && mkdir -p "$repo_dir/skills/$(basename "$d")" && \
+            cp "$d/SKILL.md" "$repo_dir/skills/$(basename "$d")/"
     done
 
     # Copy docs needed for validation

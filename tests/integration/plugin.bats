@@ -57,17 +57,17 @@ teardown() {
 }
 
 @test "spec skill delegates to agents properly" {
-    [ -f "$PROJECT_ROOT/skills/csf/spec/SKILL.md" ]
+    [ -f "$PROJECT_ROOT/skills/spec/SKILL.md" ]
 
     # Check YAML frontmatter
-    grep -q "description:" "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
+    grep -q "description:" "$PROJECT_ROOT/skills/spec/SKILL.md"
 
     # Check delegation to agents
-    grep -q "define-scope" "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
-    grep -q "create-criteria" "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
-    grep -q "identify-risks" "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
-    grep -q "synthesize-spec" "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
-    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/skills/csf/spec/SKILL.md"
+    grep -q "define-scope" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "create-criteria" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "identify-risks" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q "synthesize-spec" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    grep -q '\$ARGUMENTS' "$PROJECT_ROOT/skills/spec/SKILL.md"
 }
 
 @test "agents have file persistence instructions" {

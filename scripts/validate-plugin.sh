@@ -123,7 +123,7 @@ else
 fi
 
 # Check skills directory
-SKILLS_DIR="./skills/csf"
+SKILLS_DIR="./skills"
 if [ -d "$SKILLS_DIR" ]; then
     print_status "skills/ directory exists" 0
     SKILL_COUNT=$(find "$SKILLS_DIR" -name "SKILL.md" -type f 2>/dev/null | wc -l | tr -d ' ')
@@ -143,7 +143,7 @@ while IFS= read -r agent_file; do
     REQUIRED_AGENTS+=("$(basename "$agent_file" .md)")
 done < <(find "./agents" -maxdepth 1 -name "*.md" -type f 2>/dev/null | sort)
 REQUIRED_SKILLS=()
-for skill_dir in ./skills/csf/*/; do
+for skill_dir in ./skills/*/; do
     [ -f "$skill_dir/SKILL.md" ] && REQUIRED_SKILLS+=("$(basename "$skill_dir")")
 done
 print_info "Discovered ${#REQUIRED_AGENTS[@]} agents and ${#REQUIRED_SKILLS[@]} skills"
@@ -236,7 +236,7 @@ echo "📋 Validating Skills..."
 echo "========================"
 
 for skill in "${REQUIRED_SKILLS[@]}"; do
-    SKILL_FILE="./skills/csf/${skill}/SKILL.md"
+    SKILL_FILE="./skills/${skill}/SKILL.md"
 
     if [ -f "$SKILL_FILE" ]; then
         print_status "$skill skill exists" 0
@@ -354,8 +354,8 @@ echo "======================="
 
 # Check for consistency between agents and skills
 SKILL_AGENT_REFS=0
-if [ -d "./skills/csf" ]; then
-    SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./skills/csf/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
+if [ -d "./skills" ]; then
+    SKILL_AGENT_REFS=$(grep -rh "$AGENT_PATTERN" ./skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')
     print_info "Found $SKILL_AGENT_REFS agent references in skills"
 else
     print_warning "skills/ directory missing"
@@ -376,7 +376,7 @@ echo "=============================="
 WORKFLOW_COMPLETE=true
 
 for skill in "${REQUIRED_SKILLS[@]}"; do
-    SKILL_PATH="./skills/csf/${skill}/SKILL.md"
+    SKILL_PATH="./skills/${skill}/SKILL.md"
     if [ ! -f "$SKILL_PATH" ]; then
         WORKFLOW_COMPLETE=false
         break

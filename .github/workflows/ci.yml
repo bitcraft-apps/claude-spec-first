@@ -120,9 +120,9 @@ jobs:
 
       - name: Validate skill files exist
         run: |
-          echo "Checking skills/csf/*/SKILL.md..."
+          echo "Checking skills/*/SKILL.md..."
           count=0
-          for f in skills/csf/*/SKILL.md; do
+          for f in skills/*/SKILL.md; do
             if [ ! -f "$f" ]; then
               echo "FAIL: no SKILL.md files found"
               exit 1
@@ -157,7 +157,7 @@ jobs:
       - name: Validate SKILL.md frontmatter
         run: |
           failed=0
-          for f in skills/csf/*/SKILL.md; do
+          for f in skills/*/SKILL.md; do
             echo "Checking $f..."
             # Extract frontmatter (between first and second ---)
             frontmatter=$(sed -n '/^---$/,/^---$/p' "$f")
@@ -207,7 +207,7 @@ jobs:
       - name: Check for placeholder text
         run: |
           failed=0
-          for f in agents/*.md skills/csf/*/SKILL.md; do
+          for f in agents/*.md skills/*/SKILL.md; do
             # Strip inline code spans before checking for placeholders
             if sed 's/`[^`]*`//g' "$f" | grep -qE '\bTODO\b|\bTBD\b|\bPLACEHOLDER\b'; then
               echo "FAIL: placeholder text found in $f"
