@@ -5,6 +5,18 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.30.1](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.0...v0.30.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* Include all commit types in release-please changelog ([#136](https://github.com/bitcraft-apps/claude-spec-first/issues/136)) ([9d85d1a](https://github.com/bitcraft-apps/claude-spec-first/commit/9d85d1a7c72b08bb5e3de541dd7be8ae7d9965d2))
+
+
+### Code Refactoring
+
+* Align plugin structure with Anthropic conventions ([#135](https://github.com/bitcraft-apps/claude-spec-first/issues/135)) ([35399b7](https://github.com/bitcraft-apps/claude-spec-first/commit/35399b7cb71afd5fba766bc6382efbebf88d61cb))
+
 ## [0.30.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.29.0...v0.30.0) (2026-03-12)
 
 
