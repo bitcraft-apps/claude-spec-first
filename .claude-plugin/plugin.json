@@ -1,6 +1,6 @@
 {
   "name": "csf",
-  "version": "0.30.0",
+  "version": "0.30.1",
   "description": "Minimalist spec-first development workflow",
   "hooks": "./hooks/hooks.json"
 }
