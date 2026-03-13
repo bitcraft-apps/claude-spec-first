@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-# Error Recovery and Edge Case E2E Tests  
+# Error Recovery and Edge Case E2E Tests
 # Tests how the system handles various error conditions and edge cases
 
 # Detect project root directory
@@ -10,27 +10,35 @@ export PROJECT_ROOT
 # Require minimum BATS version for run flags
 bats_require_minimum_version 1.5.0
 
-# Inline helper functions - only what's actually used
-create_mock_home() {
-    local home_dir="${1:-$TEST_DIR/mock_home}"
-    mkdir -p "$home_dir/.claude"
-    export HOME="$home_dir"
-    echo "$home_dir"
-}
+# Create a mock repo structure that validate-plugin.sh can run against
+setup_mock_repo() {
+    local repo_dir="$1"
+    mkdir -p "$repo_dir/agents" "$repo_dir/skills" "$repo_dir/scripts"
 
-# Set up framework structure for testing
-setup_framework_to() {
-    local target="$1/.claude"
-    mkdir -p "$target/.csf" "$target/agents/csf" "$target/commands/csf"
-    cp "$PROJECT_ROOT/framework/VERSION" "$target/.csf/"
-    cp "$PROJECT_ROOT/framework/validate-framework.sh" "$target/.csf/"
-    chmod +x "$target/.csf/validate-framework.sh"
-    for f in "$PROJECT_ROOT/framework/agents/"*.md; do
-        [ -f "$f" ] && cp "$f" "$target/agents/csf/"
+    # Copy VERSION
+    cp "$PROJECT_ROOT/VERSION" "$repo_dir/"
+
+    # Copy validation script
+    cp "$PROJECT_ROOT/scripts/validate-plugin.sh" "$repo_dir/scripts/"
+    chmod +x "$repo_dir/scripts/validate-plugin.sh"
+
+    # Copy agents
+    for f in "$PROJECT_ROOT/agents/"*.md; do
+        [ -f "$f" ] && cp "$f" "$repo_dir/agents/"
     done
-    for d in "$PROJECT_ROOT/framework/skills/csf/"*/; do
-        [ -d "$d" ] && cp "$d/SKILL.md" "$target/commands/csf/$(basename "$d").md"
+
+    # Copy skills
+    for d in "$PROJECT_ROOT/skills/"*/; do
+        [ -d "$d" ] && mkdir -p "$repo_dir/skills/$(basename "$d")" && \
+            cp "$d/SKILL.md" "$repo_dir/skills/$(basename "$d")/"
     done
+
+    # Copy docs needed for validation
+    [ -f "$PROJECT_ROOT/AGENTS.md" ] && cp "$PROJECT_ROOT/AGENTS.md" "$repo_dir/"
+    [ -f "$PROJECT_ROOT/CLAUDE.md" ] && cp "$PROJECT_ROOT/CLAUDE.md" "$repo_dir/"
+    [ -f "$PROJECT_ROOT/README.md" ] && cp "$PROJECT_ROOT/README.md" "$repo_dir/"
+    # Skip .claude-plugin/ — tests manipulate VERSION, so copying plugin.json/marketplace.json
+    # would cause version mismatch failures. Version-match checks are conditional on file existence.
 }
 
 assert_success() {
@@ -47,14 +55,6 @@ assert_failure() {
         echo "Output: $output" >&2
         return 1
     }
-}
-
-assert_version_format() {
-    local version="$1"
-    if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        echo "Expected semantic version format (x.y.z), got: $version" >&2
-        return 1
-    fi
 }
 
 assert_output_contains() {
@@ -75,149 +75,108 @@ test_error() {
 }
 
 setup() {
-    # Create temporary test directory
     TEST_DIR="$(mktemp -d)"
     export TEST_DIR
-    export ORIGINAL_HOME="$HOME"
     export ORIGINAL_PWD="$(pwd)"
 }
 
 teardown() {
-    # Restore original environment
-    if [ -n "$ORIGINAL_HOME" ]; then
-        export HOME="$ORIGINAL_HOME"
-    fi
     if [ -n "$ORIGINAL_PWD" ] && [ -d "$ORIGINAL_PWD" ]; then
         cd "$ORIGINAL_PWD"
     fi
-    # Cleanup test directory
     if [ -n "$TEST_DIR" ] && [ -d "$TEST_DIR" ]; then
         rm -rf "$TEST_DIR"
     fi
 }
 
 @test "recover from corrupted VERSION file" {
-    # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
+    MOCK_REPO="$TEST_DIR/repo"
+    setup_mock_repo "$MOCK_REPO"
+    cd "$MOCK_REPO"
 
-    setup_framework_to "$HOME_DIR"
+    # Corrupt the VERSION file
+    echo "invalid.version.format" > VERSION
 
-    cd "$HOME_DIR/.claude"
-
-    # Corrupt the VERSION file with invalid content
-    echo "invalid.version.format" > .csf/VERSION
-
-    # Framework validation should detect corrupted VERSION but still show it
-    run ./.csf/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     assert_failure
-    assert_output_contains "Framework Version: invalid.version.format"
-    assert_output_contains "Framework validation FAILED"
-    test_info "✅ Framework validation detects corrupted VERSION"
-    
-    # Recovery: Fix the VERSION file
-    echo "1.0.0" > .csf/VERSION
+    assert_output_contains "Plugin Version: invalid.version.format"
+    assert_output_contains "Plugin validation FAILED"
+    test_info "Plugin validation detects corrupted VERSION"
 
-    run ./.csf/validate-framework.sh
+    # Recovery: Fix the VERSION file
+    echo "1.0.0" > VERSION
+
+    run ./scripts/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version: 1.0.0"
-    assert_output_contains "Framework validation PASSED"
-    test_info "✅ Recovery successful after fixing VERSION file"
+    assert_output_contains "Plugin Version: 1.0.0"
+    assert_output_contains "Plugin validation PASSED"
+    test_info "Recovery successful after fixing VERSION file"
 }
 
 @test "handle missing critical files gracefully" {
-    # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
-
-    setup_framework_to "$HOME_DIR"
-
-    cd "$HOME_DIR/.claude"
+    MOCK_REPO="$TEST_DIR/repo"
+    setup_mock_repo "$MOCK_REPO"
+    cd "$MOCK_REPO"
 
     # Test missing VERSION file
-    mv .csf/VERSION .csf/VERSION.backup
+    mv VERSION VERSION.backup
 
-    run ./.csf/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     assert_failure
-    assert_output_contains "Framework Version: unknown (VERSION file not found)"
-    assert_output_contains "❌ VERSION file exists"
-    test_info "✅ Validation detects missing VERSION file"
+    assert_output_contains "Must be run from the repository root"
+    test_info "Validation detects missing VERSION file"
 
     # Restore VERSION file
-    mv .csf/VERSION.backup .csf/VERSION
+    mv VERSION.backup VERSION
 
-    # Test validation still works
-    run ./.csf/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version:"
-    test_info "✅ Handles missing VERSION file gracefully"
+    assert_output_contains "Plugin Version:"
+    test_info "Handles missing VERSION file gracefully"
 }
 
 @test "handle permission issues gracefully" {
-    # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
-
-    setup_framework_to "$HOME_DIR"
-
-    cd "$HOME_DIR/.claude"
+    MOCK_REPO="$TEST_DIR/repo"
+    setup_mock_repo "$MOCK_REPO"
+    cd "$MOCK_REPO"
 
     # Remove execute permissions from validation script
-    chmod -x .csf/validate-framework.sh
+    chmod -x scripts/validate-plugin.sh
 
-    run -126 ./.csf/validate-framework.sh 2>/dev/null
-    # Expect exit code 126 (permission denied)
+    run -126 ./scripts/validate-plugin.sh 2>/dev/null
     [ "$status" -eq 126 ]
-    test_info "✅ Handles missing execute permissions"
+    test_info "Handles missing execute permissions"
 
     # Restore permissions
-    chmod +x .csf/validate-framework.sh
+    chmod +x scripts/validate-plugin.sh
 
-    run ./.csf/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     assert_success
-    test_info "✅ Recovers after fixing permissions"
+    test_info "Recovers after fixing permissions"
 }
 
-@test "handle disk space and write permission issues" {
-    # This test simulates scenarios where writes might fail
+@test "handle read-only directory gracefully" {
+    MOCK_REPO="$TEST_DIR/repo"
+    setup_mock_repo "$MOCK_REPO"
+    cd "$MOCK_REPO"
 
-    # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
+    # Make scripts directory read-only
+    chmod 555 scripts/
 
-    setup_framework_to "$HOME_DIR"
-
-    cd "$HOME_DIR/.claude"
-
-    # Make .csf directory read-only to simulate write permission issues
-    chmod 555 .csf/
-
-    # Validation should still work even with read-only directory
-    run ./.csf/validate-framework.sh
+    # Validation should still work (it only reads)
+    run ./scripts/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version:"
-    test_info "✅ Handles write permission issues gracefully"
+    assert_output_contains "Plugin Version:"
+    test_info "Handles read-only directory gracefully"
 
     # Restore permissions
-    chmod 755 .csf/
-
-    # Verify validation still works after restoring permissions
-    run ./.csf/validate-framework.sh
-    assert_success
-    test_info "✅ Recovers after fixing permissions"
+    chmod 755 scripts/
 }
 
 @test "handle concurrent access scenarios" {
-    # Setup installation
-    HOME_DIR="$TEST_DIR/home"
-    create_mock_home "$HOME_DIR"
-
-    setup_framework_to "$HOME_DIR"
-
-    cd "$HOME_DIR/.claude"
-
-    # Simulate concurrent validation access
-    # This tests for race conditions and file locking issues
+    MOCK_REPO="$TEST_DIR/repo"
+    setup_mock_repo "$MOCK_REPO"
+    cd "$MOCK_REPO"
 
     local pids=()
 
@@ -225,30 +184,30 @@ teardown() {
     for i in {1..5}; do
         (
             sleep 0.1
-            ./.csf/validate-framework.sh > "$TEST_DIR/result_$i.txt" 2>&1
+            ./scripts/validate-plugin.sh > "$TEST_DIR/result_$i.txt" 2>&1
             echo $? > "$TEST_DIR/status_$i.txt"
         ) &
         pids+=($!)
     done
-    
+
     # Wait for all processes to complete
     for pid in "${pids[@]}"; do
         wait "$pid"
     done
-    
+
     # Check that all processes succeeded and got consistent results
     local first_result
     local all_consistent=true
-    
+
     for i in {1..5}; do
         local status=$(cat "$TEST_DIR/status_$i.txt")
         local result=$(cat "$TEST_DIR/result_$i.txt")
-        
+
         [ "$status" -eq 0 ] || {
             test_error "Process $i failed with status $status"
             all_consistent=false
         }
-        
+
         if [ -z "$first_result" ]; then
             first_result="$result"
         elif [ "$result" != "$first_result" ]; then
@@ -256,7 +215,7 @@ teardown() {
             all_consistent=false
         fi
     done
-    
+
     [ "$all_consistent" = true ]
-    test_info "✅ Concurrent access handled consistently"
+    test_info "Concurrent access handled consistently"
 }

@@ -35,7 +35,7 @@ show_help() {
     echo ""
     echo "Purpose:"
     echo "  Determines if changes require a version bump based on files modified"
-    echo "  Only framework/ changes require version bumps (framework capabilities)"
+    echo "  Only plugin content changes require version bumps (agents, skills, hooks)"
     echo "  Scripts, tests, docs, CI changes do not require version bumps"
 }
 
@@ -108,13 +108,16 @@ set_github_output() {
 }
 
 # Define files that require version bumps when changed
-# Only framework content affects the installed framework capabilities
+# Only plugin content affects the installed framework capabilities
 get_version_requiring_patterns() {
-    echo "framework/"
+    echo "agents/"
+    echo "skills/"
+    echo "hooks/"
+    echo "VERSION"
 }
 
 # Define files that do NOT require version bumps
-# These are files that don't affect installed framework capabilities
+# These are files that don't affect installed plugin capabilities
 get_version_exempt_patterns() {
     echo ".github/workflows/"
     echo "tests/"
@@ -158,7 +161,7 @@ file_matches_patterns() {
             return 0
         fi
         
-        # Handle prefix patterns (e.g., "framework/" matches "framework/VERSION")
+        # Handle prefix patterns (e.g., "agents/" matches "agents/define-scope.md")
         if [[ "$pattern" == */ && "$file" == "$pattern"* ]]; then
             return 0
         fi
@@ -238,19 +241,19 @@ analyze_changes() {
     
     # Determine if version bump is required
     if [ ${#framework_files[@]} -gt 0 ]; then
-        output_warning "Version bump REQUIRED - framework files changed:"
+        output_warning "Version bump REQUIRED - plugin files changed:"
         printf '  %s\n' "${framework_files[@]}"
         
         set_github_output "version_required" "true"
-        set_github_output "reason" "framework_changes"
-        set_github_output "framework_files" "$(IFS=,; echo "${framework_files[*]}")"
+        set_github_output "reason" "plugin_changes"
+        set_github_output "plugin_files" "$(IFS=,; echo "${framework_files[*]}")"
         
         return 0
     else
-        output_success "No version bump required - only non-framework files changed"
+        output_success "No version bump required - only non-plugin files changed"
         
         set_github_output "version_required" "false" 
-        set_github_output "reason" "no_framework_changes"
+        set_github_output "reason" "no_plugin_changes"
         
         return 1
     fi
@@ -262,8 +265,8 @@ check_version_bump() {
     
     # Get versions
     local base_version current_version
-    base_version=$(git show "$base_branch:framework/VERSION" 2>/dev/null || echo "0.0.0")
-    current_version=$(cat "$PROJECT_ROOT/framework/VERSION" 2>/dev/null || echo "0.0.0")
+    base_version=$(git show "$base_branch:VERSION" 2>/dev/null || echo "0.0.0")
+    current_version=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "0.0.0")
     
     echo "Base version ($base_branch): $base_version"
     echo "Current version: $current_version"
@@ -314,10 +317,10 @@ main() {
             output_error "❌ Version requirement NOT satisfied"
             echo ""
             echo "Required action:"
-            echo "1. Bump version in framework/VERSION"
+            echo "1. Bump version in VERSION"
             echo "2. Add changelog entry in CHANGELOG.md"
             echo ""
-            echo "Framework files that require version bump:"
+            echo "Plugin files that require version bump:"
             get_changed_files "$BASE_BRANCH" | while read -r file; do
                 if file_matches_patterns "$file" $(get_version_requiring_patterns); then
                     echo "  - $file"

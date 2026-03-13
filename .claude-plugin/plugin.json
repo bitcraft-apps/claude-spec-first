@@ -1,25 +1,6 @@
 {
-  "name": "claude-spec-first",
+  "name": "csf",
   "version": "0.30.0",
   "description": "Minimalist spec-first development workflow",
-  "agents": [
-    "./framework/agents/analyze-artifacts.md",
-    "./framework/agents/analyze-existing-docs.md",
-    "./framework/agents/analyze-implementation.md",
-    "./framework/agents/create-criteria.md",
-    "./framework/agents/create-technical-docs.md",
-    "./framework/agents/create-user-docs.md",
-    "./framework/agents/define-scope.md",
-    "./framework/agents/identify-risks.md",
-    "./framework/agents/implement-minimal.md",
-    "./framework/agents/integrate-docs.md",
-    "./framework/agents/manage-spec-directory.md",
-    "./framework/agents/synthesize-spec.md"
-  ],
-  "skills": [
-    "./framework/skills/csf/document",
-    "./framework/skills/csf/implement",
-    "./framework/skills/csf/spec"
-  ],
-  "hooks": "./framework/hooks/hooks.json"
+  "hooks": "./hooks/hooks.json"
 }

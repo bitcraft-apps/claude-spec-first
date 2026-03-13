@@ -41,7 +41,7 @@ setup:
 	chmod +x tests/run-tests.sh
 	chmod +x tests/bats-core/bin/bats
 	chmod +x scripts/*.sh
-	chmod +x framework/validate-framework.sh
+	chmod +x scripts/validate-plugin.sh
 	@echo "✅ Setup complete!"
 
 # Run all tests
@@ -88,7 +88,7 @@ test-parallel: setup
 # Validate framework
 validate: setup
 	@echo "🔍 Validating framework..."
-	./framework/validate-framework.sh
+	./scripts/validate-plugin.sh
 
 # Clean up test artifacts
 clean:
@@ -112,7 +112,7 @@ dev-test: test-verbose
 dev-watch:
 	@echo "👀 Watching for changes (requires fswatch)..."
 	@if command -v fswatch >/dev/null 2>&1; then \
-		fswatch -o framework/ scripts/ tests/ | while read f; do \
+		fswatch -o agents/ skills/ hooks/ scripts/ tests/ | while read f; do \
 			echo "🔄 Changes detected, running tests..."; \
 			make test; \
 		done; \
@@ -126,7 +126,7 @@ docs:
 	@echo "📚 Framework documentation available in:"
 	@echo "  - README.md (project overview)"
 	@echo "  - CLAUDE.md (development guide)"
-	@echo "  - framework/CLAUDE.md (global workflow)"
+	@echo "  - AGENTS.md (development guide)"
 	@echo "  - tests/ (test examples and setup)"
 
 # Version management

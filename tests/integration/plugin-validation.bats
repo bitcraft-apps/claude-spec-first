@@ -16,61 +16,30 @@ import sys, json
 data = json.load(sys.stdin)
 assert 'name' in data, 'missing name'
 assert 'version' in data, 'missing version'
-assert 'agents' in data, 'missing agents'
-assert 'skills' in data, 'missing skills'
 assert 'hooks' in data, 'missing hooks'
 "
 }
 
-@test "plugin.json agents match framework/agents directory" {
-    local manifest_agents
-    manifest_agents=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
-import sys, json, os, glob
-data = json.load(sys.stdin)
-names = set()
-for entry in data['agents']:
-    if entry.endswith('.md'):
-        names.add(os.path.splitext(os.path.basename(entry))[0])
-    elif entry.startswith('./'):
-        path = os.path.join('$PROJECT_ROOT', entry)
-        names.update(os.path.splitext(os.path.basename(f))[0] for f in glob.glob(os.path.join(path, '*.md')))
-    else:
-        names.add(entry)
-print('\n'.join(sorted(names)))
-")
-
-    local dir_agents
-    dir_agents=$(ls "$PROJECT_ROOT/framework/agents/"*.md | xargs -n1 basename | sed 's/\.md$//' | sort)
-
-    [ "$manifest_agents" = "$dir_agents" ]
+@test "agents directory contains agent files" {
+    local count=0
+    for f in "$PROJECT_ROOT/agents/"*.md; do
+        [ -f "$f" ] || continue
+        count=$((count + 1))
+    done
+    [ "$count" -gt 0 ]
 }
 
-@test "plugin.json skills match framework/skills directory" {
-    local manifest_skills
-    manifest_skills=$(cat "$PROJECT_ROOT/.claude-plugin/plugin.json" | python3 -c "
-import sys, json, os
-data = json.load(sys.stdin)
-names = set()
-for entry in data['skills']:
-    if entry.startswith('./'):
-        path = os.path.join('$PROJECT_ROOT', entry)
-        if os.path.isdir(path) and os.path.exists(os.path.join(path, 'SKILL.md')):
-            names.add(os.path.basename(entry))
-        elif os.path.isdir(path):
-            names.update(d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d)))
-    else:
-        names.add(entry)
-print('\n'.join(sorted(names)))
-")
-
-    local dir_skills
-    dir_skills=$(ls -d "$PROJECT_ROOT/framework/skills/csf/"*/ | xargs -n1 basename | sort)
-
-    [ "$manifest_skills" = "$dir_skills" ]
+@test "skills directory contains skill files" {
+    local count=0
+    for d in "$PROJECT_ROOT/skills/"*/; do
+        [ -f "$d/SKILL.md" ] || continue
+        count=$((count + 1))
+    done
+    [ "$count" -gt 0 ]
 }
 
 @test "agent frontmatter is parseable YAML" {
-    for agent in "$PROJECT_ROOT/framework/agents/"*.md; do
+    for agent in "$PROJECT_ROOT/agents/"*.md; do
         # Extract YAML frontmatter between --- delimiters
         local frontmatter
         frontmatter=$(sed -n '/^---$/,/^---$/p' "$agent" | sed '1d;$d')
@@ -88,7 +57,7 @@ print('\n'.join(sorted(names)))
 }
 
 @test "skill frontmatter is parseable YAML" {
-    for skill_dir in "$PROJECT_ROOT/framework/skills/csf/"*/; do
+    for skill_dir in "$PROJECT_ROOT/skills/"*/; do
         local skill_file="$skill_dir/SKILL.md"
         [ -f "$skill_file" ] || {
             echo "Missing SKILL.md in $(basename "$skill_dir")" >&2
@@ -106,7 +75,7 @@ print('\n'.join(sorted(names)))
 }
 
 @test "hooks.json is valid JSON with expected structure" {
-    run cat "$PROJECT_ROOT/framework/hooks/hooks.json"
+    run cat "$PROJECT_ROOT/hooks/hooks.json"
     [ "$status" -eq 0 ]
 
     echo "$output" | python3 -c "
@@ -120,7 +89,7 @@ assert 'SubagentStop' in hooks, 'missing SubagentStop hook event'
 }
 
 @test "hooks.json references existing shell scripts" {
-    local hooks_dir="$PROJECT_ROOT/framework/hooks"
+    local hooks_dir="$PROJECT_ROOT/hooks"
     local referenced_scripts
     referenced_scripts=$(cat "$hooks_dir/hooks.json" | python3 -c "
 import sys, json, os
