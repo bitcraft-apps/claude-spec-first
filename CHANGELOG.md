@@ -5,6 +5,13 @@ All notable changes to the Claude Spec-First Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.31.1](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.31.0...v0.31.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* align marketplace plugin name with plugin.json ([#147](https://github.com/bitcraft-apps/claude-spec-first/issues/147)) ([60e89ef](https://github.com/bitcraft-apps/claude-spec-first/commit/60e89efb200c43684a3fa4b575cb84ef69f8c234))
+
 ## [0.31.0](https://github.com/bitcraft-apps/claude-spec-first/compare/v0.30.2...v0.31.0) (2026-03-13)
 
 
