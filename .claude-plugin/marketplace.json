@@ -6,7 +6,7 @@
   },
   "plugins": [
     {
-      "name": "claude-spec-first",
+      "name": "csf",
       "source": {
         "source": "github",
         "repo": "bitcraft-apps/claude-spec-first"
