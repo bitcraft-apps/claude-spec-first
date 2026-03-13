@@ -62,7 +62,7 @@ After directory setup and clarification (if needed), run agents:
 - Task: identify-risks (maxTurns: 6) with requirements: $ARGUMENTS
 
 **Batch 2:**
-- Task: synthesize-spec (maxTurns: 12) to combine all research
+- Task: synthesize-spec (maxTurns: 12) to combine all research, following the structure in `${CLAUDE_SKILL_DIR}/spec-template.md`
 
 Output: `$CSF_DIR/spec.md` (direct file or symlink to timestamped spec)
 
