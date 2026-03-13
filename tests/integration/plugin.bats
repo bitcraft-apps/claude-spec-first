@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-# Framework Structure Integration Tests
-# Tests core framework structure and validation functionality
+# Plugin Structure Integration Tests
+# Tests core plugin structure and validation functionality
 
 # Detect project root directory
 PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
@@ -26,21 +26,21 @@ teardown() {
     [ -f "$PROJECT_ROOT/VERSION" ]
     [ -d "$PROJECT_ROOT/skills" ]
     [ -d "$PROJECT_ROOT/agents" ]
-    [ -x "$PROJECT_ROOT/scripts/validate-framework.sh" ]
+    [ -x "$PROJECT_ROOT/scripts/validate-plugin.sh" ]
 }
 
 @test "framework validation includes version" {
     cd "$PROJECT_ROOT"
-    run ./scripts/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     [ "$status" -eq 0 ]
-    [[ "$output" == *"Framework Version:"* ]]
+    [[ "$output" == *"Plugin Version:"* ]]
 }
 
 @test "framework validation passes" {
     cd "$PROJECT_ROOT"
-    run ./scripts/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     [ "$status" -eq 0 ]
-    [[ "$output" == *"Framework validation PASSED"* ]]
+    [[ "$output" == *"Plugin validation PASSED"* ]]
 }
 
 @test "agents exist and are properly configured" {

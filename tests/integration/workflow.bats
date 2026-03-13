@@ -168,7 +168,7 @@ teardown() {
 
 @test "framework validation recognizes all agents" {
     cd "$PROJECT_ROOT"
-    run ./scripts/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     [ "$status" -eq 0 ]
     
     # Verify agents are validated
@@ -180,7 +180,7 @@ teardown() {
 
 @test "framework validation recognizes all 3 skills" {
     cd "$PROJECT_ROOT"
-    run ./scripts/validate-framework.sh
+    run ./scripts/validate-plugin.sh
     [ "$status" -eq 0 ]
 
     # Check that framework finds 3 skill files (spec, implement, document)

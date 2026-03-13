@@ -26,7 +26,7 @@ Agent turn limits (`maxTurns`) are set in skill files, not agent frontmatter.
 
 ### plugin.json
 
-`.claude-plugin/plugin.json` declares the framework's component inventory: agents, skills, and hooks. `validate-framework.sh` reads it to enumerate files instead of maintaining separate lists.
+`.claude-plugin/plugin.json` declares the framework's component inventory: agents, skills, and hooks. `validate-plugin.sh` reads it to enumerate files instead of maintaining separate lists.
 
 Schema:
 
@@ -41,9 +41,9 @@ Schema:
 
 Agents and skills use default directory auto-discovery (`agents/`, `skills/`) and are not listed in the manifest.
 
-**Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, `validate-framework.sh` falls back to hardcoded arrays.
+**Fallback behavior:** If the manifest is missing, invalid JSON, or `jq` is not installed, `validate-plugin.sh` falls back to hardcoded arrays.
 
-**Version drift:** `validate-framework.sh` checks that `plugin.json` version matches `VERSION` and fails validation if they differ. This check only runs in repository mode.
+**Version drift:** `validate-plugin.sh` checks that `plugin.json` version matches `VERSION` and fails validation if they differ. This check only runs in repository mode.
 
 ### marketplace.json
 
@@ -64,7 +64,7 @@ Schema:
 }
 ```
 
-Plugin version is auto-synced by release-please alongside `plugin.json`. `validate-framework.sh` checks consistency.
+Plugin version is auto-synced by release-please alongside `plugin.json`. `validate-plugin.sh` checks consistency.
 
 **Relationship to plugin.json:** `marketplace.json` is the catalog (how users discover and install the plugin). `plugin.json` is the manifest (what the plugin provides). Both have version fields kept in sync automatically.
 
@@ -110,7 +110,7 @@ Both entries prevent CSF artifacts from being committed.
 ### Validation
 
 ```bash
-bash scripts/validate-framework.sh
+bash scripts/validate-plugin.sh
 ```
 
 ## Cross-References

@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Specification-First Development Framework Validation Script
+# Claude Spec-First Plugin Validation Script
 # Validates all components for Claude Code compliance and functionality
 # Supports dual-mode operation: repository mode (./agents/, ./skills/, ./hooks/) and installed mode (~/.claude/)
 
 set -e  # Exit on any error
 
-echo "🔍 Validating Specification-First Development Framework..."
-echo "=================================================="
+echo "🔍 Validating Claude Spec-First Plugin..."
+echo "=========================================="
 
 # Read framework version directly from VERSION file
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,9 +22,9 @@ else
 fi
 
 if [ "$FRAMEWORK_VERSION" != "unknown" ] && [ -n "$FRAMEWORK_VERSION" ]; then
-    echo -e "${BLUE}Framework Version: $FRAMEWORK_VERSION${NC}"
+    echo -e "${BLUE}Plugin Version: $FRAMEWORK_VERSION${NC}"
 else
-    echo -e "${YELLOW}Framework Version: unknown (VERSION file not found)${NC}"
+    echo -e "${YELLOW}Plugin Version: unknown (VERSION file not found)${NC}"
 fi
 echo ""
 
@@ -182,10 +182,10 @@ fi
 # Check framework structure using detected mode
 if [ "$EXECUTION_MODE" = "repository" ]; then
     # In repository mode, check for essential framework components
-    print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
+    print_status "Plugin structure detected ($EXECUTION_MODE mode)" 0
 else
     # In installed mode, check for CSF directories
-    print_status "Framework structure detected ($EXECUTION_MODE mode)" 0
+    print_status "Plugin structure detected ($EXECUTION_MODE mode)" 0
 fi
 
 # Check VERSION file
@@ -204,7 +204,7 @@ if [ -f "$VERSION_PATH" ]; then
     fi
     if echo "$VERSION_CONTENT" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null; then
         print_status "VERSION file has valid format" 0
-        print_info "Framework version: $VERSION_CONTENT"
+        print_info "Plugin version: $VERSION_CONTENT"
     else
         print_status "VERSION file has valid format" 1
         print_info "VERSION content: '$VERSION_CONTENT'"
@@ -598,8 +598,8 @@ echo ""
 
 # Final assessment
 if [ $FAILED -eq 0 ]; then
-    echo -e "${GREEN}🎉 Framework validation PASSED!${NC}"
-    echo -e "${GREEN}The specification-first development framework is properly configured and ready for use.${NC}"
+    echo -e "${GREEN}🎉 Plugin validation PASSED!${NC}"
+    echo -e "${GREEN}The Claude Spec-First plugin is properly configured and ready for use.${NC}"
 
     if [ $WARNINGS -gt 0 ]; then
         echo -e "${YELLOW}Note: $WARNINGS warnings found. Consider addressing them for optimal performance.${NC}"
@@ -618,7 +618,7 @@ if [ $FAILED -eq 0 ]; then
 
     exit 0
 else
-    echo -e "${RED}❌ Framework validation FAILED!${NC}"
+    echo -e "${RED}❌ Plugin validation FAILED!${NC}"
     echo -e "${RED}$FAILED critical issues must be resolved before using the framework.${NC}"
 
     echo ""

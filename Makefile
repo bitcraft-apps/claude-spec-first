@@ -41,7 +41,7 @@ setup:
 	chmod +x tests/run-tests.sh
 	chmod +x tests/bats-core/bin/bats
 	chmod +x scripts/*.sh
-	chmod +x scripts/validate-framework.sh
+	chmod +x scripts/validate-plugin.sh
 	@echo "✅ Setup complete!"
 
 # Run all tests
@@ -88,7 +88,7 @@ test-parallel: setup
 # Validate framework
 validate: setup
 	@echo "🔍 Validating framework..."
-	./scripts/validate-framework.sh
+	./scripts/validate-plugin.sh
 
 # Clean up test artifacts
 clean:

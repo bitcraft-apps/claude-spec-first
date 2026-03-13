@@ -23,8 +23,8 @@ setup_framework_to() {
     local target="$1/.claude"
     mkdir -p "$target/.csf" "$target/agents/csf" "$target/commands/csf"
     cp "$PROJECT_ROOT/VERSION" "$target/.csf/"
-    cp "$PROJECT_ROOT/scripts/validate-framework.sh" "$target/.csf/"
-    chmod +x "$target/.csf/validate-framework.sh"
+    cp "$PROJECT_ROOT/scripts/validate-plugin.sh" "$target/.csf/"
+    chmod +x "$target/.csf/validate-plugin.sh"
     for f in "$PROJECT_ROOT/agents/"*.md; do
         [ -f "$f" ] && cp "$f" "$target/agents/csf/"
     done
@@ -108,20 +108,20 @@ teardown() {
     # Corrupt the VERSION file with invalid content
     echo "invalid.version.format" > .csf/VERSION
 
-    # Framework validation should detect corrupted VERSION but still show it
-    run ./.csf/validate-framework.sh
+    # Plugin validation should detect corrupted VERSION but still show it
+    run ./.csf/validate-plugin.sh
     assert_failure
-    assert_output_contains "Framework Version: invalid.version.format"
-    assert_output_contains "Framework validation FAILED"
-    test_info "✅ Framework validation detects corrupted VERSION"
+    assert_output_contains "Plugin Version: invalid.version.format"
+    assert_output_contains "Plugin validation FAILED"
+    test_info "✅ Plugin validation detects corrupted VERSION"
     
     # Recovery: Fix the VERSION file
     echo "1.0.0" > .csf/VERSION
 
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version: 1.0.0"
-    assert_output_contains "Framework validation PASSED"
+    assert_output_contains "Plugin Version: 1.0.0"
+    assert_output_contains "Plugin validation PASSED"
     test_info "✅ Recovery successful after fixing VERSION file"
 }
 
@@ -137,9 +137,9 @@ teardown() {
     # Test missing VERSION file
     mv .csf/VERSION .csf/VERSION.backup
 
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_failure
-    assert_output_contains "Framework Version: unknown (VERSION file not found)"
+    assert_output_contains "Plugin Version: unknown (VERSION file not found)"
     assert_output_contains "❌ VERSION file exists"
     test_info "✅ Validation detects missing VERSION file"
 
@@ -147,9 +147,9 @@ teardown() {
     mv .csf/VERSION.backup .csf/VERSION
 
     # Test validation still works
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version:"
+    assert_output_contains "Plugin Version:"
     test_info "✅ Handles missing VERSION file gracefully"
 }
 
@@ -163,17 +163,17 @@ teardown() {
     cd "$HOME_DIR/.claude"
 
     # Remove execute permissions from validation script
-    chmod -x .csf/validate-framework.sh
+    chmod -x .csf/validate-plugin.sh
 
-    run -126 ./.csf/validate-framework.sh 2>/dev/null
+    run -126 ./.csf/validate-plugin.sh 2>/dev/null
     # Expect exit code 126 (permission denied)
     [ "$status" -eq 126 ]
     test_info "✅ Handles missing execute permissions"
 
     # Restore permissions
-    chmod +x .csf/validate-framework.sh
+    chmod +x .csf/validate-plugin.sh
 
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_success
     test_info "✅ Recovers after fixing permissions"
 }
@@ -193,16 +193,16 @@ teardown() {
     chmod 555 .csf/
 
     # Validation should still work even with read-only directory
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_success
-    assert_output_contains "Framework Version:"
+    assert_output_contains "Plugin Version:"
     test_info "✅ Handles write permission issues gracefully"
 
     # Restore permissions
     chmod 755 .csf/
 
     # Verify validation still works after restoring permissions
-    run ./.csf/validate-framework.sh
+    run ./.csf/validate-plugin.sh
     assert_success
     test_info "✅ Recovers after fixing permissions"
 }
@@ -225,7 +225,7 @@ teardown() {
     for i in {1..5}; do
         (
             sleep 0.1
-            ./.csf/validate-framework.sh > "$TEST_DIR/result_$i.txt" 2>&1
+            ./.csf/validate-plugin.sh > "$TEST_DIR/result_$i.txt" 2>&1
             echo $? > "$TEST_DIR/status_$i.txt"
         ) &
         pids+=($!)

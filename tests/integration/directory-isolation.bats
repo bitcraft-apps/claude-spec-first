@@ -81,7 +81,7 @@ teardown() {
 @test "framework validation recognizes manage-spec-directory agent" {
     # Run framework validation and check it counts the correct number of agents (12 total)
     cd "$PROJECT_ROOT"
-    ./scripts/validate-framework.sh 2>&1 | grep -q "Found 12 agent files"
+    ./scripts/validate-plugin.sh 2>&1 | grep -q "Found 12 agent files"
 
     # Also verify the agent file is actually detected in the agents directory
     [ -f "$PROJECT_ROOT/agents/manage-spec-directory.md" ]

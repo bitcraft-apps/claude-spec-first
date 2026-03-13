@@ -35,8 +35,8 @@ create_minimal_framework() {
     # Create minimal validate-framework.sh
     cat > "$framework_dir/validate-framework.sh" << 'EOF'
 #!/bin/bash
-echo "Framework Version: $(cat VERSION 2>/dev/null || echo 'unknown')"
-echo "Framework validation PASSED"
+echo "Plugin Version: $(cat VERSION 2>/dev/null || echo 'unknown')"
+echo "Plugin validation PASSED"
 EOF
     chmod +x "$framework_dir/validate-framework.sh"
     
