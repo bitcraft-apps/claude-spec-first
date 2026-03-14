@@ -8,9 +8,9 @@ Spec-first v1.0.0 is functionally complete but has a hard blocker (`claude plugi
 
 Four changes, all scoped to marketplace readiness:
 
-1. **Fix marketplace.json** — remove fields rejected by the official validator
-2. **Enrich plugin.json** — add author, repository, homepage, license, keywords
-3. **Add examples/** — one minimal example showing the 3-command workflow
+1. **Fix `.claude-plugin/marketplace.json`** — remove fields rejected by the official validator
+2. **Enrich `.claude-plugin/plugin.json`** — add author, repository, homepage, license, keywords
+3. **Add `examples/` (repo root)** — one minimal example showing the 3-command workflow
 4. **Validate** — confirm both official and project validation pass clean
 
 ### Out of Scope
@@ -25,14 +25,14 @@ Four changes, all scoped to marketplace readiness:
 
 - [ ] `claude plugin validate .` passes with zero errors
 - [ ] `make validate` passes with zero failures
-- [ ] marketplace.json contains only valid schema fields (name, owner, plugins)
-- [ ] plugin.json includes author, repository, homepage, license, keywords
+- [ ] `.claude-plugin/marketplace.json` contains only valid schema fields (name, owner, plugins)
+- [ ] `.claude-plugin/plugin.json` includes author, repository, homepage, license, keywords
 - [ ] `examples/rate-limiter/README.md` exists and demonstrates the spec > implement > document workflow
 - [ ] All changes committed to main
 
 ## Changes
 
-### 1. marketplace.json
+### 1. `.claude-plugin/marketplace.json`
 
 Strip `title`, `tagline`, `description`, `categories` from root level. Keep `name`, `owner`, `plugins`.
 
@@ -56,7 +56,7 @@ Strip `title`, `tagline`, `description`, `categories` from root level. Keep `nam
 }
 ```
 
-### 2. plugin.json
+### 2. `.claude-plugin/plugin.json`
 
 Add metadata fields:
 
@@ -76,7 +76,7 @@ Add metadata fields:
 }
 ```
 
-### 3. examples/rate-limiter/README.md
+### 3. `examples/rate-limiter/README.md` (repo root)
 
 Single file, under 50 lines. Walks through the 3-command flow with a concrete rate-limiter scenario:
 
@@ -96,3 +96,4 @@ Run both validators after changes:
 
 - **Anthropic's review criteria are unpublished** — they may request additional changes. This spec addresses all known technical requirements; review feedback will drive further iteration.
 - **marketplace.json field removal** — the stripped fields (title, tagline, etc.) are likely captured in the web submission form instead. If not, they can be re-added to plugin.json if the schema supports them there.
+- **plugin.json field rejection** — the proposed metadata fields (author, repository, homepage, license, keywords) are documented in the Claude Code plugin reference but not schema-validated at write time. If any are rejected by `claude plugin validate .`, they will be removed before submission.
