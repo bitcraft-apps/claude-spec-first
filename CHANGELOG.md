@@ -5,6 +5,15 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1](https://github.com/bitcraft-apps/spec-first/compare/v1.0.0...v1.0.1) (2026-03-14)
+
+
+### Bug Fixes
+
+* correct plugin installation instructions ([#155](https://github.com/bitcraft-apps/spec-first/issues/155)) ([20d88d7](https://github.com/bitcraft-apps/spec-first/commit/20d88d7e078f51d603dd2f0e310338b95c10814e))
+* polish marketplace metadata for Anthropic submission ([#158](https://github.com/bitcraft-apps/spec-first/issues/158)) ([5c9361a](https://github.com/bitcraft-apps/spec-first/commit/5c9361a09cf818bae1ee8342d66ed87b20ca13cf))
+* remove one-time release bootstrapping config ([#157](https://github.com/bitcraft-apps/spec-first/issues/157)) ([5f7c489](https://github.com/bitcraft-apps/spec-first/commit/5f7c48932c7160426fbda8c6499c862ca2b874af))
+
 ## [1.0.0](https://github.com/bitcraft-apps/spec-first/compare/v0.31.1...v1.0.0) (2026-03-14)
 
 
