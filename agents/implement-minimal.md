@@ -9,10 +9,10 @@ tools: Read, Write, Edit, MultiEdit, Bash
 Creates SIMPLEST solution that works.
 
 Inputs:
-- `.claude/.csf/spec.md` or specified path
-- `.claude/.csf/research/pattern-example.md`
+- `.claude/.sf/spec.md` or specified path
+- `.claude/.sf/research/pattern-example.md`
 
-Output: Working code + `.claude/.csf/implementation-summary.md`
+Output: Working code + `.claude/.sf/implementation-summary.md`
 
 Rules:
 - Follow the pattern found, no creativity

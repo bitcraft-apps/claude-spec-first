@@ -1,10 +1,10 @@
-# Makefile for Claude Spec-First Framework
+# Makefile for Spec First
 
 .PHONY: help test test-verbose test-integration test-version test-unit test-e2e test-parallel setup validate clean
 
 # Default target
 help:
-	@echo "Claude Spec-First Framework - Development Commands"
+	@echo "Spec First - Development Commands"
 	@echo "=================================================="
 	@echo ""
 	@echo "Available targets:"
@@ -36,7 +36,7 @@ help:
 
 # Initialize and setup
 setup:
-	@echo "🔧 Setting up Claude Spec-First Framework..."
+	@echo "🔧 Setting up Spec First..."
 	git submodule update --init --recursive
 	chmod +x tests/run-tests.sh
 	chmod +x tests/bats-core/bin/bats

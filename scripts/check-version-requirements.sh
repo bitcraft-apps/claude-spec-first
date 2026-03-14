@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Claude Spec-First Framework - Version Requirement Detection
+# Spec First - Version Requirement Detection
 # Determines if changes to the codebase require a version bump based on impact to installed framework
 # Enforces version bump policy for framework-affecting changes
 
@@ -293,7 +293,7 @@ main() {
     cd "$PROJECT_ROOT"
     
     # Show header
-    output_info "Claude Spec-First Framework - Version Requirement Analysis"
+    output_info "Spec First - Version Requirement Analysis"
     echo "============================================================"
     echo ""
     

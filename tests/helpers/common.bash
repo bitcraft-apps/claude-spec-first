@@ -50,7 +50,7 @@ test_error() {
 # Project validation
 validate_project_root() {
     if [ -z "$PROJECT_ROOT" ] || [ ! -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-        test_error "Cannot find Claude Spec-First Framework project root"
+        test_error "Cannot find Spec First project root"
         return 1
     fi
 }

@@ -24,7 +24,7 @@ body:
       label: How to reproduce
       description: Steps to reproduce the issue
       placeholder: |
-        1. Run command: /csf:spec Add login page
+        1. Run command: /sf:spec Add login page
         2. Error occurs: ...
     validations:
       required: true
@@ -36,13 +36,13 @@ body:
       description: Which part has the issue?
       options:
         - "Installation"
-        - "Agent: csf-spec"
-        - "Agent: csf-implement" 
-        - "Agent: csf-document"
-        - "Command: /csf:spec"
-        - "Command: /csf:implement"
-        - "Command: /csf:document"
-        - "Command: /csf:workflow"
+        - "Agent: sf-spec"
+        - "Agent: sf-implement"
+        - "Agent: sf-document"
+        - "Command: /sf:spec"
+        - "Command: /sf:implement"
+        - "Command: /sf:document"
+        - "Command: /sf:workflow"
         - "Validation script"
         - "Other"
     validations:

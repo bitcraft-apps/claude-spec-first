@@ -10,7 +10,7 @@ model: haiku
 Identifies ESSENTIAL risks and blocks following MVP principle.
 
 Input: Requirements from arguments
-Output: `.claude/.csf/research/risks.md`
+Output: `.claude/.sf/research/risks.md`
 
 Rules:
 - Focus on blockers, not every possible risk

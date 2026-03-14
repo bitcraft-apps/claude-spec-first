@@ -1,12 +1,12 @@
 #!/bin/bash
-# CSF Implementation validation hook - validates implementation against spec
+# SF Implementation validation hook - validates implementation against spec
 
 INPUT=$(cat)
 [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 
 PROJECT_DIR=$(echo "$INPUT" | jq -r '.cwd // ""')
-SPEC_FILE="$PROJECT_DIR/.claude/.csf/spec.md"
-IMPL_FILE="$PROJECT_DIR/.claude/.csf/implementation-summary.md"
+SPEC_FILE="$PROJECT_DIR/.claude/.sf/spec.md"
+IMPL_FILE="$PROJECT_DIR/.claude/.sf/implementation-summary.md"
 
 [ ! -f "$SPEC_FILE" ] || [ ! -f "$IMPL_FILE" ] && exit 0
 

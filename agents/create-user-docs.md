@@ -9,12 +9,12 @@ tools: Read, Write
 Creates MINIMAL user-facing docs. Only document what the user needs to DO differently.
 
 Inputs:
-- `.claude/.csf/research/artifacts-summary.md`
-- `.claude/.csf/research/implementation-summary.md`
-- `.claude/.csf/research/docs-inventory.md` (existing doc manifest)
+- `.claude/.sf/research/artifacts-summary.md`
+- `.claude/.sf/research/implementation-summary.md`
+- `.claude/.sf/research/docs-inventory.md` (existing doc manifest)
 
-Output: `.claude/.csf/research/user-docs.md`
-Shared context: `.claude/.csf/research/doc-context.md`
+Output: `.claude/.sf/research/user-docs.md`
+Shared context: `.claude/.sf/research/doc-context.md`
 
 Sections — include ONLY if the user needs to act:
 - ## What Changed — one paragraph max. Skip if change is invisible to users.
@@ -31,5 +31,5 @@ Rules:
 - If unclear whether something needs user docs, it doesn't
 
 Shared context convention:
-- If `.claude/.csf/research/doc-context.md` exists, read it for terminology decisions
+- If `.claude/.sf/research/doc-context.md` exists, read it for terminology decisions
 - After writing output, append terms and topics to doc-context.md under `## User Docs`

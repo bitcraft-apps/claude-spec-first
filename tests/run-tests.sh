@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test Runner for Claude Spec-First Framework
+# Test Runner for Spec First
 # Orchestrates execution of BATS test suites with proper setup and reporting
 
 set -e
@@ -70,7 +70,7 @@ parse_args() {
 }
 
 show_help() {
-    echo "Test Runner for Claude Spec-First Framework"
+    echo "Test Runner for Spec First"
     echo ""
     echo "Usage: $0 [OPTIONS]"
     echo ""
@@ -101,7 +101,7 @@ check_prerequisites() {
     
     # Check if we're in the right directory
     if [ ! -f "$PROJECT_ROOT/CLAUDE.md" ]; then
-        echo -e "${RED}❌ Not in Claude Spec-First Framework repository${NC}" >&2
+        echo -e "${RED}❌ Not in Spec First repository${NC}" >&2
         exit 1
     fi
     
@@ -207,7 +207,7 @@ build_bats_command() {
 
 # Run test suite
 run_tests() {
-    local suite_name="Claude Spec-First Framework Test Suite"
+    local suite_name="Spec First Test Suite"
     case "$TEST_TYPE" in
         "unit")
             suite_name="$suite_name (Unit Tests)"
@@ -342,7 +342,7 @@ generate_report() {
     echo "📊 Test Execution Summary"
     echo "========================="
     echo "Test runner: BATS (Bash Automated Testing System)"
-    echo "Framework: Claude Spec-First Framework"
+    echo "Framework: Spec First"
     echo "Date: $(date)"
     echo "Project: $PROJECT_ROOT"
     echo ""
@@ -353,7 +353,7 @@ main() {
     parse_args "$@"
     
     # Show header
-    echo -e "${BLUE}Claude Spec-First Framework - Test Suite${NC}"
+    echo -e "${BLUE}Spec First - Test Suite${NC}"
     echo -e "${BLUE}========================================${NC}"
     echo ""
     

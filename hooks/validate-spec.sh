@@ -1,11 +1,11 @@
 #!/bin/bash
-# CSF Spec validation hook - validates spec.md structure
+# SF Spec validation hook - validates spec.md structure
 
 INPUT=$(cat)
 [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 
 PROJECT_DIR=$(echo "$INPUT" | jq -r '.cwd // ""')
-SPEC_FILE="$PROJECT_DIR/.claude/.csf/spec.md"
+SPEC_FILE="$PROJECT_DIR/.claude/.sf/spec.md"
 
 [ ! -f "$SPEC_FILE" ] && exit 0
 

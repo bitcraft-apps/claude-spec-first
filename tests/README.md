@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Claude Spec-First Framework uses **BATS (Bash Automated Testing System)** for comprehensive testing. This modern testing approach provides better structure, reporting, and CI/CD integration compared to the previous shell-based tests.
+Spec First uses **BATS (Bash Automated Testing System)** for comprehensive testing. This modern testing approach provides better structure, reporting, and CI/CD integration compared to the previous shell-based tests.
 
 ## Architecture
 
