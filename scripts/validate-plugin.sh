@@ -408,9 +408,9 @@ if [ $FAILED -eq 0 ]; then
 
     echo ""
     echo "🚀 Next Steps:"
-    echo "- Create spec: /csf:spec sample feature"
-    echo "- Implement code: /csf:implement spec-file-or-requirements"
-    echo "- Generate docs: /csf:document spec-and-code-paths"
+    echo "- Create spec: /sf:spec sample feature"
+    echo "- Implement code: /sf:implement spec-file-or-requirements"
+    echo "- Generate docs: /sf:document spec-and-code-paths"
 
     exit 0
 else

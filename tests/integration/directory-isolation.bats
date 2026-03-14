@@ -61,8 +61,8 @@ teardown() {
     # Check that synthesize-spec agent mentions symlink awareness
     grep -q "active.*directory\|symlink-aware" "$PROJECT_ROOT/agents/synthesize-spec.md"
 
-    # Check output paths are documented correctly (now uses $CSF_DIR variable)
-    grep -q "CSF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/skills/spec/SKILL.md"
+    # Check output paths are documented correctly (now uses $SF_DIR variable)
+    grep -q "SF_DIR/spec\.md.*direct file or symlink" "$PROJECT_ROOT/skills/spec/SKILL.md"
 }
 
 @test "manage-spec-directory agent includes gitignore protection" {
@@ -71,11 +71,11 @@ teardown() {
     # Check it guards on .git existence
     grep -q '\.git"' "$agent_file"
 
-    # Check it appends exact pattern .claude/.csf/
-    grep -qF '.claude/.csf/' "$agent_file"
+    # Check it appends exact pattern .claude/.sf/
+    grep -qF '.claude/.sf/' "$agent_file"
 
     # Check it skips if already present (negated grep guard)
-    grep -q '! grep -qF .*.claude/.csf/' "$agent_file"
+    grep -q '! grep -qF .*.claude/.sf/' "$agent_file"
 }
 
 @test "framework validation recognizes manage-spec-directory agent" {

@@ -11,14 +11,14 @@ Creates minimal implementation following existing patterns.
 
 ## Usage
 ```
-/csf:implement [--isolate] [SPECIFICATION_OR_PATH]
+/sf:implement [--isolate] [SPECIFICATION_OR_PATH]
 ```
 
 ---
 
 ## Project Context
 - Branch: !`git branch --show-current 2>/dev/null`
-- Spec exists: !`test -f .claude/.csf/spec.md && echo "yes" || echo "no"`
+- Spec exists: !`test -f .claude/.sf/spec.md && echo "yes" || echo "no"`
 
 ## Input Resolution
 
@@ -26,7 +26,7 @@ Creates minimal implementation following existing patterns.
 
 1. Parse $ARGUMENTS: If `--isolate` is present, set ISOLATE=true and strip it from remaining args
 2. If remaining args provided: Use as specification path or inline requirements
-3. Else if `.claude/.csf/spec.md` exists: Use it
+3. Else if `.claude/.sf/spec.md` exists: Use it
 4. Else: Use **AskUserQuestion** tool to ask for specification location
 
 ## Execution
@@ -35,13 +35,13 @@ After input resolution, run sequential agents:
 
 **Step 1: Learn**
 - Use Agent tool with subagent_type="Explore", maxTurns=10 to find similar patterns in the codebase for: $SPECIFICATION (request "medium" thoroughness in the prompt)
-- Save findings to `.claude/.csf/research/pattern-example.md`
+- Save findings to `.claude/.sf/research/pattern-example.md`
 
 **Step 2: Implement**
 - If ISOLATE is true: Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION, isolation: "worktree"
 - Else: Task: implement-minimal (maxTurns: 25) with spec: $SPECIFICATION
 
-Output: Implementation + `.claude/.csf/implementation-summary.md`
+Output: Implementation + `.claude/.sf/implementation-summary.md`
 
 ## Philosophy
 

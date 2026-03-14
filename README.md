@@ -1,53 +1,76 @@
-# Claude Spec-First Framework
+# spec-first
 
-Minimalist development workflow for Claude Code following YAGNI, KISS, and SRP principles. **Build the smallest thing that works.**
+A Claude Code plugin that enforces a define-then-build workflow. You write requirements, it generates a spec, implements code from the spec, and writes documentation proportional to the change.
+
+## Who is this for
+
+Engineers and teams who want Claude Code to stop guessing and start building from clear requirements.
 
 ## Quick Start
 
-### Installation
+### Install
 
 ```bash
-claude plugin marketplace add bitcraft-apps/claude-spec-first
-claude plugin install claude-spec-first
+claude plugin add bitcraft-apps/claude-spec-first
 ```
 
-For local development, use `--plugin-dir` to point at your clone:
+### 1. Define what to build
 
-```bash
-claude --plugin-dir ./claude-spec-first
+```
+/sf:spec Add a rate limiter to the API gateway
 ```
 
-## Core Philosophy
+```
+Researching requirements...
 
-- **YAGNI**: Don't build it until you need it
-- **KISS**: Simplest solution that works
-- **SRP**: Each component does one thing
-- **MVP First**: Deliver narrowest viable change
+  Batch 1 (parallel): define-scope, create-criteria, identify-risks
+  Batch 2: synthesize-spec
 
-## Features
+Spec written to .claude/.sf/spec.md
+```
 
-- 12 specialized agents (50 lines max each)
-- 3 workflow commands (75 lines max each)
-- Challenge assumptions and unclear requirements
-- Smart implementation: CLI tools for immediate needs, code for reusable solutions
-- Technology agnostic and self-documenting
+### 2. Implement it
+
+```
+/sf:implement
+```
+
+```
+Step 1: Learning patterns from codebase...
+  Found: src/middleware/auth.ts (similar middleware pattern)
+
+Step 2: Implementing...
+  Created: src/middleware/rate-limiter.ts
+  Updated: src/middleware/index.ts
+  Created: src/middleware/rate-limiter.test.ts
+
+Implementation summary written to .claude/.sf/implementation-summary.md
+```
+
+### 3. Document it
+
+```
+/sf:document
+```
+
+```
+Batch 1 (parallel): analyze-artifacts, analyze-implementation, analyze-existing-docs
+Batch 2 (parallel): create-technical-docs, create-user-docs
+Batch 3: integrate-docs
+
+Updated: docs/middleware.md (added rate limiter section)
+```
+
+## How it works
+
+Each command orchestrates specialized agents that run in parallel where possible. Agents write intermediate output to `.claude/.sf/research/` (gitignored). The spec is the contract between define and implement -- no spec, no code.
+
+See [AGENTS.md](AGENTS.md) for framework principles and constraints.
 
 ## Command Reference
 
-- `/csf:spec [REQUIREMENTS]` — Define what to build and why
-- `/csf:implement [SPEC_OR_PATH]` — Build the minimal working solution
-- `/csf:document [PATHS]` — Generate docs proportional to the change
-
-See `skills/` for orchestration details.
-
-## File Structure
-
-```
-.claude/
-└── .csf/
-    ├── spec.md        # Current specification (overwritten each run)
-    ├── research/      # Agent outputs
-    └── [project files remain in natural locations]
-```
-
-> **v0.x users:** The legacy install-based workflow is archived on the [`legacy/v0`](../../tree/legacy/v0) branch.
+| Command | Purpose |
+|---------|---------|
+| `/sf:spec [REQUIREMENTS]` | Define what to build and why |
+| `/sf:implement [--isolate] [SPEC_OR_PATH]` | Build the minimal working solution |
+| `/sf:document [PATHS]` | Generate docs proportional to the change |

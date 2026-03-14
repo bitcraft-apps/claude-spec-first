@@ -11,7 +11,7 @@ Creates specifications with intelligent clarification.
 
 ## Usage
 ```
-/csf:spec [REQUIREMENTS]
+/sf:spec [REQUIREMENTS]
 ```
 
 ---
@@ -34,18 +34,18 @@ If requirements are vague (< 15 words or unclear), use the **AskUserQuestion** t
 
 ## Directory Management
 
-Claude Code will use `.claude/.csf/` as the working directory.
+Claude Code will use `.claude/.sf/` as the working directory.
 
 **Command-level logic:**
 
 ```
-If .claude/.csf/spec.md exists:
+If .claude/.sf/spec.md exists:
     Use AskUserQuestion tool: "Existing spec found. What would you like to do?"
       Options: "Update existing" / "Create new"
-    If user chooses update: Write "update" to .claude/.csf/mode
-    If user chooses new: Write "new" to .claude/.csf/mode
+    If user chooses update: Write "update" to .claude/.sf/mode
+    If user chooses new: Write "new" to .claude/.sf/mode
 Else:
-    Write "first" to .claude/.csf/mode
+    Write "first" to .claude/.sf/mode
 ```
 
 ## Execution
@@ -53,7 +53,7 @@ Else:
 After directory setup and clarification (if needed), run agents:
 
 **Pre-execution:**
-- Task: manage-spec-directory (maxTurns: 3) (reads mode from $CSF_DIR/mode file)
+- Task: manage-spec-directory (maxTurns: 3) (reads mode from $SF_DIR/mode file)
 
 **Batch 1 (Parallel):**
 - Task: define-scope (maxTurns: 6) with requirements: $ARGUMENTS
@@ -63,12 +63,12 @@ After directory setup and clarification (if needed), run agents:
 **Batch 2:**
 - Task: synthesize-spec (maxTurns: 12) to combine all research, following the structure in `${CLAUDE_SKILL_DIR}/spec-template.md`
 
-Output: `$CSF_DIR/spec.md` (direct file or symlink to timestamped spec)
+Output: `$SF_DIR/spec.md` (direct file or symlink to timestamped spec)
 
 ## Error Recovery
 
 If any agent fails:
 1. Claude Code shows the specific error
 2. Fix the issue (usually unclear requirements)
-3. Re-run /csf:spec with clearer input
+3. Re-run /sf:spec with clearer input
 4. No partial state - each run starts fresh

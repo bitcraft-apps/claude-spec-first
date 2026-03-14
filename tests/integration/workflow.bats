@@ -137,8 +137,8 @@ teardown() {
 
 @test "synthesize-spec reads from research outputs" {
     # Verify synthesize-spec agent reads from agent outputs using literal paths
-    grep -q "\.claude/\.csf/research" "$PROJECT_ROOT/agents/synthesize-spec.md"
-    grep -q "Inputs.*\.claude/\.csf/research.*\.md" "$PROJECT_ROOT/agents/synthesize-spec.md"
+    grep -q "\.claude/\.sf/research" "$PROJECT_ROOT/agents/synthesize-spec.md"
+    grep -q "Inputs.*\.claude/\.sf/research.*\.md" "$PROJECT_ROOT/agents/synthesize-spec.md"
 }
 
 @test "implementation follows sequential workflow" {

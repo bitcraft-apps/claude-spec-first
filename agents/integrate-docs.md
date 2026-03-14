@@ -9,10 +9,10 @@ tools: Read, Write, Edit, MultiEdit, Glob
 Merges research docs into existing project docs. Prefer updating over creating.
 
 Inputs:
-- `.claude/.csf/research/technical-docs.md`
-- `.claude/.csf/research/user-docs.md`
-- `.claude/.csf/research/docs-inventory.md` (existing doc manifest)
-- `.claude/.csf/research/doc-context.md` (shared terminology, if present)
+- `.claude/.sf/research/technical-docs.md`
+- `.claude/.sf/research/user-docs.md`
+- `.claude/.sf/research/docs-inventory.md` (existing doc manifest)
+- `.claude/.sf/research/doc-context.md` (shared terminology, if present)
 
 Rules:
 - Read docs-inventory.md first — match topics against existing files

@@ -8,8 +8,8 @@ tools: Read, Write
 
 Combines research into MINIMAL actionable specification.
 
-Inputs: `.claude/.csf/research/*.md` (active research directory)
-Output: `.claude/.csf/spec.md` (active spec file)
+Inputs: `.claude/.sf/research/*.md` (active research directory)
+Output: `.claude/.sf/spec.md` (active spec file)
 
 Rules:
 - Keep specification under 50 lines if possible

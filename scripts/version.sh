@@ -17,9 +17,9 @@ get_framework_dir() {
     # Check if we're in repository mode (has ./VERSION file at root)
     if [ -f "./VERSION" ]; then
         echo "."
-    # Check if we're in .csf subdirectory (installed mode)
-    elif [ -f "./.csf/VERSION" ]; then
-        echo "./.csf"
+    # Check if we're in .sf subdirectory (installed mode)
+    elif [ -f "./.sf/VERSION" ]; then
+        echo "./.sf"
     else
         echo "ERROR: Cannot determine framework directory" >&2
         return 1

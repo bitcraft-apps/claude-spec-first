@@ -1,6 +1,6 @@
 ---
 name: analyze-artifacts
-description: Read and parse CSF artifacts (spec, criteria, risks). Use when documentation needs context from the spec phase.
+description: Read and parse SF artifacts (spec, criteria, risks). Use when documentation needs context from the spec phase.
 tools: Read
 model: haiku
 ---
@@ -9,8 +9,8 @@ model: haiku
 
 Reads MINIMAL development artifacts for documentation.
 
-Input: Artifact paths from arguments or `.claude/.csf/` directory
-Output: `.claude/.csf/research/artifacts-summary.md`
+Input: Artifact paths from arguments or `.claude/.sf/` directory
+Output: `.claude/.sf/research/artifacts-summary.md`
 
 Rules:
 - Read only what exists (spec.md, implementation-summary.md)

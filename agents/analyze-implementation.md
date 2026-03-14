@@ -10,7 +10,7 @@ model: haiku
 Finds ACTUAL implementation structure and patterns.
 
 Input: Implementation paths from arguments or artifact references
-Output: `.claude/.csf/research/implementation-summary.md`
+Output: `.claude/.sf/research/implementation-summary.md`
 
 Rules:
 - Find main implementation files and structure

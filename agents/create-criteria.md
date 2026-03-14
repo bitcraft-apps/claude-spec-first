@@ -10,7 +10,7 @@ model: haiku
 Creates MINIMAL success conditions following KISS principle.
 
 Input: Requirements from arguments
-Output: `.claude/.csf/research/criteria.md`
+Output: `.claude/.sf/research/criteria.md`
 
 Rules:
 - Simplest testable conditions only

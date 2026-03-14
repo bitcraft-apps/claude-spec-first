@@ -1,11 +1,11 @@
 #!/bin/bash
-# CSF SubagentStop validation hook - validates agent output exists and is non-empty
+# SF SubagentStop validation hook - validates agent output exists and is non-empty
 
 INPUT=$(cat)
 [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 
 PROJECT_DIR=$(echo "$INPUT" | jq -r '.cwd // ""')
-RESEARCH_DIR="$PROJECT_DIR/.claude/.csf/research"
+RESEARCH_DIR="$PROJECT_DIR/.claude/.sf/research"
 
 [ ! -d "$RESEARCH_DIR" ] && exit 0
 

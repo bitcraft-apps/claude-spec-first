@@ -2,15 +2,15 @@
 
 ## Overview
 
-3 commands orchestrate 13 agent invocations. 7 research agents run on Haiku; 5 synthesis/implementation agents use the caller's model. 1 built-in Explore subagent handles pattern discovery. All output goes to `.claude/.csf/research/` (gitignored).
+3 commands orchestrate 13 agent invocations. 7 research agents run on Haiku; 5 synthesis/implementation agents use the caller's model. 1 built-in Explore subagent handles pattern discovery. All output goes to `.claude/.sf/research/` (gitignored).
 
 ## Commands
 
 Commands are defined as skills in `skills/`. Each `SKILL.md` is the source of truth for agent orchestration, batching, and gates.
 
-- `/csf:spec [REQUIREMENTS]` — parallel research → synthesis into `spec.md`
-- `/csf:implement [SPEC_OR_PATH]` — Explore subagent for patterns → `implement-minimal` for code
-- `/csf:document [PATHS]` — parallel analysis → parallel doc generation → integration into `docs/`
+- `/sf:spec [REQUIREMENTS]` — parallel research → synthesis into `spec.md`
+- `/sf:implement [SPEC_OR_PATH]` — Explore subagent for patterns → `implement-minimal` for code
+- `/sf:document [PATHS]` — parallel analysis → parallel doc generation → integration into `docs/`
 
 ## Agents
 
@@ -22,7 +22,7 @@ Agent turn limits (`maxTurns`) are set in skill files, not agent frontmatter.
 
 ### pattern-example.md
 
-`.claude/.csf/research/pattern-example.md` is the handoff between Explore (Step 1) and `implement-minimal` (Step 2) in `/csf:implement`. Free-form markdown. Referenced in `skills/implement/SKILL.md` and `agents/implement-minimal.md`.
+`.claude/.sf/research/pattern-example.md` is the handoff between Explore (Step 1) and `implement-minimal` (Step 2) in `/sf:implement`. Free-form markdown. Referenced in `skills/implement/SKILL.md` and `agents/implement-minimal.md`.
 
 ### plugin.json
 
@@ -101,11 +101,11 @@ Current events: `Stop` (2 hooks: validate-spec, validate-implementation), `Subag
 ### .gitignore
 
 ```gitignore
-.csf/
-.claude/.csf/
+.sf/
+.claude/.sf/
 ```
 
-Both entries prevent CSF artifacts from being committed.
+Both entries prevent SF artifacts from being committed.
 
 ### Validation
 

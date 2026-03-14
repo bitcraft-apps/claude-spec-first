@@ -10,7 +10,7 @@ model: haiku
 Defines the NARROWEST viable solution following YAGNI principle.
 
 Input: Requirements from arguments
-Output: `.claude/.csf/research/scope.md`
+Output: `.claude/.sf/research/scope.md`
 
 Rules:
 - MVP only - exclude everything not immediately needed
