@@ -13,7 +13,7 @@ Describe what you need:
 > Token-bucket rate limiter. 100 requests per minute per API key.
 > Returns 429 when exceeded. Configurable burst allowance.
 
-The command produces a spec at `.claude/.sf/spec.md`.
+Review the generated spec, then proceed to implementation.
 
 ## 2. Implement
 
