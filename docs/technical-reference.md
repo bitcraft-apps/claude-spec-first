@@ -1,4 +1,4 @@
-# Technical Reference: Claude Spec-First Framework
+# Technical Reference: Spec First
 
 ## Overview
 
@@ -47,7 +47,7 @@ Agents and skills use default directory auto-discovery (`agents/`, `skills/`) an
 
 ### marketplace.json
 
-`.claude-plugin/marketplace.json` — marketplace catalog for plugin discovery. Enables `claude plugin marketplace add bitcraft-apps/claude-spec-first`.
+`.claude-plugin/marketplace.json` — marketplace catalog for plugin discovery. Enables `claude plugin add bitcraft-apps/spec-first`.
 
 Schema:
 

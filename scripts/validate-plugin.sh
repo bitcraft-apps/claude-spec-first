@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Claude Spec-First Plugin Validation Script
+# Spec First Plugin Validation Script
 # Validates all components for Claude Code compliance and functionality
 # Must be run from the repository root
 
 set -e  # Exit on any error
 
-echo "🔍 Validating Claude Spec-First Plugin..."
+echo "🔍 Validating Spec First Plugin..."
 echo "=========================================="
 
 # Read version from VERSION file
@@ -285,7 +285,7 @@ CLAUDE_MD_PATH="./CLAUDE.md"
 if [ -f "$AGENTS_MD_PATH" ]; then
     print_status "AGENTS.md exists at repository root" 0
 
-    if grep -q "Claude Spec-First Framework" "$AGENTS_MD_PATH"; then
+    if grep -q "Spec First" "$AGENTS_MD_PATH"; then
         print_status "AGENTS.md contains spec-first framework" 0
     else
         print_status "AGENTS.md contains spec-first framework" 1
@@ -400,7 +400,7 @@ echo ""
 # Final assessment
 if [ $FAILED -eq 0 ]; then
     echo -e "${GREEN}🎉 Plugin validation PASSED!${NC}"
-    echo -e "${GREEN}The Claude Spec-First plugin is properly configured and ready for use.${NC}"
+    echo -e "${GREEN}The Spec First plugin is properly configured and ready for use.${NC}"
 
     if [ $WARNINGS -gt 0 ]; then
         echo -e "${YELLOW}Note: $WARNINGS warnings found. Consider addressing them for optimal performance.${NC}"

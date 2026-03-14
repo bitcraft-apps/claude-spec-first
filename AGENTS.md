@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Claude Spec-First Framework — minimalist development workflow.
+Spec First — minimalist development workflow.
 
 ## Core Philosophy
 

@@ -11,7 +11,7 @@ Engineers and teams who want Claude Code to stop guessing and start building fro
 ### Install
 
 ```bash
-claude plugin add bitcraft-apps/claude-spec-first
+claude plugin add bitcraft-apps/spec-first
 ```
 
 ### 1. Define what to build
@@ -65,7 +65,7 @@ Updated: docs/middleware.md (added rate limiter section)
 
 Each command orchestrates specialized agents that run in parallel where possible. Agents write intermediate output to `.claude/.sf/research/` (gitignored). The spec is the contract between define and implement -- no spec, no code.
 
-See [AGENTS.md](AGENTS.md) for framework principles and constraints.
+See [AGENTS.md](AGENTS.md) for principles and constraints.
 
 ## Command Reference
 

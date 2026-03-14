@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Custom BATS Assertions
-# Provides domain-specific assertions for the Claude Spec-First Framework
+# Provides domain-specific assertions for Spec First
 
 # Load common utilities
 load 'common'

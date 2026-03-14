@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Claude Spec-First Framework - Version Change Validation
+# Spec First - Version Change Validation
 # Extracts and consolidates version validation logic from GitHub workflows
 # Handles version comparison, changelog validation, and semantic versioning checks
 
@@ -269,7 +269,7 @@ main() {
     cd "$PROJECT_ROOT"
     
     # Show header
-    output_info "Claude Spec-First Framework - Version Change Validation"
+    output_info "Spec First - Version Change Validation"
     echo "================================================================"
     echo ""
     

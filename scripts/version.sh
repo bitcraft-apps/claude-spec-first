@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Claude Spec-First Framework - Version Utilities
+# Spec First - Version Utilities
 # POSIX-compliant shell functions for semantic version management
 # Supports version parsing, comparison, and increment operations
 
@@ -226,7 +226,7 @@ get_version_info() {
     local framework_dir
     framework_dir=$(get_framework_dir) || return 1
     
-    echo "Claude Spec-First Framework"
+    echo "Spec First"
     echo "Version: $current_version"
     echo "Location: $framework_dir"
     echo "VERSION file: ${framework_dir}/VERSION"
@@ -314,7 +314,7 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
             get_version_info
             ;;
         "help"|"--help"|"-h"|"")
-            echo "Claude Spec-First Framework - Version Utilities"
+            echo "Spec First - Version Utilities"
             echo ""
             echo "Usage: $0 <command> [arguments]"
             echo ""
