@@ -1,6 +1,6 @@
 # spec-first
 
-A Claude Code plugin that enforces a define-then-build workflow. You write requirements, it generates a spec, implements code from the spec, and writes documentation proportional to the change.
+Build faster by writing requirements before code. This Claude Code plugin enforces a three-step workflow: define what to build, implement it from the spec, and generate documentation — all from your terminal.
 
 ## Who is this for
 
@@ -8,13 +8,13 @@ Engineers and teams who want Claude Code to stop guessing and start building fro
 
 ## Quick Start
 
-### Install
+Install the plugin:
 
 ```bash
 claude plugin add bitcraft-apps/spec-first
 ```
 
-### 1. Define what to build
+Write your first spec:
 
 ```
 /sf:spec Add a rate limiter to the API gateway
@@ -29,7 +29,7 @@ Researching requirements...
 Spec written to .claude/.sf/spec.md
 ```
 
-### 2. Implement it
+Implement it:
 
 ```
 /sf:implement
@@ -47,7 +47,7 @@ Step 2: Implementing...
 Implementation summary written to .claude/.sf/implementation-summary.md
 ```
 
-### 3. Document it
+Document it:
 
 ```
 /sf:document
@@ -63,14 +63,16 @@ Updated: docs/middleware.md (added rate limiter section)
 
 ## How it works
 
-Each command orchestrates specialized agents that run in parallel where possible. Agents write intermediate output to `.claude/.sf/research/` (gitignored). The spec is the contract between define and implement -- no spec, no code.
+Each command orchestrates specialized agents that run in parallel where possible. Agents write intermediate output to `.claude/.sf/research/` (gitignored). The spec is the contract between define and implement — no spec, no code.
 
-See [AGENTS.md](AGENTS.md) for principles and constraints.
-
-## Command Reference
+## Commands
 
 | Command | Purpose |
 |---------|---------|
 | `/sf:spec [REQUIREMENTS]` | Define what to build and why |
 | `/sf:implement [--isolate] [SPEC_OR_PATH]` | Build the minimal working solution |
 | `/sf:document [PATHS]` | Generate docs proportional to the change |
+
+## Requirements
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
