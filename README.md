@@ -8,10 +8,16 @@ Engineers and teams who want Claude Code to stop guessing and start building fro
 
 ## Quick Start
 
-Install the plugin:
+Install the plugin from your terminal:
 
 ```bash
-claude plugin add bitcraft-apps/spec-first
+claude plugin marketplace add bitcraft-apps/spec-first
+```
+
+Or from within Claude Code:
+
+```
+/plugin marketplace add bitcraft-apps/spec-first
 ```
 
 Write your first spec:
