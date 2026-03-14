@@ -1,5 +1,13 @@
 {
   "name": "sf",
   "version": "1.0.0",
-  "description": "Minimalist spec-first development workflow"
+  "description": "Minimalist spec-first development workflow",
+  "author": {
+    "name": "Szymon Graczyk",
+    "url": "https://github.com/bitcraft-apps"
+  },
+  "repository": "https://github.com/bitcraft-apps/spec-first",
+  "homepage": "https://github.com/bitcraft-apps/spec-first",
+  "license": "MIT",
+  "keywords": ["spec-first", "workflow", "documentation", "development"]
 }
