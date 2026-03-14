@@ -3,7 +3,11 @@
   "title": "Spec-First",
   "tagline": "Define, implement, document — specs before code",
   "description": "Spec-first development workflow for Claude Code — define, implement, document",
-  "categories": ["workflow", "development", "productivity"],
+  "categories": [
+    "workflow",
+    "development",
+    "productivity"
+  ],
   "owner": {
     "name": "bitcraft-apps"
   },
@@ -15,7 +19,7 @@
         "repo": "bitcraft-apps/spec-first"
       },
       "description": "Minimalist spec-first development workflow",
-      "version": "0.31.1"
+      "version": "1.0.0"
     }
   ]
 }
