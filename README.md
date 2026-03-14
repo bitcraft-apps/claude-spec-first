@@ -63,7 +63,7 @@ Updated: docs/middleware.md (added rate limiter section)
 
 ## How it works
 
-Each command orchestrates specialized agents that run in parallel where possible. Agents write intermediate output to `.claude/.sf/research/` (gitignored). The spec is the contract between define and implement — no spec, no code.
+Each command orchestrates specialized agents that run in parallel where possible. The spec is the contract between define and implement — no spec, no code.
 
 ## Commands
 
