@@ -1,9 +1,7 @@
 {
-  "bootstrap-sha": "df7271678bf29970ffc8f487617dd456e85e7ac3",
   "packages": {
     ".": {
       "release-type": "simple",
-      "release-as": "1.0.0",
       "changelog-path": "CHANGELOG.md",
       "version-file": "VERSION",
       "extra-files": [
