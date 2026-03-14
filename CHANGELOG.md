@@ -5,6 +5,23 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0](https://github.com/bitcraft-apps/spec-first/compare/v0.31.1...v1.0.0) (2026-03-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename plugin from csf to sf for marketplace ([#150](https://github.com/bitcraft-apps/spec-first/issues/150))
+
+### Features
+
+* marketplace listing - README rewrite and metadata ([#152](https://github.com/bitcraft-apps/spec-first/issues/152)) ([a8e05b7](https://github.com/bitcraft-apps/spec-first/commit/a8e05b7eac86315141de9d497c58de914fa13659))
+* rename plugin from csf to sf for marketplace ([#150](https://github.com/bitcraft-apps/spec-first/issues/150)) ([448bff5](https://github.com/bitcraft-apps/spec-first/commit/448bff5bf711b983702a1f5e36c134e4f9cfa5a2))
+
+
+### Miscellaneous
+
+* force next release as 1.0.0 ([#154](https://github.com/bitcraft-apps/spec-first/issues/154)) ([227c5eb](https://github.com/bitcraft-apps/spec-first/commit/227c5ebab81db3f53dfc3796f94756121012f098))
+
 ## [Unreleased]
 
 ### BREAKING CHANGES
