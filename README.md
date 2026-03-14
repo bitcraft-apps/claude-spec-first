@@ -65,7 +65,7 @@ Updated: docs/middleware.md (added rate limiter section)
 
 Each command orchestrates specialized agents that run in parallel where possible. The spec is the contract between define and implement — no spec, no code.
 
-## Commands
+## Command Reference
 
 | Command | Purpose |
 |---------|---------|
