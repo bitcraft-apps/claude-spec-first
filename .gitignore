@@ -54,6 +54,6 @@ tests/tmp/
 tests/*.tmp
 tests/test-results/
 
-# Claude Specification Files
+# Specification Files
 .sf/
 .claude/.sf/
