@@ -17,8 +17,9 @@ while [ "$PROJECT_ROOT" != "/" ]; do
     [ -f "$PROJECT_ROOT/CLAUDE.md" ] && break
     PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
 done
+[ "$PROJECT_ROOT" = "/" ] && echo "Error: CLAUDE.md not found in any parent directory" >&2 && exit 1
 SF_DIR="$PROJECT_ROOT/.claude/.sf"
-mkdir -p "$SF_DIR"
+mkdir -p "$SF_DIR" 2>/dev/null || { echo "Error: Cannot create or write to $SF_DIR" >&2; exit 1; }
 [ -d "$PROJECT_ROOT/.git" ] && [ -f "$PROJECT_ROOT/.gitignore" ] && ! grep -qF '.claude/.sf/' "$PROJECT_ROOT/.gitignore" && echo '.claude/.sf/' >> "$PROJECT_ROOT/.gitignore"
 if [ -f "$SF_DIR/mode" ]; then
     MODE=$(cat "$SF_DIR/mode")

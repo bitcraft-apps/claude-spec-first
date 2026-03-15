@@ -48,6 +48,28 @@ teardown() {
     grep -q "rm -f.*mode" "$agent_file"
 }
 
+@test "manage-spec-directory agent validates CLAUDE.md exists" {
+    local agent_file="$PROJECT_ROOT/agents/manage-spec-directory.md"
+
+    # Check for CLAUDE.md existence validation with non-zero exit
+    grep -q 'CLAUDE.md not found' "$agent_file"
+    grep -q 'exit 1' "$agent_file"
+}
+
+@test "manage-spec-directory agent validates directory is writable" {
+    local agent_file="$PROJECT_ROOT/agents/manage-spec-directory.md"
+
+    # Check for writable directory validation with stderr output
+    grep -q 'Cannot create or write to' "$agent_file"
+}
+
+@test "spec skill halts on manage-spec-directory failure" {
+    local skill_file="$PROJECT_ROOT/skills/spec/SKILL.md"
+
+    # Check that spec skill documents halting on failure
+    grep -q 'manage-spec-directory fails.*halt' "$skill_file"
+}
+
 @test "spec skill includes directory management step" {
     # Check spec skill references the new agent
     grep -q "manage-spec-directory" "$PROJECT_ROOT/skills/spec/SKILL.md"
