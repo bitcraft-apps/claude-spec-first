@@ -37,12 +37,12 @@ After input resolution, run agents in 3 batches:
 - Task: analyze-existing-docs (maxTurns: 6) (scans project for existing documentation inventory)
 
 **Gate 1 — Post-Analysis:**
-Check that each output file exists and is non-empty:
+Check that each output file exists:
 - `$SF_DIR/research/artifacts-summary.md`
 - `$SF_DIR/research/implementation-summary.md`
 - `$SF_DIR/research/docs-inventory.md`
 
-If any file is missing or empty: halt pipeline, report which file(s) failed, preserve existing output for inspection. Write gate results to `$SF_DIR/research/gate-analysis.md` (pass/fail per file, warnings for files under 5 lines).
+Missing file = agent failed to run → halt pipeline, report which file(s) are missing, preserve existing output for inspection. Empty or whitespace-only file = valid "no docs needed" signal → pass. Write gate results to `$SF_DIR/research/gate-analysis.md` (pass/fail per file, warnings for files under 5 lines).
 
 **Batch 2 (Parallel):**
 - Task: create-technical-docs (maxTurns: 15) (reads $SF_DIR/research/artifacts-summary.md, $SF_DIR/research/implementation-summary.md)
