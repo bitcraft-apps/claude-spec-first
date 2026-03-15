@@ -103,6 +103,7 @@ teardown() {
     echo "2.5.9" > "$FIXTURE_DIR/VERSION"
     cd "$FIXTURE_DIR"
     run ./scripts/validate-plugin.sh
+    [ "$status" -eq 0 ]
     [[ "$output" == *"VERSION file has valid format"* ]]
 }
 

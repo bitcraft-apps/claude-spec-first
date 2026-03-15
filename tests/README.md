@@ -24,7 +24,6 @@ tests/
 ├── helpers/                    # Granular test helpers
 │   ├── common.bash             # Common utilities
 │   ├── assertions.bash         # Custom assertions
-│   ├── fixtures.bash           # Test fixtures
 │   └── environment.bash        # Environment setup
 │
 ├── bats-core/                  # Git submodule - BATS framework
@@ -154,11 +153,6 @@ The framework provides a modular helper system in `tests/helpers/`:
 - `assert_directory_structure()`: Verify directory trees
 - `assert_files_exist()`: Check required files
 - `assert_output_contains()`: Verify command output
-
-**`fixtures.bash`**: Test data and mock environments
-- `create_mock_home()`: Mock installation directory
-- `create_version_file()`: Generate test VERSION files
-- `setup_full_test_environment()`: Complete test setup
 
 **`environment.bash`**: Test lifecycle management
 - `setup_integration_test()`: Standard integration setup
