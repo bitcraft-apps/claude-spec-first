@@ -5,6 +5,16 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3](https://github.com/bitcraft-apps/spec-first/compare/v1.0.2...v1.0.3) (2026-03-15)
+
+
+### Miscellaneous
+
+* add Dependabot for GitHub Actions and submodule updates ([#163](https://github.com/bitcraft-apps/spec-first/issues/163)) ([8b366e0](https://github.com/bitcraft-apps/spec-first/commit/8b366e0fc9fd0e930a63b76431df3988c2effceb))
+* **deps:** bump actions/cache from 4 to 5 ([#165](https://github.com/bitcraft-apps/spec-first/issues/165)) ([c44a9b4](https://github.com/bitcraft-apps/spec-first/commit/c44a9b43ad4e276b782cb639e1f14c46a532d382))
+* **deps:** bump actions/checkout from 4 to 6 ([#166](https://github.com/bitcraft-apps/spec-first/issues/166)) ([af0ef1e](https://github.com/bitcraft-apps/spec-first/commit/af0ef1e80c5990b85b532ef4cf20a16c27541379))
+* **deps:** bump tests/bats-core from `855844b` to `3bca150` ([#167](https://github.com/bitcraft-apps/spec-first/issues/167)) ([250be60](https://github.com/bitcraft-apps/spec-first/commit/250be60af386781753e66e9bc71eeda0bfa8216c))
+
 ## [1.0.2](https://github.com/bitcraft-apps/spec-first/compare/v1.0.1...v1.0.2) (2026-03-15)
 
 
