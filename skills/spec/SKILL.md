@@ -54,6 +54,7 @@ After directory setup and clarification (if needed), run agents:
 
 **Pre-execution:**
 - Task: manage-spec-directory (maxTurns: 3) (reads mode from $SF_DIR/mode file)
+- **If manage-spec-directory fails (non-zero exit), halt immediately — do not run downstream agents.**
 
 **Batch 1 (Parallel):**
 - Task: define-scope (maxTurns: 6) with requirements: $ARGUMENTS
