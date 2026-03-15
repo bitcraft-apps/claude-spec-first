@@ -5,6 +5,19 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0](https://github.com/bitcraft-apps/spec-first/compare/v1.1.0...v1.2.0) (2026-03-15)
+
+
+### Features
+
+* add BATS unit tests for validate-plugin.sh and version.sh ([#193](https://github.com/bitcraft-apps/spec-first/issues/193)) ([3b9d042](https://github.com/bitcraft-apps/spec-first/commit/3b9d042b5826528fb36cdf19f54a04f7007c9dce))
+
+
+### Bug Fixes
+
+* add failure handling to manage-spec-directory ([#194](https://github.com/bitcraft-apps/spec-first/issues/194)) ([b3a2770](https://github.com/bitcraft-apps/spec-first/commit/b3a2770ef273c80beb04b096b89e88f480e57dde))
+* allow empty analysis files in document skill Gate 1 ([#190](https://github.com/bitcraft-apps/spec-first/issues/190)) ([f14deca](https://github.com/bitcraft-apps/spec-first/commit/f14deca253e3a739fb07082da29f0f20e2c89c74))
+
 ## [1.1.0](https://github.com/bitcraft-apps/spec-first/compare/v1.0.3...v1.1.0) (2026-03-15)
 
 
