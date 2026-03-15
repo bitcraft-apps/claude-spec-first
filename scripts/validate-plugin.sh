@@ -13,9 +13,9 @@ echo "=========================================="
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ -f "$SCRIPT_DIR/../VERSION" ]; then
-    PLUGIN_VERSION=$(cat "$SCRIPT_DIR/../VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+    PLUGIN_VERSION=$(sed 's/^[[:space:]]*//;s/[[:space:]]*$//' < "$SCRIPT_DIR/../VERSION" 2>/dev/null || echo "unknown")
 elif [ -f "./VERSION" ]; then
-    PLUGIN_VERSION=$(cat "./VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+    PLUGIN_VERSION=$(sed 's/^[[:space:]]*//;s/[[:space:]]*$//' < "./VERSION" 2>/dev/null || echo "unknown")
 else
     PLUGIN_VERSION="unknown"
 fi
@@ -75,7 +75,7 @@ print_status "Plugin structure detected" 0
 VERSION_PATH="./VERSION"
 if [ -f "$VERSION_PATH" ]; then
     print_status "VERSION file exists" 0
-    VERSION_CONTENT=$(cat "$VERSION_PATH" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    VERSION_CONTENT=$(tr -d '\n\r' < "$VERSION_PATH" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
     if echo "$VERSION_CONTENT" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null; then
         print_status "VERSION file has valid format" 0
         print_info "Plugin version: $VERSION_CONTENT"
