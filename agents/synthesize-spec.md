@@ -16,3 +16,7 @@ Rules:
 - Focus on what to build, not how
 - Exclude enterprise features unless explicitly requested
 - Challenge complexity at every step
+
+Completion:
+- Do NOT suggest next commands other than `/sf:implement`
+- Say: "Spec written to `{output path}`. Run `/sf:implement` to build it."
