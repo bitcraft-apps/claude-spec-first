@@ -323,8 +323,10 @@ main() {
             echo "2. Add changelog entry in CHANGELOG.md"
             echo ""
             echo "Plugin files that require version bump:"
+            local err_patterns=()
+            mapfile -t err_patterns < <(get_version_requiring_patterns)
             get_changed_files "$BASE_BRANCH" | while read -r file; do
-                if file_matches_patterns "$file" "$(get_version_requiring_patterns)"; then
+                if file_matches_patterns "$file" "${err_patterns[@]}"; then
                     echo "  - $file"
                 fi
             done

@@ -10,7 +10,7 @@ RESEARCH_DIR="$PROJECT_DIR/.claude/.sf/research"
 [ ! -d "$RESEARCH_DIR" ] && exit 0
 
 # Find most recently modified file in research directory
-LATEST=$(find "$RESEARCH_DIR" -maxdepth 1 -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+LATEST=$(find "$RESEARCH_DIR" -maxdepth 1 -type f -exec stat -f '%m %N' {} + 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
 [ -z "$LATEST" ] && exit 0
 
 if [ ! -s "$LATEST" ]; then
