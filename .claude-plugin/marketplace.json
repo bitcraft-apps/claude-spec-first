@@ -10,7 +10,7 @@
         "source": "github",
         "repo": "bitcraft-apps/spec-first"
       },
-      "description": "Minimalist spec-first development workflow",
+      "description": "Claude Code plugin that guides you from requirements to working code — define a spec, implement it, and generate docs, all from your terminal.",
       "version": "1.2.0"
     }
   ]
