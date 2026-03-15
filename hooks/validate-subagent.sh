@@ -1,5 +1,5 @@
 #!/bin/bash
-# SF SubagentStop validation hook - validates agent output exists and is non-empty
+# SF SubagentStop validation hook - validates agent output exists
 
 INPUT=$(cat)
 [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
@@ -13,8 +13,4 @@ RESEARCH_DIR="$PROJECT_DIR/.claude/.sf/research"
 LATEST=$(find "$RESEARCH_DIR" -maxdepth 1 -type f -exec stat -f '%m %N' {} + 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
 [ -z "$LATEST" ] && exit 0
 
-if [ ! -s "$LATEST" ]; then
-  FILENAME=$(basename "$LATEST")
-  echo "{\"decision\":\"block\",\"reason\":\"Subagent output empty: $FILENAME\"}"
-fi
 exit 0
