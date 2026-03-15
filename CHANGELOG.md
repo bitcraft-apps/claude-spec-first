@@ -5,6 +5,18 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/bitcraft-apps/spec-first/compare/v1.0.3...v1.1.0) (2026-03-15)
+
+
+### Features
+
+* add ShellCheck CI workflow and fix existing violations ([#187](https://github.com/bitcraft-apps/spec-first/issues/187)) ([3553309](https://github.com/bitcraft-apps/spec-first/commit/3553309972c62fd59baae78217720bb25d2a1a3d))
+
+
+### Bug Fixes
+
+* prompt user for mode when spec exists without mode file ([#189](https://github.com/bitcraft-apps/spec-first/issues/189)) ([2a47a90](https://github.com/bitcraft-apps/spec-first/commit/2a47a9076972644306761b4098a5caa154fe2622))
+
 ## [1.0.4](https://github.com/bitcraft-apps/spec-first/compare/v1.0.3...v1.0.4) (2026-03-15)
 
 
