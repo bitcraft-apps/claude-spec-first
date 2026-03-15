@@ -7,12 +7,7 @@ model: haiku
 
 # Spec Directory Manager
 
-Autonomous directory management based on mode from SF mode file.
-
-## Modes
-**first**: Create initial `.claude/.sf/research/` directory
-**update**: Backup existing spec, clear research for fresh run
-**new**: Create timestamped directory with symlinks
+Modes: **first** (create initial dir), **update** (backup spec, clear research), **new** (archive with timestamp+symlinks)
 
 ## Implementation
 ```bash
@@ -25,7 +20,17 @@ done
 SF_DIR="$PROJECT_ROOT/.claude/.sf"
 mkdir -p "$SF_DIR"
 [ -d "$PROJECT_ROOT/.git" ] && [ -f "$PROJECT_ROOT/.gitignore" ] && ! grep -qF '.claude/.sf/' "$PROJECT_ROOT/.gitignore" && echo '.claude/.sf/' >> "$PROJECT_ROOT/.gitignore"
-MODE=$(cat "$SF_DIR/mode" 2>/dev/null || echo "first")
+if [ -f "$SF_DIR/mode" ]; then
+    MODE=$(cat "$SF_DIR/mode")
+elif [ -f "$SF_DIR/spec.md" ]; then
+    MODE=""
+    while [ "$MODE" != "update" ] && [ "$MODE" != "new" ]; do
+        printf "Existing spec found. Update existing or create new? (update/new): " && read -r MODE
+    done
+    echo "$MODE" > "$SF_DIR/mode"
+else
+    MODE="first"
+fi
 case $MODE in
     "update")
         cp "$SF_DIR/spec.md" "$SF_DIR/spec-backup.md" 2>/dev/null
