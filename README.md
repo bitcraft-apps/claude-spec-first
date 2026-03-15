@@ -73,6 +73,18 @@ Updated: docs/middleware.md (added rate limiter section)
 
 Each command orchestrates specialized agents that run in parallel where possible. The spec is the contract between define and implement — no spec, no code.
 
+## Token Usage
+
+Typical ranges per phase (example: small CLI tool, ~500 lines):
+
+| Phase | Input tokens | Output tokens |
+|-------|-------------|---------------|
+| spec | 10k–30k | 2k–6k |
+| implement | 30k–120k | 5k–30k |
+| document | 20k–60k | 3k–10k |
+
+Actual usage varies with codebase size, feature complexity, and iteration count. For current pricing, see [Claude pricing](https://www.anthropic.com/pricing).
+
 ## Command Reference
 
 | Command | Purpose |
