@@ -307,7 +307,8 @@ run_tests() {
     fi
     
     # Build and execute BATS command
-    local cmd=$(build_bats_command)
+    local cmd
+    cmd=$(build_bats_command)
     
     if [ $PARALLEL -eq 1 ] && [ ${#test_files[@]} -gt 1 ]; then
         echo "🚀 Running tests in parallel..."

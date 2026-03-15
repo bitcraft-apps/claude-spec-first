@@ -41,7 +41,7 @@ WARNINGS=0
 
 # Function to print status
 print_status() {
-    if [ $2 -eq 0 ]; then
+    if [ "$2" -eq 0 ]; then
         echo -e "${GREEN}✅ $1${NC}"
         PASSED=$((PASSED + 1))
     else
@@ -147,6 +147,7 @@ for skill_dir in ./skills/*/; do
     [ -f "$skill_dir/SKILL.md" ] && REQUIRED_SKILLS+=("$(basename "$skill_dir")")
 done
 print_info "Discovered ${#REQUIRED_AGENTS[@]} agents and ${#REQUIRED_SKILLS[@]} skills"
+# shellcheck disable=SC2034 # Used by validation checks below
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
 
@@ -256,6 +257,7 @@ for skill in "${REQUIRED_SKILLS[@]}"; do
         fi
 
         # Check for $ARGUMENTS usage
+        # shellcheck disable=SC2016 # Intentionally matching literal $ARGUMENTS
         if grep -q '\$ARGUMENTS' "$SKILL_FILE"; then
             print_status "$skill uses \$ARGUMENTS placeholder" 0
         else
@@ -264,7 +266,7 @@ for skill in "${REQUIRED_SKILLS[@]}"; do
 
         # Check for agent delegation
         AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$SKILL_FILE" || true)
-        if [ $AGENT_MENTIONS -gt 0 ]; then
+        if [ "$AGENT_MENTIONS" -gt 0 ]; then
             print_status "$skill delegates to agents ($AGENT_MENTIONS mentions)" 0
         else
             print_warning "$skill doesn't delegate to agents"
@@ -361,7 +363,7 @@ else
     print_warning "skills/ directory missing"
 fi
 
-if [ $SKILL_AGENT_REFS -gt 0 ]; then
+if [ "$SKILL_AGENT_REFS" -gt 0 ]; then
     print_status "Skills integrate with agents" 0
 else
     print_status "Skills integrate with agents" 1
