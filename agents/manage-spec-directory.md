@@ -7,12 +7,7 @@ model: haiku
 
 # Spec Directory Manager
 
-Autonomous directory management based on mode from SF mode file.
-
-## Modes
-**first**: Create initial `.claude/.sf/research/` directory
-**update**: Backup existing spec, clear research for fresh run
-**new**: Create timestamped directory with symlinks
+Modes: **first** (create initial dir), **update** (backup spec, clear research), **new** (archive with timestamp+symlinks)
 
 ## Implementation
 ```bash
