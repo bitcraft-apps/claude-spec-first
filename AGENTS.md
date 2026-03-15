@@ -45,6 +45,10 @@ Spec First — minimalist development workflow.
 6. **User guide = user actions only.** If the user doesn't need to do anything, don't explain the internals.
 7. **Technical reference = contract surface.** Document interfaces and schemas. Do not duplicate orchestration flows already defined in skill files.
 
+## PR Rules
+
+1. **Every PR must reference a GitHub issue.** Use `Closes #<number>` in the PR body to auto-close the issue on merge. If no issue exists, create one first.
+
 ## Code Rules
 
 1. **YAGNI, KISS, SRP** — always.
