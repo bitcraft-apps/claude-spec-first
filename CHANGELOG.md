@@ -5,6 +5,13 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2](https://github.com/bitcraft-apps/spec-first/compare/v1.0.1...v1.0.2) (2026-03-15)
+
+
+### Bug Fixes
+
+* add completion instructions to synthesize-spec agent ([#160](https://github.com/bitcraft-apps/spec-first/issues/160)) ([6a2a0c8](https://github.com/bitcraft-apps/spec-first/commit/6a2a0c80e6ef0ae9f5ac25cb0df2cd3f4d6a18aa))
+
 ## [1.0.1](https://github.com/bitcraft-apps/spec-first/compare/v1.0.0...v1.0.1) (2026-03-14)
 
 
