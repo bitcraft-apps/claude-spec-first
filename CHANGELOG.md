@@ -16,14 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 
 * prompt user for mode when spec exists without mode file ([#189](https://github.com/bitcraft-apps/spec-first/issues/189)) ([2a47a90](https://github.com/bitcraft-apps/spec-first/commit/2a47a9076972644306761b4098a5caa154fe2622))
-
-## [1.0.4](https://github.com/bitcraft-apps/spec-first/compare/v1.0.3...v1.0.4) (2026-03-15)
-
-
-### Bug Fixes
-
-* prompt user for mode when spec exists without mode file instead of silently defaulting to "first" ([#189](https://github.com/bitcraft-apps/spec-first/issues/189))
-
 ## [1.0.3](https://github.com/bitcraft-apps/spec-first/compare/v1.0.2...v1.0.3) (2026-03-15)
 
 
