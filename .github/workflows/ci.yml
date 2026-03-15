@@ -146,6 +146,22 @@ jobs:
           done
           echo "PASS: $count agent files found"
 
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run ShellCheck
+        run: |
+          find . -name '*.sh' \
+            -not -path './.git/*' \
+            -not -path './node_modules/*' \
+            -not -path './tests/bats-core/*' \
+            | xargs shellcheck -x
+
   format-checks:
     name: Format Checks
     runs-on: ubuntu-latest
