@@ -157,7 +157,7 @@ file_matches_patterns() {
     
     for pattern in "${patterns[@]}"; do
         # Handle glob patterns
-        if [[ "$file" == $pattern ]]; then
+        if [[ "$file" == "$pattern" ]]; then
             return 0
         fi
         
@@ -194,8 +194,10 @@ analyze_changes() {
     
     # Get patterns (using more compatible approach)
     local version_requiring_patterns version_exempt_patterns
-    version_requiring_patterns=($(get_version_requiring_patterns))
-    version_exempt_patterns=($(get_version_exempt_patterns))
+    local version_requiring_patterns=()
+    mapfile -t version_requiring_patterns < <(get_version_requiring_patterns)
+    local version_exempt_patterns=()
+    mapfile -t version_exempt_patterns < <(get_version_exempt_patterns)
     
     # Categorize changed files
     local framework_files=()
@@ -321,8 +323,10 @@ main() {
             echo "2. Add changelog entry in CHANGELOG.md"
             echo ""
             echo "Plugin files that require version bump:"
+            local err_patterns=()
+            mapfile -t err_patterns < <(get_version_requiring_patterns)
             get_changed_files "$BASE_BRANCH" | while read -r file; do
-                if file_matches_patterns "$file" $(get_version_requiring_patterns); then
+                if file_matches_patterns "$file" "${err_patterns[@]}"; then
                     echo "  - $file"
                 fi
             done

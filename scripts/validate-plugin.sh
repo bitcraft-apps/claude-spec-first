@@ -13,9 +13,9 @@ echo "=========================================="
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ -f "$SCRIPT_DIR/../VERSION" ]; then
-    PLUGIN_VERSION=$(cat "$SCRIPT_DIR/../VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+    PLUGIN_VERSION=$(sed 's/^[[:space:]]*//;s/[[:space:]]*$//' < "$SCRIPT_DIR/../VERSION" 2>/dev/null || echo "unknown")
 elif [ -f "./VERSION" ]; then
-    PLUGIN_VERSION=$(cat "./VERSION" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || echo "unknown")
+    PLUGIN_VERSION=$(sed 's/^[[:space:]]*//;s/[[:space:]]*$//' < "./VERSION" 2>/dev/null || echo "unknown")
 else
     PLUGIN_VERSION="unknown"
 fi
@@ -41,7 +41,7 @@ WARNINGS=0
 
 # Function to print status
 print_status() {
-    if [ $2 -eq 0 ]; then
+    if [ "$2" -eq 0 ]; then
         echo -e "${GREEN}✅ $1${NC}"
         PASSED=$((PASSED + 1))
     else
@@ -75,7 +75,7 @@ print_status "Plugin structure detected" 0
 VERSION_PATH="./VERSION"
 if [ -f "$VERSION_PATH" ]; then
     print_status "VERSION file exists" 0
-    VERSION_CONTENT=$(cat "$VERSION_PATH" 2>/dev/null | tr -d '\n\r' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    VERSION_CONTENT=$(tr -d '\n\r' < "$VERSION_PATH" 2>/dev/null | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
     if echo "$VERSION_CONTENT" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' >/dev/null; then
         print_status "VERSION file has valid format" 0
         print_info "Plugin version: $VERSION_CONTENT"
@@ -147,6 +147,7 @@ for skill_dir in ./skills/*/; do
     [ -f "$skill_dir/SKILL.md" ] && REQUIRED_SKILLS+=("$(basename "$skill_dir")")
 done
 print_info "Discovered ${#REQUIRED_AGENTS[@]} agents and ${#REQUIRED_SKILLS[@]} skills"
+# shellcheck disable=SC2034 # Used by validation checks below
 VALID_TOOLS=("Read" "Write" "Edit" "MultiEdit" "Bash" "Grep" "Glob" "LSP")
 VALID_MODELS=("haiku")
 
@@ -256,6 +257,7 @@ for skill in "${REQUIRED_SKILLS[@]}"; do
         fi
 
         # Check for $ARGUMENTS usage
+        # shellcheck disable=SC2016 # Intentionally matching literal $ARGUMENTS
         if grep -q '\$ARGUMENTS' "$SKILL_FILE"; then
             print_status "$skill uses \$ARGUMENTS placeholder" 0
         else
@@ -264,7 +266,7 @@ for skill in "${REQUIRED_SKILLS[@]}"; do
 
         # Check for agent delegation
         AGENT_MENTIONS=$(grep -c "$AGENT_PATTERN" "$SKILL_FILE" || true)
-        if [ $AGENT_MENTIONS -gt 0 ]; then
+        if [ "$AGENT_MENTIONS" -gt 0 ]; then
             print_status "$skill delegates to agents ($AGENT_MENTIONS mentions)" 0
         else
             print_warning "$skill doesn't delegate to agents"
@@ -361,7 +363,7 @@ else
     print_warning "skills/ directory missing"
 fi
 
-if [ $SKILL_AGENT_REFS -gt 0 ]; then
+if [ "$SKILL_AGENT_REFS" -gt 0 ]; then
     print_status "Skills integrate with agents" 0
 else
     print_status "Skills integrate with agents" 1

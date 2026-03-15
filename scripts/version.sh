@@ -8,6 +8,7 @@
 set -e
 
 # Global constants
+# shellcheck disable=SC2034 # Full semver regex for future use
 VERSION_REGEX='^([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z0-9][a-zA-Z0-9\-]*(\.[a-zA-Z0-9][a-zA-Z0-9\-]*)*)?(\+[a-zA-Z0-9][a-zA-Z0-9\-]*(\.[a-zA-Z0-9][a-zA-Z0-9\-]*)*)?$'
 SIMPLE_VERSION_REGEX='^[0-9]+\.[0-9]+\.[0-9]+$'
 
@@ -202,7 +203,8 @@ set_framework_version() {
     
     # Create backup of current version file if it exists
     if [ -f "$version_file" ]; then
-        local backup_file="${version_file}.bak.$(date +%Y%m%d%H%M%S)"
+        local backup_file
+        backup_file="${version_file}.bak.$(date +%Y%m%d%H%M%S)"
         cp "$version_file" "$backup_file" || {
             echo "ERROR: Failed to create backup of VERSION file" >&2
             return 1
