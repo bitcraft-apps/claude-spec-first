@@ -5,6 +5,18 @@ All notable changes to Spec First will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/bitcraft-apps/spec-first/compare/v1.2.0...v1.3.0) (2026-03-16)
+
+
+### Features
+
+* add generated output examples to rate-limiter ([#199](https://github.com/bitcraft-apps/spec-first/issues/199)) ([5ce61ec](https://github.com/bitcraft-apps/spec-first/commit/5ce61ec112f3e015e0aa38e40d827d7f23d59e58))
+
+
+### Documentation
+
+* add token usage guidance to README ([#195](https://github.com/bitcraft-apps/spec-first/issues/195)) ([510480c](https://github.com/bitcraft-apps/spec-first/commit/510480c7867ef9c58b67f22fc72ae70568dd2d21))
+
 ## [1.2.0](https://github.com/bitcraft-apps/spec-first/compare/v1.1.0...v1.2.0) (2026-03-15)
 
 
