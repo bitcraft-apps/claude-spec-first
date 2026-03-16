@@ -41,15 +41,13 @@ The workflow is sequential: **spec > implement > document**.
 The [`output/`](output/) directory contains the complete result of running this workflow end-to-end:
 
 **Deliverables:**
-- [`spec.md`](output/spec.md) — specification
 - [`rate-limiter.ts`](output/rate-limiter.ts) — token-bucket implementation
 - [`rate-limiter.test.ts`](output/rate-limiter.test.ts) — tests
 - [`rate-limiter-middleware.ts`](output/rate-limiter-middleware.ts) — HTTP middleware
 - [`docs.md`](output/docs.md) — user-facing documentation
-- [`technical-docs.md`](output/technical-docs.md) — API reference
 
 **Pipeline artifacts** ([`output/.sf/`](output/.sf/)):
-- [`spec.md`](output/.sf/spec.md) — spec as consumed by implement
+- [`spec.md`](output/.sf/spec.md) — specification
 - [`research/`](output/.sf/research/) — scope, criteria, risks, gate results, doc drafts
 - [`implementation-summary.md`](output/.sf/implementation-summary.md) — what implement produced
 
