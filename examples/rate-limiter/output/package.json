@@ -1,0 +1,16 @@
+{
+  "name": "rate-limiter",
+  "version": "1.0.0",
+  "description": "Token-bucket rate limiter with per-key tracking and automatic stale-bucket eviction.",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}

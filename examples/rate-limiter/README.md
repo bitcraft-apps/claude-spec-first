@@ -36,4 +36,19 @@ Produces user-facing and technical docs based on the implementation.
 Each command runs autonomously. Review the output, iterate if needed.
 The workflow is sequential: **spec > implement > document**.
 
-No generated artifacts are included in this example — run it yourself to see the output.
+## Generated Output
+
+The [`output/`](output/) directory contains the complete result of running this workflow end-to-end:
+
+**Deliverables:**
+- [`rate-limiter.ts`](output/rate-limiter.ts) — token-bucket implementation
+- [`rate-limiter.test.ts`](output/rate-limiter.test.ts) — tests
+- [`rate-limiter-middleware.ts`](output/rate-limiter-middleware.ts) — HTTP middleware
+- [`docs.md`](output/docs.md) — user-facing documentation
+
+**Pipeline artifacts** ([`output/.sf/`](output/.sf/)):
+- [`spec.md`](output/.sf/spec.md) — specification
+- [`research/`](output/.sf/research/) — scope, criteria, risks, gate results, doc drafts
+- [`implementation-summary.md`](output/.sf/implementation-summary.md) — what implement produced
+
+Generated on 2026-03-16 by running `/sf:spec` → `/sf:implement` → `/sf:document` sequentially.
