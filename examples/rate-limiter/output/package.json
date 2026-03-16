@@ -1,20 +1,14 @@
 {
-  "name": "sf-regen",
+  "name": "rate-limiter",
   "version": "1.0.0",
-  "description": "Build faster by writing requirements before code. This Claude Code plugin enforces a three-step workflow: define what to build, implement it from the spec, and generate documentation — all from your terminal.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "test": "tests"
-  },
+  "description": "Token-bucket rate limiter with per-key tracking and automatic stale-bucket eviction.",
+  "type": "module",
   "scripts": {
     "test": "vitest run"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"

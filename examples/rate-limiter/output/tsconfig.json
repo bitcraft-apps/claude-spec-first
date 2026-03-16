@@ -5,7 +5,8 @@
     "moduleResolution": "bundler",
     "strict": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "."
   },
-  "include": ["src"]
+  "include": ["*.ts"],
+  "exclude": ["*.test.ts"]
 }
